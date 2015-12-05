@@ -6,9 +6,9 @@
 		Having reseached which tools are currently available, I've condensed my findings into the following list. 
 
 		\begin{itemize}
-			\item LastPass and Similar (https://lastpass.com/)
+			\item LastPass, and Similar Solutions
+			\item KeePass, and Similar Solutions
 			\item Rattic (https://rattic.org)
-			\item KeePass / Other Local Stored Password Managers(https://keepass.org)
 			\item Encryptr (https://encryptr.org/)
 			\item VAULT (https://vaultproject.io/)
 			\item Vault (https://www.zoho.com/vault/application-security.html)
@@ -20,30 +20,62 @@
 			\item PasswordState (http://www.clickstudios.com.au/)
 		\end{itemize}
 
-		\subsection{LastPass}
+		\subsection{LastPass, and Similar Solutions}
+		\label{subsec:lastpass}
+			In the name of usability services such as LastPass\footnote{https://lastpass.com/}, PassPack\footnote{https://www.passpack.com/}, DashLane\footnote{https://www.dashlane.com/}, and so many others grew popular, and it is easy to understand why. Enabling you to access your passwords from several devices, through native apps or the browser, it seemed like it was the perfect match of usability and security. To not repeat myself over and over again, I will focus on LastPass \emph{(due to them being the most well-known)} as a representation of this group.
+
+			If we start by looking at the technical details of LastPass, they quote themselves using 256-bit AES encryption, and applies PBKDF2, in order to make it as difficult as possible, to crack stored data. For maximum security, both encryption and decryption, is done client side\cite{lastpass_cleintsideencryption}, as to avoid transferring the actual password, unencrypted, to their servers. Encryption and decryption is done using the master password, which is never actually sent to their servers. Finally, as is to be expected, all connections to LastPass' servers, are SSL encrypted.
+
+			Having examined the technical aspect, we need to pay attention to the usability as well. Looking at their web UI, it shows a reasonably straight forward design. Allowing the user to organise passwords folders, creating a two-level structure, as seen on figure \ref{fig:lastpass_main} on page \pageref{fig:lastpass_main}. While this \emph{does} allow the user some level of organisation, several levels would have been preferable. Additionally, LastPass is renowned for their apps and plugins, covering all major operating systems and browsers, creating a near seamless integration, when it comes to addition of new passwords and auto-filling stored passwords.
+
+			However, with the recent leak from LastPass \cite{lastpass_leak}, more and more users grew suspicious of these services. No matter how much encryption you apply, you can not get around the fact, that you have to \emph{trust} LastPass to both be completely honest about their encryption technology, \emph{and} storing your sensitive data. In many of the more sceptical user's eyes, this is a huge drawback, and why this solution is deemed unusable to solve the problem at hand.
+
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=\textwidth]{figures/analysis/lastpass_main.png}
+				\caption{Screenshot of LastPass' main view, in a browser.}
+				\label{fig:lastpass_main}
+			\end{figure}
+
+
+
+		\subsection{KeePass}
+			As the users grew suspicious of LastPass and the likes, a lot of them moved over to e.g. KeePass\footnote{https://keepass.org}. While there exists a plethora of tools similar to KeePass, I will focus on KeePass as the representative of the bunch, much as in section \ref{subsec:lastpass}.
+
+			If we again start by examining the technical details, as of version 2.x KeePass only -- per default -- offers AES-256 encryption, which is seen on figure \ref{fig:keepass_create_security} on page \pageref{fig:keepass_create_security}, with additional algorithm choices available through plugins \cite{keepass_security}. This enables users to tailor the encryption security, to their own needs -- and beliefs. 
+
+			Looking at the main UI, of which an example is shown on figure \ref{fig:keepass_main} on page \pageref{fig:keepass_main}, KeePass features exactly that which could be improved in LastPass: A tree like structure, in order to completely organise passwords. Other than that, there isn't anything noteworty to say about their UI: It features the necessary and that's about it. A final thing worth mentioning, is that their password generator is completely customisable, as seen on figure \ref{fig:keepass_newpassword_passwordgen} on page \pageref{fig:keepass_newpassword_passwordgen}. You can manually choose, exactly which character sets, you wish to be in your passwords, enabling you to have passwords using local accents should the target system support it, which is a really nifty feature.
 
 
 
 
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=\textwidth]{figures/analysis/keepass_mainview.png}
+				\caption{Screenshot of KeePass' main view.}
+				\label{fig:keepass_main}
+			\end{figure}
 
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=0.7\textwidth]{figures/analysis/keepass_create_security.png}
+				\caption{Screenshot of KeePass' security options.}
+				\label{fig:keepass_create_security}
+			\end{figure}
+		
+			%\begin{figure}[h!]
+			%	\centering
+			%	\includegraphics[width=\textwidth]{figures/analysis/keepass_newpassword_main.png}
+			%	\caption{.}
+			%	\label{fig:}
+			%\end{figure}
 
-
-
-
-
-
-
-
-
-
-			The infamous LastPass was the cause of a major scandal, in June 2015 \footnote{https://blog.lastpass.com/2015/06/lastpass-security-notice.html/}, where they discovered, that users -- granted salted and encrypted -- passwords could have been leaked. Post this event, a lot of professionals lost trust in their services.
-
-			Generally, LastPass offers \emph{great} usability. Their user experience is unparalleled, with browser integration making it a joy to use. However, you \emph{do} need to store your password on their servers. While LastPass only encrypts and decrypts locally \footnote{https://lastpass.com/whylastpass\_technology.php}, on the user's machine, it is \emph{still} storing sensitive data, on someone else's machine.
-
-			LastPass employs AES-256 as encryption algorithm.
-
-
-
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=0.7\textwidth]{figures/analysis/keepass_newpassword_passwordgen.png}
+				\caption{Screenshot of KeePass' password generator settings.}
+				\label{fig:keepass_newpassword_passwordgen}
+			\end{figure}
 
 
 
