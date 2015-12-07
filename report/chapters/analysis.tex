@@ -123,11 +123,11 @@
 
 			Having said that, the UI of Encryptr is \emph{very} minimalistic and sleek, which both is a good and a bad thing. As seen on figure \ref{fig:encryptr_main} on page \pageref{fig:encryptr_main}, all passwords are stored in a \emph{single} list: There is \emph{no} organisation, other than labels. Granted, they do support searching, but somehow that still makes it very confusing, if more than a handful of passwords or secrets are stored, and since Encryptr not only supports storing passwords, but also credit card information and general secrets, this could be achieved fairly quickly.
 
-			Adding a passwords shows something disturbing: Lack of a decent password generator, cf. figure \ref{fig:encryptr_newpassword} on page \ref{fig:encryptr_newpassword}. Once the form for adding a new password is opened, a password is generated as per some default behaviour. There is no customising entropy of the password, or even something as simple as the length.
+			Adding a passwords shows something disturbing: Lack of a decent password generator, cf. figure \ref{fig:encryptr_newpassword} on page \pageref{fig:encryptr_newpassword}. Once the form for adding a new password is opened, a password is generated as per some default behaviour. There is no customising entropy of the password, or even something as simple as the length.
 
 			\begin{figure}[htbp]
 				\centering
-				\includegraphics[width=0.95\textwidth]{figures/analysis/encryptr_main.png}
+				\includegraphics[width=0.75\textwidth]{figures/analysis/encryptr_main.png}
 				\caption{Encryptr's main view.}
 				\label{fig:encryptr_main}
 			\end{figure}
@@ -135,12 +135,12 @@
 
 			\begin{figure}[htbp]
 				\centering
-				\includegraphics[width=0.95\textwidth]{figures/analysis/encryptr_newpassword_main.png}
+				\includegraphics[width=0.75\textwidth]{figures/analysis/encryptr_newpassword_main.png}
 				\caption{Adding a new password in Encryptr.}
 				\label{fig:encryptr_newpassword}
 			\end{figure}
 
-			On the technical side, Crypton -- the backend -- is actually fairly interesting. Using their own definition of zero-knowledge, the developers created a complete framework for securely transferring and storing data at a remote machine\cite{crypton_paper}. They claim, that it is impossible to obtain the unencrypted data on their servers, without actually getting hold of the users private encryption key. 
+			On the technical side, Crypton -- the backend -- is actually fairly interesting. Using their own definition of zero-knowledge, the developers created a complete framework for securely transferring and storing data at a remote machine\cite{crypton_paper}. They claim, that it is impossible to obtain the unencrypted data on their servers, without actually getting hold of the users private encryption key. The Crypton backend is open source, and available at \cite{crypton_git}
 
 
 
