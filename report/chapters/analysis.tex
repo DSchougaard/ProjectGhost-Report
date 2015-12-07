@@ -40,14 +40,13 @@
 
 
 		\subsection{KeePass}
-			As the users grew suspicious of LastPass and the likes, a lot of them moved over to e.g. KeePass\footnote{https://keepass.org}. While there exists a plethora of tools similar to KeePass, I will focus on KeePass as the representative of the bunch, much as in section \ref{subsec:lastpass}.
+			As the users grew suspicious of LastPass and the likes, a lot of them moved over to e.g. KeePass\footnote{https://keepass.org}, which allows the user to store the passwords in a local file. While there exists a plethora of tools similar to KeePass, I will focus on KeePass as the representative of the bunch, much as in section \ref{subsec:lastpass}.
 
 			If we again start by examining the technical details, as of version 2.x KeePass only -- per default -- offers AES-256 encryption, which is seen on figure \ref{fig:keepass_create_security} on page \pageref{fig:keepass_create_security}, with additional algorithm choices available through plugins \cite{keepass_security}. This enables users to tailor the encryption security, to their own needs -- and beliefs. 
 
-			Looking at the main UI, of which an example is shown on figure \ref{fig:keepass_main} on page \pageref{fig:keepass_main}, KeePass features exactly that which could be improved in LastPass: A tree like structure, in order to completely organise passwords. Other than that, there isn't anything noteworty to say about their UI: It features the necessary and that's about it. A final thing worth mentioning, is that their password generator is completely customisable, as seen on figure \ref{fig:keepass_newpassword_passwordgen} on page \pageref{fig:keepass_newpassword_passwordgen}. You can manually choose, exactly which character sets, you wish to be in your passwords, enabling you to have passwords using local accents should the target system support it, which is a really nifty feature.
+			Looking at the main UI, of which an example is shown on figure \ref{fig:keepass_main} on page \pageref{fig:keepass_main}, KeePass features exactly that which could be improved in LastPass: A tree like structure, in order to completely organise passwords. Other than that, there isn't anything noteworthy to say about their UI: It features the necessary and that's about it. A final thing worth mentioning, is that their password generator is completely customisable, as seen on figure \ref{fig:keepass_newpassword_passwordgen} on page \pageref{fig:keepass_newpassword_passwordgen}. You can manually choose, exactly which character sets, you wish to be in your passwords, enabling you to have passwords using local accents should the target system support it, which is a really nifty feature.
 
-
-
+			However, having praised the features of KeePass, it does lack something extremely important: Usability. More precisely, it lacks distribution. Since KeePass works on a local file, it would only inherently work on a \emph{single} device. Should one wish to distribute it, another tool has to be involved. File synchronisation tools, such as Dropbox, Google Drive, or Syncthing could be used, in order to create a distributed-ish feel to KeePass. However, you do still rely on a third party tool, which is a drawback. Additionally, there is the lack of cross-platform compatibility, since \emph{officially} KeePass only supports Windows. Granted, there exists unofficial ports for Linux, OS X, Android, etc., but you have to trust the developers of these unofficial applications. By extension, this introduces the threat of security breaches, which renders it as a less than ideal setup.
 
 			\begin{figure}[h!]
 				\centering
@@ -77,34 +76,78 @@
 				\label{fig:keepass_newpassword_passwordgen}
 			\end{figure}
 
-
-
-
-
-
-
-		\subsection{KeePass \& Other Locally Stored Password Managers}
-			Since the breach of LastPass, KeePass and the like have been the go-to tools, for storing, generating and retrieving passwords. While most of these tools are very user-friendly, very intuitive, and very secure, they do lack one very important aspect: Accessibility. All of these tools store the passwords, in an encrypted file on the disk of the local machine.
-
-			While there exists a plethora of similar solutions, I will focus on KeePass for this section.P
-
-			KeePass' organisational options are brilliant. Its tree structure, enables you to easily organise your passwords.While one could argue, that this is "enough", we also have to face that we live in the age of electronics. Almost everybody has at least \emph{two} devices, both of which would need access to passwords. Hence, KeePass and the like suffer from the fact, that you would need a 3rd party way to distribute these files. One option to this is Dropbox. But again: This just destroys the user-friendliness of the workflow.
-
-			KeePass uses AES-256, compressed with GZIp
-
-
 		\subsection{Rattic}
-			Rattic is almost what a good password manager should be: Simple, lightweight, and easy to use. That is, except that it is obviously aimed at teams. The most apparent indicator of this, is the fact that a newly created password needs to be assigned to a "Group". This would be fine, had Rattic taken a hint from Unix, creating a personal group for each user. But alas, no. You'd need to manually create a new group, for each user, to be able to store private passwords in Rattic.
+			Rattic\cite{rattic_frontpage} represents a third type of password manager, and the primary focus of this thesis: A self-hosted password manager, in the so-called private cloud. While at first glance, Rattic seems to be a solution very suited to the problem described earlier, it becomes a far more sketchy solution, upon investigating it closely. Rattic wonderfully describe their solution as:
 
-			Additionally, Rattic suffers from lack of a tree stucture. You have \emph{two} options of sorting passwords: Groups and tags. Neither of which is presented in a manner, that gives a quick overview of the contents of the databse, or allows for more than a single level of hierarchy. Supports export in KeePass format.
-			
-			While this software could essentially suffice, in order to meet the requirements, it would be lacking heavily in the user experience department.
+			\begin{quote}
+				\emph{RatticDB is a password management database designed for humans. We have focused on making it able to manage passwords for a team and to make that as easy as possible.}\\\cite{rattic_frontpage}
+			\end{quote}
+
+			Since Rattic \emph{is} meant for teams it has multi-user support. Rattic organises passwords and users in groups, and these groups are used for access control. A group is a collection of users, which can access the same passwords. An example of this could be \verb=DevelopmentTeam1= and \verb=DevelopmentTeam2=. Members of team one, can access their own passwords, and members of team two can access theirs, but unless specifically stated, they can not access each others. Additionally it supports tags for their passwords, allowing for even further organisation, for their users allowing quick access to similar passwords, from across different groups.
+
+			However, the fact that Rattic markets itself at teams, rather than individual users is evident by the fact that as per default, you can not create ``private'' passwords, which only a single user can access. To achieve that, you would need to manually create a new group -- per user -- with only said user as member. While this would work, it is very much a work-around of Rattic's default behaviour, for it to work that way.
+
+			From a user experience point of view, Rattic is a rather friendly tool. On figure \ref{fig:rattic_main} on page \pageref{fig:rattic_main}, you see a clean, minimalistic view of available passwords. Granted, this figure is from an Admin's point of view, hence he can access both the \verb=DevelopmentTeam1= and \verb=DevelopmentTeam2= groups, and consequently passwords stored under them.
+
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/rattic_main.png}
+				\caption{Rattic's Frontpage of their Web UI.}
+				\label{fig:rattic_main}
+			\end{figure}
+
+			Adding passwords is just as easy in KeePass, cf. figure \ref{fig:rattic_newpassword_main} on page \pageref{fig:rattic_newpassword_main}. Simply type in the details, select an owner group and submit. While the password generator, cf. figure \ref{fig:rattic_newpassword_passwordgen} on page \pageref{fig:rattic_newpassword_passwordgen}, could stand to have some additional features, it is sufficient for generating strong passwords with high enough entropy. A nifty little feature, is the \verb=Download KeePass= button, which allows a user to download passwords in the KeePass format, making it available for later offline use.
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/rattic_newpassword_main.png}
+				\caption{Adding a new password, in Rattic.}
+				\label{fig:rattic_newpassword_main}
+			\end{figure}
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/rattic_newpassword_passwordgen.png}
+				\caption{Generating a password in Rattic.}
+				\label{fig:rattic_newpassword_passwordgen}
+			\end{figure}
+
+			Having said that, there are some technical concerns, regarding Rattic. Rattic does \emph{not} encrypt passwords stored in the database -- something they are very open about. In \cite{rattic_encryption} they argue heavily for their lack of encryption, due to requiring less code and tests. They do, however, highly recommend storing the database on an encrypted drive, to ensure database protection. However, this \emph{does} mean that a sysadmin can access \emph{all} passwords, should he or she have the encryption key for the drive. Due to this, the deployment of Rattic is fairly complex, as they admit themselves. 
+
+			Rattic is developed in Python, using the Django framework and tested on the Apache server.
+
 
 
 		\subsection{Encryptr}
-			Encryptr is a very interesting piece of software. Developed by SpiderOak, it offers zero-knowledge encrypted password storage, using the Crypton backend. However, per default it uses SpiderOaks servers, running Crypton. This puts Encryptr basically in the same overall category as LastPass: You need to trust someone else with your sensitive information. 
+			Bordering between the type of LastPass and Rattic, Enryptr \cite{encryptr} relies on the Crypton\cite{crypton} backend\cite{encryptr_backend}, available hosted at SpiderOak\cite{crypton_spideroak}. Per default, Encryptr \emph{only} supports hosting passwords at the Crypton backend, hosted at SpiderOak. However, it \emph{is} possible to run this in the private cloud, with your own Crypton backend. \emph{But} it requires manually editing source files\cite{encryptr_selfhost}, which makes the setup a pain. Because of this technical aspect, usability is virtually zero, as you would need to be fairly confident behind a keyboard, to successfully set this up.
 
-			Luckily, you \emph{can} run the Crypton backend at home. Unfortunately, getting this Crypton to work is not as straight forward as one could've hoped. Ontop of that, getting Encryptr to work with your own Crypton server, requires editing code, to change the target server. Hence, for this purpose Encryptr is \emph{very} bad, when it comes to usability.
+			Having said that, the UI of Encryptr is \emph{very} minimalistic and sleek, which both is a good and a bad thing. As seen on figure \ref{fig:encryptr_main} on page \pageref{fig:encryptr_main}, all passwords are stored in a \emph{single} list: There is \emph{no} organisation, other than labels. Granted, they do support searching, but somehow that still makes it very confusing, if more than a handful of passwords or secrets are stored, and since Encryptr not only supports storing passwords, but also credit card information and general secrets, this could be achieved fairly quickly.
+
+			Adding a passwords shows something disturbing: Lack of a decent password generator, cf. figure \ref{fig:encryptr_newpassword} on page \ref{fig:encryptr_newpassword}. Once the form for adding a new password is opened, a password is generated as per some default behaviour. There is no customising entropy of the password, or even something as simple as the length.
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/encryptr_main.png}
+				\caption{Encryptr's main view.}
+				\label{fig:encryptr_main}
+			\end{figure}
+
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/encryptr_newpassword_main.png}
+				\caption{Adding a new password in Encryptr.}
+				\label{fig:encryptr_newpassword}
+			\end{figure}
+
+			On the technical side, Crypton -- the backend -- is actually fairly interesting. Using their own definition of zero-knowledge, the developers created a complete framework for securely transferring and storing data at a remote machine\cite{crypton_paper}. They claim, that it is impossible to obtain the unencrypted data on their servers, without actually getting hold of the users private encryption key. 
+
+
+
+
+
+
+
 
 		\subsection{Vault}
 			ZOHO's Vault software is yet another piece of software that falls under the same category as LastPass: You upload your passwords to their servers. While they -- much like LastPass -- have a delightful UI and good user experience, it is \emph{still} hosted on a machine, someone else hosts.
@@ -152,7 +195,16 @@
 
 
 
-
+		\subsection{Comparison Chart}
+			\begin{table}
+				\begin{tabular}{ r l l l l }
+					Name 				& Encryption  & Web Accessible 		& Server Software 		& Language \& Framework 		\\
+					\hline
+					LastPass 			& AES-256 		& Yes			& N/A 				& N/A \\
+					KeePass 			& AES-256 (more available through plugins) & No & N/A & C++ \\
+					Rattic 				& None 			& Yes 			& Apache 		& Python \& Django \\
+				\end{tabular}
+			\end{table}
 
 
 
