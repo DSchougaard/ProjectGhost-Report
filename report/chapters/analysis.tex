@@ -8,8 +8,8 @@
 		\begin{itemize}
 			\item LastPass, and Similar Solutions
 			\item KeePass, and Similar Solutions
-			\item Rattic (https://rattic.org)
-			\item Encryptr (https://encryptr.org/)
+			\item Rattic
+			\item Encryptr
 			\item VAULT (https://vaultproject.io/)
 			\item Vault (https://www.zoho.com/vault/application-security.html)
 			\item TeamPasswordManager (http://teampasswordmanager.com)
@@ -98,14 +98,14 @@
 
 			Adding passwords is just as easy in KeePass, cf. figure \ref{fig:rattic_newpassword_main} on page \pageref{fig:rattic_newpassword_main}. Simply type in the details, select an owner group and submit. While the password generator, cf. figure \ref{fig:rattic_newpassword_passwordgen} on page \pageref{fig:rattic_newpassword_passwordgen}, could stand to have some additional features, it is sufficient for generating strong passwords with high enough entropy. A nifty little feature, is the \verb=Download KeePass= button, which allows a user to download passwords in the KeePass format, making it available for later offline use.
 
-			\begin{figure}[htbp]
+			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=0.95\textwidth]{figures/analysis/rattic_newpassword_main.png}
 				\caption{Adding a new password, in Rattic.}
 				\label{fig:rattic_newpassword_main}
 			\end{figure}
 
-			\begin{figure}[htbp]
+			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=0.95\textwidth]{figures/analysis/rattic_newpassword_passwordgen.png}
 				\caption{Generating a password in Rattic.}
@@ -125,7 +125,7 @@
 
 			Adding a passwords shows something disturbing: Lack of a decent password generator, cf. figure \ref{fig:encryptr_newpassword} on page \pageref{fig:encryptr_newpassword}. Once the form for adding a new password is opened, a password is generated as per some default behaviour. There is no customising entropy of the password, or even something as simple as the length.
 
-			\begin{figure}[htbp]
+			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=0.75\textwidth]{figures/analysis/encryptr_main.png}
 				\caption{Encryptr's main view.}
@@ -133,33 +133,72 @@
 			\end{figure}
 
 
-			\begin{figure}[htbp]
+			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=0.75\textwidth]{figures/analysis/encryptr_newpassword_main.png}
 				\caption{Adding a new password in Encryptr.}
 				\label{fig:encryptr_newpassword}
 			\end{figure}
 
-			On the technical side, Crypton -- the backend -- is actually fairly interesting. Using their own definition of zero-knowledge, the developers created a complete framework for securely transferring and storing data at a remote machine\cite{crypton_paper}. They claim, that it is impossible to obtain the unencrypted data on their servers, without actually getting hold of the users private encryption key. The Crypton backend is open source, and available at \cite{crypton_git}
-
-
-
-
-
-
+			On the technical side, Crypton -- the backend -- is actually fairly interesting. Using their own definition of zero-knowledge, the developers created a complete framework for securely transferring and storing data at a remote machine\cite{crypton_paper}. They claim, that it is impossible to obtain the unencrypted data on their servers, without actually getting hold of the users private encryption key. The Crypton backend is open source, and available at \cite{crypton_git}. What powers Crypton, cryptographically speaking, is AES-256.
 
 
 		\subsection{Vault}
-			ZOHO's Vault software is yet another piece of software that falls under the same category as LastPass: You upload your passwords to their servers. While they -- much like LastPass -- have a delightful UI and good user experience, it is \emph{still} hosted on a machine, someone else hosts.
+			Vault\emph{(ZOHO)}\cite{vault_zoho} is another piece of software, that requires you to submit your data to their servers. Where this tool differs from LastPass and Encryptr, is that it is \emph{clearly} aimed at enterprise customers, which is clearly evident based on their features, such as LDAP integration.
 
-			
-		\subsection{VAULT (vaultproject.io)}
-			Vault markets itself as a tool for ``securely accessing secrets". This tool differs greatly from the previously covered. Vault is \emph{only} a CLI / HTTP API tool. There is no graphical interface as such.
+			Vault organises the passwords in so called Chambers. Each password \emph{can} be added to one or more chambers, but is not necessary. Seen on figure \ref{fig:vaultzoho_main_secrets} on page \pageref{fig:vaultzoho_main_secrets} we see how it lists all available passwords, in a single list. Using this main list quickly becomes very confusing. Looking at the Chambers list, which is found on figure \ref{fig:vaultzoho_main_chambers} on page \pageref{fig:vaultzoho_main_chambers}, the same pattern arises again. A large list, showing only the important information -- the passwords -- in the smallest part of the UI. All in all, performing simple tasks is very clunky.
+
+			As with Encryptr, password generation lacks a lot. A password can be generated -- and re-generated -- but it happens after some under-the-hood-behaviour, which the user can not choose to customise.
+
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/vaultzoho_main_secrets.png}
+				\caption{Listing all stored secrets in Vault \emph{(ZOHO)}.}
+				\label{fig:vaultzoho_main_secrets}
+			\end{figure}
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/vaultzoho_main_chambers.png}
+				\caption{Listing Chambers stored in Vault \emph{(ZOHO)}.}
+				\label{fig:vaultzoho_main_chambers}
+			\end{figure}
+
+
+			Under the hood, Zoho uses a combination of RSA and AES. To enable sharing, a common AES encryption key is retrieved using RSA keypairs, from the admin, and users involved in sharing\cite{vault_zoho_encryption}.
+
+
+
 
 		\subsection{TeamPasswordManager}
-			TeamPasswordManager aims itself at -- as the name implies -- teams, much like Rattic. This choice, is very apparent in the work flow. For instance, a password is tied to a ``project", instead of a user. Security wise, TeamPasswordManager dons some impressive features. Using the standard AES-256, with the twist of a Bcrypt approach, and two-factor authentication.
+			TeamPasswordManager\cite{teampasswordmanager_frontpage} \emph{(henceforth referred to as TPM)} is a tool that is fairly similar to Rattic. However, where it differs is the less minimalistic UI. TPM organises passwords in ``Projects'', which is a great indicator that this tool is in fact intended to be used with enterprise in mind. TMP is able to be self-hosted and is platform independent, requiring Apache, PHP and MySQL, which is a great asset.
 
-			While this software could essentially suffice, in order to meet the requirements, it would be lacking heavily in the user experience department.
+			Turning to the user experience, the frontpage that the user is presented with, as seen in figure \ref{fig:teampasswordmanager_main} on page \pageref{fig:teampasswordmanager_main}, is a clunky list of all available passwords. For organisational value, groups as ``Favorite'' and ``Recent'' are also available, filtering the available passwords into more manageable lists. But once again, this very clunky and large UI is used, much like in Vault.
+
+			TeamPasswordManager aims itself at -- as the name implies -- teams, much like Rattic. This choice, is very apparent in the work flow. For instance, a password is tied to a ``project", instead of a user. Where TPM excels, is the fact that a project can contain sub-projects, which in return can contain sub-projects, and so forth. This creates a tree-like structure, much like that of KeePass, which can be seen on figure \ref{fig:teampasswordmanager_tree} on page \pageref{fig:teampasswordmanager_tree}.
+
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/teampasswordmanager_main.png}
+				\caption{Front page of TeamPasswordManager's web interface.}
+				\label{fig:teampasswordmanager_main}
+			\end{figure}
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.35\textwidth]{figures/analysis/teampasswordmanager_tree.png}
+				\caption{The tree-like organisational structure of TeamPasswordManager.}
+				\label{fig:teampasswordmanager_tree}
+			\end{figure}
+
+			Encryption wise, TPM uses the same basic algorithm we've seen over and over again: AES-256. TPM also uses bcrypt as their chosen key derivation function, to make it as difficult for a potential attacker to brute force password hashes. Using Google's Authenticator, it supports two-factor authentication.
+
+
+			
+
+			While this software could essentially suffice, in order to meet the requirements, it would be lacking heavily in the user experience department, while also providing features and information, which would only be of use to super-users, and enterprise users.
 
 
 
@@ -203,6 +242,7 @@
 					LastPass 			& AES-256 		& Yes			& N/A 				& N/A \\
 					KeePass 			& AES-256 (more available through plugins) & No & N/A & C++ \\
 					Rattic 				& None 			& Yes 			& Apache 		& Python \& Django \\
+					Encryptr 			& AES-256 		& Yes			& Backend / N/A 	& JS \\
 				\end{tabular}
 			\end{table}
 
