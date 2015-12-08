@@ -6,10 +6,12 @@ else
 	OPEN_UTIL = open
 endif
 
+
+	#texcount $(FILENAME).tex -inc -letter -total
+
 all: 
 	latexmk -pdf $(FILENAME).tex
-	texcount $(FILENAME).tex -inc -letter -total
-
+	texcount $(FILENAME).tex -inc -total
 clean:
 	cp $(FILENAME).tex _$(FILENAME).tex
 	rm $(FILENAME).*

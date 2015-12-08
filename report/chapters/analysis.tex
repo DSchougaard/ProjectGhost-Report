@@ -11,9 +11,9 @@
 			\item Rattic
 			\item Encryptr
 			\item Passwordstate
-			\item Vault  \emph{(Zoho)}
+			\item Vault \emph{(Zoho)}
 			\item TeamPasswordManager
-			\item Simple Safe (https://www.simplesafe.net/)
+			\item Simple Safe
 			\item PassWork (https://passwork.me/)
 			\item SimpleVault (http://simplevault.sourceforge.net)
 			\item TeamPass (http://teampass.net)
@@ -246,22 +246,38 @@
 			Unfortunately, the limited number of platforms Passwordstate can run on, is a \emph{huge} drawback.
 
 		\subsection{SimpleSafe}
-			SimpleSafe is another take on the self-hosted team password manager solution, which seems to be the predominant solution available. Unfortunately SimpleSafe's documentation is lacking heavily, but based on their available demo, it appears that all users have access to all passwords. This results in that a single user can not have a private password, for their use only.
+			SimpleSafe\cite{simplesafe} is another take on the self-hosted team password manager solution, which seems to be the predominant solution available. Unfortunately SimpleSafe's documentation is lacking heavily, but based on their available demo, it appears that all users have access to all passwords. This results in that a single user can not have a private password, for their use only.
+
+			While it appears they have whole-heartedly embraced the idea of a minimalistic design, they've done so at the expense of user experience. The main view is a rather large but accessible list, with customizable attributes. On figure \ref{fig:simplesafe_main} on page \pageref{fig:simplesafe_main} the list is shown. The user can chose to organise passwords \emph{(or custom entries)} into groups. Groups are accessed through a menu, which is auto hidden. The expanded menu is shown on figure \ref{fig:simplesafe_menu} on page \pageref{fig:simplesafe_main}. Unfortunately, changing between groups takes a \emph{long} time. This causes a horrible experience for the user. Generally, the developers of SimpleSafe have been very generous with the animations, as pretty much all actions in the UI invokes some kind of animation. The delays because of this, adds to the overall sluggish feel of the system.
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/simplesafe_main.png}
+				\caption{Homepage of SimpleSafe}
+				\label{fig:simplesafe_main}
+			\end{figure}
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/simplesafe_groups.png}
+				\caption{Menu for changing groups in SimpleSafe.}
+				\label{fig:simplesafe_menu}
+			\end{figure}
+
+			Security wise, it is \emph{very} difficult to inspect SimpleSafe, due to their own lack of description. The only available information regarding security or encryption is the following quote.
+			\begin{quote}
+				\emph{SimpleSafe utilises a 256 bit encryption method. Each password has a unique private salt along with a master salt stored separately to the database. Only encrypted passwords are stored within the database.}\cite{simplesafe_faq}
+			\end{quote}
+
+			All in all SimpleSafe is a \emph{fairly} sketchy solution. One thing that is pretty neat, is the ability for a user to customise the fields in the different groups. For instance, they allow you to store SSH keys, in a particular field type. This lets the user separate things that require keys / certs, from traditional username/password logins.
 
 
 
+		\subsection{PassWork}
+			PassWork\cite{passwork} is yet another take, on the same type of solution as SimpleSafe, Rattic, TeamPasswordManager, and Passwordstate. Passwork organises passwords in groups, which in return can contain sub-groups, or folders if you will. Each group has a list of users, currently allowed to access passwords in said group.
 
 
 
-
-
-
-		\subsection{Simple Safe}
-			Simple Safe markets itself at teams, which is not necessarily evident at a first glance. However, based on their own user experience -- and poor description -- 
-
-			As seen before, Simple Safe allows passwords to be organised in "groups", much like Rattic. When you switch between groups, it is very ``clonky", with a grey'ed over screen, showing it's loading -- and it takes a while. From a user experience point of view, their solution is less than optimal.
-
-			From a encryption perspective, there isn't a lot to be told. Their rather vague description of their software, only states that they use 256 bit encryption \footnote{https://www.simplesafe.net/faqs/}, omitting their algorithm choice.
 
 
 		\subsection{PassWork}
