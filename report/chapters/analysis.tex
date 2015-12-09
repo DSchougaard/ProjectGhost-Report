@@ -259,7 +259,7 @@
 
 			\begin{figure}[htbp]
 				\centering
-				\includegraphics[width=0.95\textwidth]{figures/analysis/simplesafe_groups.png}
+				\includegraphics[width=0.70\textwidth]{figures/analysis/simplesafe_groups.png}
 				\caption{Menu for changing groups in SimpleSafe.}
 				\label{fig:simplesafe_menu}
 			\end{figure}
@@ -274,16 +274,69 @@
 
 
 		\subsection{PassWork}
-			PassWork\cite{passwork} is yet another take, on the same type of solution as SimpleSafe, Rattic, TeamPasswordManager, and Passwordstate. Passwork organises passwords in groups, which in return can contain sub-groups, or folders if you will. Each group has a list of users, currently allowed to access passwords in said group.
+			PassWork\cite{passwork} is yet another take, on the same type of solution as SimpleSafe, Rattic, TeamPasswordManager, and Passwordstate. 	PassWork is avilable as both a remote and a self-hosted solution, both of which comes with a price tag. 
+
+			PassWork organises passwords in groups, which in return can contain sub-groups -- or folders as the icon resembles. Each group has a list of users, currently allowed to access passwords in said group. As figure \ref{fig:passwork_adduser} on page \pageref{fig:passwork_adduser} shows, users can be added to groups, with permissions ``Full Access'', ``Edit'', and ``Read''. While differentiating between ``Edit'' and ``Full Access'' might be difficult, the option of setting permissions \emph{that} easily, when adding a user, is surprisingly a very good feature. Per default a group called a ``My passwords'' group is created, in which the user can place private passwords. 
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/passwork_adduser_cropped.png}
+				\caption{Permissions available, when adding users to a group.}
+				\label{fig:passwork_adduser}
+			\end{figure}
+
+			PassWork is another example of developers not describing and documenting their soltion properly. Unfortunately it is impossible to completely determine their encryption scheme, but they use ``256-bit passwords'' and RSA keypairs for sharing passwords. 
+
+			Their less than completely transparency when it comes to choice of encryption algorithm not to mention the hefty price-tag, should one wish to self-host it. Additionally, they completely omit to inform which platform(s) the self-hosted version is able to be run on.
+
+
+		\subsection*{SimpleVault}
+			Taking a bit of a different route from other solutions, SimpleVault\cite{simplevault} chooses to encrypt each individual password, with a different ``passphrase''. Based on their user experience, it would seem that SimpleVault is a proof of concept, more than a release software. Something as simple as headers for the table containing the main information is missing, as seen on figure \ref{fig:simplevault_main} on page \pageref{fig:simplevault_main}.
+
+			Adding a password, on figure \ref{fig:simplevault_addpassword}, shows the same lack of attention to the user experience, having two fields completely undescribed. One thing that SimpleVault \emph{does} get right in this context, is the option to generate passwords. Three buttons exists for generating passwords, with increasinly ``rare'' symbols. While options for passwords of specific length lacks, it seems to -- per default -- generate password of suitable length. 
+
+			Retrieving a password, on figure \ref{fig:simplevault_getpassword}, requires the user to type in the passphrase. The choice of this per-password passphrase, will undoubtedly only result in the user using the same password over and over again. However, this choice \emph{does} allow for the system to be used by multiple users, each just using their own master passphrase for all of their passwords.
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/simplevault_main.png}
+				\caption{Frontpage of SimpleVault.}
+				\label{fig:simplevault_main}
+			\end{figure}
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/simplevault_newpassword.png}
+				\caption{Adding a password to be stored in SimpleVault.}
+				\label{fig:simplevault_addpassword}
+			\end{figure}
 
 
 
 
+			\begin{figure}[htbp]
+				\centering
+				\begin{subfigure}{\textwidth}
+					\centering
+					\includegraphics[width=0.95\textwidth]{figures/analysis/simplevault_getpassword.png}
+					\caption{Typing passphrase, in order to decrypt stored password.}
+					\label{fig:simplevault_getpassword_type}
+				\end{subfigure}%
+				
+				\begin{subfigure}{\textwidth}
+					\centering
+					\includegraphics[width=0.95\textwidth]{figures/analysis/simplevault_getpassword_decrypted.png}
+					\caption{Decrypted password shown in SimpleVault}
+					\label{fig:simplevault_getpassword_decrypted}
+				\end{subfigure}
+				
+				\caption{Process of retrieving a password in SimpleVault.}
+				\label{fig:simplevault_getpassword}
+			\end{figure}
 
-		\subsection{PassWork}
-			Yet another solution, that markets itself at the enterprise, and has password data stored on a remote server. Same comments goes for this, as for LastPass, Vault (ZOHO), and Secret Server Express. 
 
-			Their user experience seems fine, and at first glance they -- per default -- have created a private group for each user, to store private passwords in. 
+			Security wise SimpleVault is quite horrible. With what can be taken from the quite poor description of the security of the system, the encrypted data is actally \emph{stored in clear text} on the remote machine, at some point or other. When adding a new entry, the password is sent in \emph{clear text} to the server, which then encrypts it. The developer argues that this is fine, as long as only HTTPS is used, for communicating with the server, but regardless of which protocol is used the password is \emph{still} stored in clear text.
+
 
 		\subsection{Simple Vault}
 			While Simple Vault is \emph{clearly} not aimed at enterprise use and is actually self-hosted, it does come with a bunch of downsides. First of all, it does not appear that it has the possibility for several users. Secondly, there is absolutely \emph{no} organisation: Passwords are stored single level, sorted lexicographical. Each individual password, can be protected by a passphrase, ``sort of" enabling multi-user access. However, other users will be able to see the password exists for a given website, which can be considered unfortunate.
