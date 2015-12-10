@@ -14,10 +14,10 @@
 			\item Vault \emph{(Zoho)}
 			\item TeamPasswordManager
 			\item Simple Safe
-			\item PassWork (https://passwork.me/)
-			\item SimpleVault (http://simplevault.sourceforge.net)
+			\item PassWork
+			\item SimpleVault
+			\item RoboForm
 			\item TeamPass (http://teampass.net)
-			\item RoboForm (http://roboform.com)
 			%\item Vault (https://vaultproject.io/)
 		\end{itemize}
 
@@ -29,7 +29,10 @@
 
 			Having examined the technical aspect, we need to pay attention to the usability as well. Looking at their web UI, it shows a reasonably straight forward design. Allowing the user to organise passwords folders, creating a two-level structure, as seen on figure \ref{fig:lastpass_main} on page \pageref{fig:lastpass_main}. While this \emph{does} allow the user some level of organisation, several levels would have been preferable. Additionally, LastPass is renowned for their apps and plugins, covering all major operating systems and browsers, creating a near seamless integration, when it comes to addition of new passwords and auto-filling stored passwords.
 
+			For devices without a browser supporting plugins, LastPass offers a so-called bookmarklet\cite{lastpass_bookmarklet}. A bookmarklet is a bookmark, which essentially contains JavaScript code, in order to add previously unobtainable features, in a browser. While this on the surface seems like a nifty feature, several studies have shown that the bookmarklets represent a significant security threat. In \cite{bookmarklet} they discuss an attack on LastPass, exploiting the users bookmarklet, to gain access to virtually all of the users stored credentials.
+
 			However, with the recent leak from LastPass \cite{lastpass_leak}, more and more users grew suspicious of these services. No matter how much encryption you apply, you can not get around the fact, that you have to \emph{trust} LastPass to both be completely honest about their encryption technology, \emph{and} storing your sensitive data. In many of the more sceptical user's eyes, this is a huge drawback, and why this solution is deemed unusable to solve the problem at hand.
+
 
 			\begin{figure}[h!]
 				\centering
@@ -47,8 +50,12 @@
 
 			Looking at the main UI, of which an example is shown on figure \ref{fig:keepass_main} on page \pageref{fig:keepass_main}, KeePass features exactly that which could be improved in LastPass: A tree like structure, in order to completely organise passwords. Other than that, there isn't anything noteworthy to say about their UI: It features the necessary and that's about it. A final thing worth mentioning, is that their password generator is completely customisable, as seen on figure \ref{fig:keepass_newpassword_passwordgen} on page \pageref{fig:keepass_newpassword_passwordgen}. You can manually choose, exactly which character sets, you wish to be in your passwords, enabling you to have passwords using local accents should the target system support it, which is a really nifty feature.
 
-			However, having praised the features of KeePass, it does lack something extremely important: Usability. More precisely, it lacks distribution. Since KeePass works on a local file, it would only inherently work on a \emph{single} device. Should one wish to distribute it, another tool has to be involved. File synchronisation tools, such as Dropbox, Google Drive, or Syncthing could be used, in order to create a distributed-ish feel to KeePass. However, you do still rely on a third party tool, which is a drawback. Additionally, there is the lack of cross-platform compatibility, since \emph{officially} KeePass only supports Windows. Granted, there exists unofficial ports for Linux, OS X, Android, etc., but you have to trust the developers of these unofficial applications. By extension, this introduces the threat of security breaches, which renders it as a less than ideal setup.
 
+			However, having praised the features of KeePass, it does lack something extremely important: Usability. More precisely, it lacks distribution. Since KeePass works on a local file, it would only inherently work on a \emph{single} device. Should one wish to distribute it, another tool has to be involved. File synchronisation tools, such as Dropbox, Google Drive, or Syncthing could be used, in order to create a distributed-ish feel to KeePass. However, you do still rely on a third party tool, which is a drawback. Additionally, there is the lack of cross-platform compatibility, since \emph{officially} KeePass only supports Windows. Granted, there exists unofficial ports for Linux, OS X, Android, etc., but you have to trust the developers of these unofficial applications. By extension, this introduces the threat of security breaches. Another negative in regards to usability, is the lack of a browser extension. While there exists third party solutions for this, the authors personal experiences with setting these up and using them, is \emph{quite} negative.	
+
+			Hence, all things taken into consideration, while KeePass has its moments it is an less than ideal solution.
+
+			
 			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=\textwidth]{figures/analysis/keepass_mainview.png}
@@ -274,7 +281,7 @@
 
 
 		\subsection{PassWork}
-			PassWork\cite{passwork} is yet another take, on the same type of solution as SimpleSafe, Rattic, TeamPasswordManager, and Passwordstate. 	PassWork is avilable as both a remote and a self-hosted solution, both of which comes with a price tag. 
+			PassWork\cite{passwork} is yet another take, on the same type of solution as SimpleSafe, Rattic, TeamPasswordManager, and Passwordstate. PassWork is available as both a remote and a self-hosted solution, both of which comes with a price tag. 
 
 			PassWork organises passwords in groups, which in return can contain sub-groups -- or folders as the icon resembles. Each group has a list of users, currently allowed to access passwords in said group. As figure \ref{fig:passwork_adduser} on page \pageref{fig:passwork_adduser} shows, users can be added to groups, with permissions ``Full Access'', ``Edit'', and ``Read''. While differentiating between ``Edit'' and ``Full Access'' might be difficult, the option of setting permissions \emph{that} easily, when adding a user, is surprisingly a very good feature. Per default a group called a ``My passwords'' group is created, in which the user can place private passwords. 
 
@@ -311,9 +318,6 @@
 				\label{fig:simplevault_addpassword}
 			\end{figure}
 
-
-
-
 			\begin{figure}[htbp]
 				\centering
 				\begin{subfigure}{\textwidth}
@@ -337,18 +341,36 @@
 
 			Security wise SimpleVault is quite horrible. With what can be taken from the quite poor description of the security of the system, the encrypted data is actally \emph{stored in clear text} on the remote machine, at some point or other. When adding a new entry, the password is sent in \emph{clear text} to the server, which then encrypts it. The developer argues that this is fine, as long as only HTTPS is used, for communicating with the server, but regardless of which protocol is used the password is \emph{still} stored in clear text.
 
+		\subsection{RoboForm}
+			RoboForm\cite{roboform} is somewhat a hybrid between the likes of KeePass and LastPass. While at heart, RoboForm is a locally stored password manager, it only exists as a browser extension. Since it only exist as a browser plugin, features such as form auto fill etc. are of course in their repertoire. However, from a ux point of view, the plugin stands out quite a bit from the browser. While this is a relatively small complaint, the usage of design guidelines from both Apple and Google, has helped create platform standards for how apps are supposed look, so the user never feels lost. Additionally, they offer ``RoboForm Everywhere'' cloud synchronisation of the encrypted file. This does however, entail trusting them with safe-keeping the encrypted file.
 
-		\subsection{Simple Vault}
-			While Simple Vault is \emph{clearly} not aimed at enterprise use and is actually self-hosted, it does come with a bunch of downsides. First of all, it does not appear that it has the possibility for several users. Secondly, there is absolutely \emph{no} organisation: Passwords are stored single level, sorted lexicographical. Each individual password, can be protected by a passphrase, ``sort of" enabling multi-user access. However, other users will be able to see the password exists for a given website, which can be considered unfortunate.
-
-			User experience wise, it is horrible. The design and colours are a pain to work with, the position of buttons and menus are not intuitive. Not to sound too harsh, but the design looks like it was made by a 7th grader: It does \emph{not} inspire confidence, in the developers ability to sufficiently protect my data.s
-
-		\subsection{TeamPass}
-			Nothing yet.
-	
+			Using RoboForm on a single device, renders it as a tool very similar to KeePass, albeit with ``better'' browser integration. Using RoboForm Everywhere results in the same downsides and threats, as previously explained.
 
 
-		\subsection{Comparison Chart}
+		\subsection{Comparison Charts}
+
+
+			\begin{tabular} {r l l l }
+				Name 				& Web Accessible 	& Bookmarklets	& Self-Hosted 		\\
+				\hline
+				LastPass 			& \cellcolor{green!75}Yes	& \cellcolor{green!75}Yes	& \cellcolor{red!75} No		\\
+				KeePass 			& \cellcolor{red!75}No 		& N/A 						& N/A						\\ 
+				Rattic  			& \cellcolor{green!75}Yes 	& \cellcolor{red!75}No 		& \cellcolor{green!75} Yes	\\
+				Encryptr 			& \cellcolor{green!75}Yes 	& \cellcolor{red!75}No 		& \cellcolor{green!75} Yes* \\
+			\end{tabular}
+
+
+			\begin{tabular}{ r l l l l }
+					Name 				& Desktop Client 	& Web Client 	& Mobile Client 	& Self-Hosted	\\
+					\hline
+					LastPass 			& Yes 				& Yes			& Yes				& No \\
+					KeePass 			& Yes				& No			& \\
+					Rattic  			& Yes						& \\
+					Encryptr 			& Yes					  	& \\
+				\end{tabular}
+
+
+
 			\begin{table}
 				\begin{tabular}{ r l l l l }
 					Name 				& Encryption  & Web Accessible 		& Server Software 		& Language \& Framework 		\\
