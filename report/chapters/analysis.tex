@@ -21,7 +21,7 @@
 			%\item Vault (https://vaultproject.io/)
 		\end{itemize}
 
-		\subsection{LastPass, and Similar Solutions}
+		\subsection*{LastPass, and Similar Solutions}
 		\label{subsec:lastpass}
 			In the name of usability services such as LastPass\footnote{https://lastpass.com/}, PassPack\footnote{https://www.passpack.com/}, DashLane\footnote{https://www.dashlane.com/}, and so many others grew popular, and it is easy to understand why. Enabling you to access your passwords from several devices, through native apps or the browser, it seemed like it was the perfect match of usability and security. To not repeat myself over and over again, I will focus on LastPass \emph{(due to them being the most well-known)} as a representation of this group.
 
@@ -43,7 +43,7 @@
 
 
 
-		\subsection{KeePass}
+		\subsection*{KeePass}
 			As the users grew suspicious of LastPass and the likes, a lot of them moved over to e.g. KeePass\footnote{https://keepass.org}, which allows the user to store the passwords in a local file. While there exists a plethora of tools similar to KeePass, I will focus on KeePass as the representative of the bunch, much as in section \ref{subsec:lastpass}.
 
 			If we again start by examining the technical details, as of version 2.x KeePass only -- per default -- offers AES-256 encryption, which is seen on figure \ref{fig:keepass_create_security} on page \pageref{fig:keepass_create_security}, with additional algorithm choices available through plugins \cite{keepass_security}. This enables users to tailor the encryption security, to their own needs -- and beliefs. 
@@ -84,7 +84,7 @@
 				\label{fig:keepass_newpassword_passwordgen}
 			\end{figure}
 
-		\subsection{Rattic}
+		\subsection*{Rattic}
 			Rattic\cite{rattic_frontpage} represents a third type of password manager, and the primary focus of this thesis: A self-hosted password manager, in the so-called private cloud. While at first glance, Rattic seems to be a solution very suited to the problem described earlier, it becomes a far more sketchy solution, upon investigating it closely. Rattic wonderfully describe their solution as:
 
 			\begin{quote}
@@ -126,7 +126,7 @@
 
 
 
-		\subsection{Encryptr}
+		\subsection*{Encryptr}
 			Bordering between the type of LastPass and Rattic, Enryptr \cite{encryptr} relies on the Crypton\cite{crypton} backend\cite{encryptr_backend}, available hosted at SpiderOak\cite{crypton_spideroak}. Per default, Encryptr \emph{only} supports hosting passwords at the Crypton backend, hosted at SpiderOak. However, it \emph{is} possible to run this in the private cloud, with your own Crypton backend. \emph{But} it requires manually editing source files\cite{encryptr_selfhost}, which makes the setup a pain. So not only would you have to set up Crypton, and its requirements, you would have to download the source of the apps, change the specified line of code, compile and \emph{then} you could use it. Because of this technical aspect, usability is virtually zero, as you would need to be fairly confident behind a keyboard, to successfully set this up.
 
 			Having said that, the UI of Encryptr is \emph{very} minimalistic and sleek, which both is a good and a bad thing. As seen on figure \ref{fig:encryptr_main} on page \pageref{fig:encryptr_main}, all passwords are stored in a \emph{single} list: There is \emph{no} organisation, other than labels. Granted, they do support searching, but somehow that still makes it very confusing, if more than a handful of passwords or secrets are stored, and since Encryptr not only supports storing passwords, but also credit card information and general secrets, this could be achieved fairly quickly.
@@ -151,7 +151,7 @@
 			On the technical side, Crypton -- the backend -- is actually fairly interesting. Using their own definition of zero-knowledge, the developers created a complete framework for securely transferring and storing data at a remote machine\cite{crypton_paper}. They claim, that it is impossible to obtain the unencrypted data on their servers, without actually getting hold of the users private encryption key. The Crypton backend is open source, and available at \cite{crypton_git}. What powers Crypton, cryptographically speaking, is AES-256.
 
 
-		\subsection{Vault}
+		\subsection*{Vault}
 			Vault\emph{(ZOHO)}\cite{vault_zoho} is another piece of software, that requires you to submit your data to their servers. Where this tool differs from LastPass and Encryptr, is that it is \emph{clearly} aimed at enterprise customers, which is clearly evident based on their features, such as LDAP integration.
 
 			Vault organises the passwords in so called Chambers. Each password \emph{can} be added to one or more chambers, but is not necessary. Seen on figure \ref{fig:vaultzoho_main_secrets} on page \pageref{fig:vaultzoho_main_secrets} we see how it lists all available passwords, in a single list. Using this main list quickly becomes very confusing. Looking at the Chambers list, which is found on figure \ref{fig:vaultzoho_main_chambers} on page \pageref{fig:vaultzoho_main_chambers}, the same pattern arises again. A large list, showing only the important information -- the passwords -- in the smallest part of the UI. All in all, performing simple tasks is very clunky.
@@ -179,7 +179,7 @@
 
 
 
-		\subsection{TeamPasswordManager}
+		\subsection*{TeamPasswordManager}
 			TeamPasswordManager\cite{teampasswordmanager_frontpage} \emph{(henceforth referred to as TPM)} is a tool that is fairly similar to Rattic. However, where it differs is the less minimalistic UI. TPM organises passwords in ``Projects'', which is a great indicator that this tool is in fact intended to be used with enterprise in mind. TMP is able to be self-hosted and is platform independent, requiring Apache, PHP and MySQL, which is a great asset.
 
 			Turning to the user experience, the frontpage that the user is presented with, as seen in figure \ref{fig:teampasswordmanager_main} on page \pageref{fig:teampasswordmanager_main}, is a clunky list of all available passwords. For organisational value, groups as ``Favorite'' and ``Recent'' are also available, filtering the available passwords into more manageable lists. But once again, this very clunky and large UI is used, much like in Vault.
@@ -208,7 +208,7 @@
 
 			While this software could essentially suffice, in order to meet the requirements, it would be lacking heavily in the user experience department, while also providing features and information, which would only be of use to super-users, and enterprise users.
 
-		\subsection{Passwordstate}
+		\subsection*{Passwordstate}
 			Passwordstate from ClickStudios\cite{passwordstate} is a solution some-what similar to both TeamPasswordManager and Vault \emph{(Zoho)}. There is not a seconds doubt, that this is a solution aimed at enterprise users, as they state themselves. This is also evident by the feature set, they have: Sporting not only active directory support, they also have built-in options for High Availability and \emph{several} options for two-factor authentication, amongst others. Passwordstate is self-hostable, but requires a windows platform and the IIS server \cite{passwordstate_requirements}.
 
 			Inspecting the user experience, reveals that Passwordstate is a fresh breeze. This solutions actually manages to give the most important information, the most screen-space. On figure \ref{fig:passwordstate_main} on page \pageref{fig:passwordstate_main}, we see how password state allows for the same tree-like structure, that we've seen before. This creates excellent organisational options, for the users. On the frontpage the user is presented with his or hers favourite passwords list, and recently accessed passwords. Alas, here is where Passwordstate falls short. Instead of keeping a minimalistic UI, the user is presented with information, only interesting to enterprise users, or super-users. A host list, is with a high probability useless for the majority of regular users, as well as the little graph that shows password statistics, as seen on figure \ref{fig:passwordstate_graph} on page \pageref{fig:passwordstate_graph}. This particular graph, presented at this particular place, seems very much to be a graph for the sake of a graph. 
@@ -252,7 +252,7 @@
 
 			Unfortunately, the limited number of platforms Passwordstate can run on, is a \emph{huge} drawback.
 
-		\subsection{SimpleSafe}
+		\subsection*{SimpleSafe}
 			SimpleSafe\cite{simplesafe} is another take on the self-hosted team password manager solution, which seems to be the predominant solution available. Unfortunately SimpleSafe's documentation is lacking heavily, but based on their available demo, it appears that all users have access to all passwords. This results in that a single user can not have a private password, for their use only.
 
 			While it appears they have whole-heartedly embraced the idea of a minimalistic design, they've done so at the expense of user experience. The main view is a rather large but accessible list, with customizable attributes. On figure \ref{fig:simplesafe_main} on page \pageref{fig:simplesafe_main} the list is shown. The user can chose to organise passwords \emph{(or custom entries)} into groups. Groups are accessed through a menu, which is auto hidden. The expanded menu is shown on figure \ref{fig:simplesafe_menu} on page \pageref{fig:simplesafe_main}. Unfortunately, changing between groups takes a \emph{long} time. This causes a horrible experience for the user. Generally, the developers of SimpleSafe have been very generous with the animations, as pretty much all actions in the UI invokes some kind of animation. The delays because of this, adds to the overall sluggish feel of the system.
@@ -280,7 +280,7 @@
 
 
 
-		\subsection{PassWork}
+		\subsection*{PassWork}
 			PassWork\cite{passwork} is yet another take, on the same type of solution as SimpleSafe, Rattic, TeamPasswordManager, and Passwordstate. PassWork is available as both a remote and a self-hosted solution, both of which comes with a price tag. 
 
 			PassWork organises passwords in groups, which in return can contain sub-groups -- or folders as the icon resembles. Each group has a list of users, currently allowed to access passwords in said group. As figure \ref{fig:passwork_adduser} on page \pageref{fig:passwork_adduser} shows, users can be added to groups, with permissions ``Full Access'', ``Edit'', and ``Read''. While differentiating between ``Edit'' and ``Full Access'' might be difficult, the option of setting permissions \emph{that} easily, when adding a user, is surprisingly a very good feature. Per default a group called a ``My passwords'' group is created, in which the user can place private passwords. 
@@ -341,13 +341,13 @@
 
 			Security wise SimpleVault is quite horrible. With what can be taken from the quite poor description of the security of the system, the encrypted data is actally \emph{stored in clear text} on the remote machine, at some point or other. When adding a new entry, the password is sent in \emph{clear text} to the server, which then encrypts it. The developer argues that this is fine, as long as only HTTPS is used, for communicating with the server, but regardless of which protocol is used the password is \emph{still} stored in clear text.
 
-		\subsection{RoboForm}
+		\subsection*{RoboForm}
 			RoboForm\cite{roboform} is somewhat a hybrid between the likes of KeePass and LastPass. While at heart, RoboForm is a locally stored password manager, it only exists as a browser extension. Since it only exist as a browser plugin, features such as form auto fill etc. are of course in their repertoire. However, from a ux point of view, the plugin stands out quite a bit from the browser. While this is a relatively small complaint, the usage of design guidelines from both Apple and Google, has helped create platform standards for how apps are supposed look, so the user never feels lost. Additionally, they offer ``RoboForm Everywhere'' cloud synchronisation of the encrypted file. This does however, entail trusting them with safe-keeping the encrypted file.
 
 			Using RoboForm on a single device, renders it as a tool very similar to KeePass, albeit with ``better'' browser integration. Using RoboForm Everywhere results in the same downsides and threats, as previously explained.
 
 
-		\subsection{Comparison Charts}
+		\subsection*{Comparison Charts}
 
 
 			\begin{tabular} {r l l l }
