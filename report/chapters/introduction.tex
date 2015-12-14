@@ -7,25 +7,141 @@
 	As with so many things, in our IT infrastructure, the users crave convenience. Tools storing an encrypted file locally, was no longer good enough, as the majority of users began to use multiple devices. Hence, the password managers slowly migrated into The Cloud.
 
 	\section{The Cloud}
-		The origin of the term ``The Cloud'' stems from Cloud Computing. Computations too heavy to be performed on a single machine, was divided into several -- usually networked -- machines, which then shared the computationally load. However, when we say ``The Cloud'' today, it is not \emph{exactly} this, that we speak of.
+		The origin of the term ``The Cloud'' stems from Cloud Computing. Computations too heavy to be performed on a single machine, was divided into several -- usually networked -- machines, which then shared the computationally load. However, when we say The Cloud today, it is not \emph{exactly} this, that we speak of.
 
-		The concept of ``The Cloud'' is simple: Somewhere out there, out of reach for you, in ``The Cloud'' are your data being stored, and any possible computations being done. This saves the user from the hassle of managing this, themselves. Applications such as Dropbox, OneDrive and Googe Drive is prime examples of what the could exactly is: You unload some of the ``resonsibilities'' onto something, or someone else. Once that file has been dragged into your Dropbox folder, and that little icon is green instead of blue, you're safe. Your data is now kept for you, available at all times, from any device. It is in the cloud.
+		The concept of The Cloud is simple: Your data, and any computations associated with it, is stored and performed somewhere \emph{else}: In the so called cloud.
 
-		While the cloud \emph{does} come with its benefits, especially convenience, it has its own drawbacks as well. Since the user 
+		This saves the user from the hassle of managing this, themselves. Applications such as Dropbox, OneDrive and Google Drive is prime examples of what the could exactly is: You unload some of the ``responsibilities'' onto something, or someone else. Once that file has been dragged into your Dropbox folder, and that little icon is green instead of blue, you're safe. Your data is now kept for you, available at all times, from any device. It is in the cloud.
+
+		While the cloud \emph{does} come with its benefits, especially convenience, it has its own drawbacks as well. Let us talk about \emph{trust}.
+
+		\subsection*{Trust}
+			When uploading data into the cloud, the user is effectively trusting the vendor. They're trusting that the vendor is completely honest regarding their inner workings, what they can access and what they can not access. They are trusting the vendor, when they say that they do not \emph{(or possibly do)} sell your information to a third party.
+
+			Trusting vendors is completely fine. You can't access the web without a certain amount of trust. Just look at the worlds most popular search engine, Google. Unfortunately, sometimes this trust is betrayed.
+
+			Dropbox experienced this, when users discovered that the data they uploaded to Dropbox, was not so private in fact. Using hashing techniques to discover duplicate files, they ``save'' the user's bandwidth, by using an already stored file on their server. While this does sound like a reasonable feature, it does also mean that Dropbox has access to the raw files on their server somehow, which again leads us to question the privacy of Dropbox.
+
+			Another example of this misplaced trust, is the incident involving LastPass in 2015. As many IT professionals had feared, the online password manager had a breach. Panic arose, and LastPass almost forced their users to change their passwords. Exactly this, is the general issue with the cloud. You have to trust someone else to store it.
 
 
-
-
-
-
-
-
-		In 2015 we saw what many professionals had feared: LastPass had had a leak. Thousands of user credentials had -- albeit encrypted -- been released. Panic arose, and LastPass almost forced their users to change their passwords.
-
-		This is general issue with the cloud: You trust someone else to store your passwords. Someone else, to ensure that your data does not end up in the hand of someone else.
+			This is general issue with the cloud: You trust someone else to store your confidential information. Someone else to ensure that your data does not end up in the hand of someone else.
 
 	\section{The Private Cloud}
-		To counteract these issues, the concept of what I choose to call the Private Cloud arose. The idea is, that while a user \emph{does} what the convenience of using a cloud, he or she does not trust \emph{the} cloud. Instead, a home server is set up, providing the same features.
+		To counteract these issues, more and more people started hosting \emph{(self-hosted)} applications themselves, giving them cloud-like features, without ever relinquishing control or ownership of their data. This concept has evolved, especially during the last few years, into something called ``The Private Cloud''. 
+
+		While the private cloud originally was intended for the various corporations and enterprise solutions, more and more open-source solutions have started to emerge. Individual software engineers, tired of having to practically sign over ownership of their data, to benefit from seamless multi-device integration. 
+
+		Unfortunately, running a private cloud come with its own set of issues. First and foremost there is the issue of finances: A server not only costs money to acquire, but also to run. To run a server 24/7, would cost a fair amount. Secondly, there's the issue of setting this private cloud up. 
+
+		\subsection*{The Financial Cost of the Private Cloud}
+			Previously, it was only enthusiast with their own private \emph{servers} that was able to host these applications. These servers could be made from anything between an old discarded PC, to top of the line server hardware, that the enthusiasts chose to buy. Unfortunately hardware like this, does have decently large power consumption, and if the user wants 100\% availability it needs to run 24/7.
+
+			This trend however, has been changed a bit recently. With the rise of low powered computers, such as the Raspberry Pi, the Beaglebone, or even the Intel NUC, having a 100\% uptime no longer comes with a equally high cost. Using as little as $2.5W$, depending on the model. While this won't take the place of an ``actual'' server, it will be sufficient to run a single cloud-like application, creating a -- cheap to both acquire and run -- private cloud.
+
+			Determining exactly how many $kWh$ such a device will consume -- over a year -- is quite easy. One simply have to fill out form \ref{eq:kwh} to calculate the total consumption of a device. If no rating of $W$ is given, it can be calculated, cf. equation \ref{eq:w}.
+
+			\begin{equation}
+				kWh_{year} = W_{device} \times h_{year} / 1000
+				\label{eq:kwh}
+			\end{equation}
+
+			\begin{equation}
+				W = V \times A
+				\label{eq:w}
+			\end{equation}
+
+			Since the Raspberry Pi Foundation has been so kind, as to provide a little table showing us the power consumptions of the different versions of the raspberry pi \cite{raspberrypi_power}, we can easily calculate the theoretical consumption, shown on equation \ref{eq:rpi_2_b_kwh}.
+
+			\begin{equation}
+				kWh_{year} = (1.2A \times 5V ) \times 365.25 \times 24 / 1000 = 52.596kWh
+				\label{eq:rpi_2_b_kwh}
+			\end{equation}
+
+			Take note, that these values are for both the \emph{newest} and Raspberry Pi, which only has a \emph{maximum} power drain noted, since it is recently new. 
+
+			The Model B+ from the previous generation, has the same maximum power drain, but it also have a significantly lower average power drain, of $0.33A$. They describe this drain, as caused by:
+			\begin{quote}
+				\emph{Typical bare-board active current consumption.}\cite{raspberrypi_power}
+			\end{quote}
+
+			Using $0.33A$ value as a more ``realistic'' rating, the energy consumption for a year is reduced \emph{drastically}, to a mere $14.4639 kWh$, using equation \ref{eq:kwh}. Using prices from the first of November 2015\cite{dong_prices}, running a Raspberry Pi 2 Model B for a year, will cost somewhere between 27DKK and 100DKK. Using the logic from \cite{raspberrypi_power} this value will more than likely be closer to 27, than to 100.
+
+			This leads to the conclusion, that the cost is no longer a cause for only enthusiast and system administrators, to run their own private cloud. However, the cost is not the only issue in regards to running a private cloud.
+
+
+		\subsection*{Technical Challenges}
+			Unfortunately, the private cloud does not come without its own disadvantages. When using a vendors solution, problems as setup, configuration, and maintenance is their responsibility. Running an enterprise-like RAID environment will more than likely be out of the question, so taking precautions for data loss is definitely a priority.
+
+
+
+
+
+
+
+	\section{The Problem}
+
+
+
+
+
+
+
+
+
+			So unfortunately, Mr. and Mrs. Hansen is hardly the ideal candidates, for running a private cloud. However, their more tech-savvy son, might very well be able to manage the setup. Then it is just a question of getting Mr. and Mrs. Hansen to actually \emph{use} this tool.
+
+
+
+
+
+
+
+
+			How difficult these applications are to set up, greatly depends on the applications structure and dependencies. Some are as simple as cloning a git repository, and copying a startup script into its apropriate directory \emph{(assuming linux server)}
+
+
+			A general trend of the 
+
+
+
+
+
+		
+
+		%Financial Cost
+		%Issues
+		%	Super Users 
+		%	Non-Super Users
+
+
+
+
+
+
+
+
+
+
+
+
+		This does however requires something of the user. Issues such as availability and cost, is a constant problem for people in the community. 
+
+
+
+
+
+
+
+
+
+
+
+
+	\subsection*{The Cost of the Private Cloud}
+
+
+	\subsection*{The Issues with the Private Cloud}
 
 
 
@@ -42,7 +158,31 @@
 
 
 
-	Some text.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	\section{Problem}
 	\section{List of Requirements}
