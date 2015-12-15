@@ -1,15 +1,31 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \chapter{Introduction}
 \label{chap:intro}
 	For many years, IT professionals have preached the importance of strong passwords. Many publications exists, describing exactly what defines a strong password. The general consensus is, that it needs \emph{at least} both upper- and lower-case letters, digits and preferably also symbols \emph{(\#, \_, etc.)}. Additionally, it shouldn't be a word -- or a word where an L is replaced by a 1. And of course it has to be at least 8 characters long. And you're not supposed to use the same password more than once place. With all of these rules for strong passwords, its hardly a surprise that a lot of the regular users of IT systems resort to simple, repetitive passwords.
 
 	To help alleviate this problem, a new class of software grew popular: Password managers. Simple tools, protected by a single master password, that generates and stores passwords, in a secure manner. A lot of the IT professionals took these tools to their heart, despite their inherent flaws. 
 
-	As with so many things, in our IT infrastructure, the users crave convenience. Tools storing an encrypted file locally, was no longer good enough, as the majority of users began to use multiple devices. Hence, the password managers slowly migrated into The Cloud.
+	As with so many other things in modern society, the users crave convenience. Tools storing an encrypted file locally, was no longer good enough, as the majority of users began to use multiple devices. Hence, the password managers slowly migrated into The Cloud.
 
 	\section{The Cloud}
-		The origin of the term ``The Cloud'' stems from Cloud Computing. Computations too heavy to be performed on a single machine, was divided into several -- usually networked -- machines, which then shared the computationally load. However, when we say The Cloud today, it is not \emph{exactly} this, that we speak of.
+		The origin of the term ``The Cloud'' stems from Cloud Computing. Computations too heavy to be performed on a single machine, was divided into several -- usually networked -- machines, which then shared the computationally load. However, when we say the cloud today, it is not \emph{exactly} this, that we speak of.
 
-		The concept of The Cloud is simple: Your data, and any computations associated with it, is stored and performed somewhere \emph{else}: In the so called cloud.
+		The concept of the cloud is simple: Your data, and any computations associated with it, is stored and performed somewhere \emph{else}: In the so called cloud.
 
 		This saves the user from the hassle of managing this, themselves. Applications such as Dropbox, OneDrive and Google Drive is prime examples of what the could exactly is: You unload some of the ``responsibilities'' onto something, or someone else. Once that file has been dragged into your Dropbox folder, and that little icon is green instead of blue, you're safe. Your data is now kept for you, available at all times, from any device. It is in the cloud.
 
@@ -80,109 +96,67 @@
 
 
 	\section{The Problem}
+		The problem is passwords. Either they're too easy bruteforce or guess using social engineering, or they're so difficult to remember, that the user inadvertently returns to using the same password, over and over again, simply because of too many passwords. It is simply impossible, due to the shear number of different, and unique, passwords that would need to be memorized.
 
+		Additionally, choosing the paranoid path, the passwords can \emph{not} be stored on a device not controlled by the user. This is mainly due to recent concerns regarding privacy of public hosts, such as LastPass.
 
 
 
 
 
+	\section{Requirements}
+		The requirements in the following sections are the requirements for the solution as a \emph{whole} and will there for be independent of which technical structure is selected, during the design-phase.
 
 
 
-			So unfortunately, Mr. and Mrs. Hansen is hardly the ideal candidates, for running a private cloud. However, their more tech-savvy son, might very well be able to manage the setup. Then it is just a question of getting Mr. and Mrs. Hansen to actually \emph{use} this tool.
+		\subsection*{Functional Requirements}
+			The most central requirement of the solution, is that it should \emph{not} be limited to a single device. It should be accessible from multiple devices, creating the feel of a private cloud. 
 
+			The solution should support multiple \emph{(individual)} users, where a user can be either an admin user or a regular user. Passwords should be able to be organized in a structured way, customizable by the individual users, for the best user experience. For convenience, passwords should be able to be shared. However, sharing of passwords should not be the default setting, but something the user \emph{actively} have to select.
 
+			The solution should be platform agnostic, and should not be limited to any \emph{one} server software. The solution has to be database agnostic, in such a way that the user can choose what type of underlying storage, he or she wishes. This is done to make it appealing to more hardcore enthusiasts as well, while also making it able to run on low powered devices. ccess to the solution should be protected by the users master password, and using two-factor authentication should be a possible option. In order to better restrict outside access, the admin will have to create a new user. This can be done either with the admin actually setting up the user, or an invite to registration.
 
+			No password -- or any other sensitive data -- should \emph{ever} be present unencrypted anywhere else, than a local device. This ensures that even if another part of the solution is somehow compromised, data is not revealed on that device.  The users should be able to audit access to their personal data including, but not limited to, retrieving passwords, adding passwords, changing passwords, and deleting passwords. This should be done by logging complete time of access and the remote host, at least. This ensures that a user can detect if unauthorised access has occurred.
 
+			To sum it up, the above requirements have been condensed into a list:
+			\begin{itemize}
+				\item Distributed password database
+				%\item Self-contained
+				\item Multi-user support
+				\item Support differentiating between admin users and regular users.
+				\item Password organization, multiple-levels
+				\item Password sharing
+				\item Only admin can add a user -- or invite a user -- to the solution
+				\item Platform agnostic
+				\item Database agnostic
+				\item Passwords and private information should never be stored or handled unencrypted anywhere, other than the local device.
+				\item Support adding of new passwords
+				\item Support retrieving stored password
+				\item Support deleting stored passwords
+				%\item Log when a password is added and from where.
+				%\item Log when a password is changed, and from where.
+				%\item Log when a password is retrieved, and from where.
+				%\item Log when a password is deleted, and from where.
+				\item Extensive auditing
+				\item Allow user authentication based on a single master password, per user
+				\item Allow the user to change his or her master password
+				\item Support two-factor authentication
+				%\item Take precautions to mitigate consequences of defect disks or data corruption
+				\item Automatic start after a hardware reboot
+			\end{itemize}
 
 
+		\subsection*{Non-Functional Requirements}
+			Based on the previous sections, we can conclude one very fundamental thing: The passwords needs to be stored somewhere the user has control over. In order to aid development, allowing for use of various open source frameworks and libraries, the solution should be open source and licensed with an appropriate license \emph{(MIT for instance)}. The solution should be able to store a million password entries \emph{(1.000.000)}, spread across all users. The encryption used for the storage of sensitive data should be of industry standard, and should be viable for at least 5 years. The same goes for the encryption used for communication. For maximum security, the solution should \emph{only} accept and use TLS version 1.2 connections, with a limited cypher suite. For the best user experience, there must not be any latency in the user interface, exceeding $500ms$. Any longer, and the user will grow tired of using the software, because of its sluggish feel.
 
-
-			How difficult these applications are to set up, greatly depends on the applications structure and dependencies. Some are as simple as cloning a git repository, and copying a startup script into its apropriate directory \emph{(assuming linux server)}
-
-
-			A general trend of the 
-
-
-
-
-
-		
-
-		%Financial Cost
-		%Issues
-		%	Super Users 
-		%	Non-Super Users
-
-
-
-
-
-
-
-
-
-
-
-
-		This does however requires something of the user. Issues such as availability and cost, is a constant problem for people in the community. 
-
-
-
-
-
-
-
-
-
-
-
-
-	\subsection*{The Cost of the Private Cloud}
-
-
-	\subsection*{The Issues with the Private Cloud}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	\section{Problem}
-	\section{List of Requirements}
+			To sum it up, the above requirements have been condensed into a list:
+			\begin{itemize}
+				\item Only use user-controlled storage.
+				\item Open Source License \emph{(MIT for instance)}.
+				\item Support for \emph{at least} 100.000 password entries
+				%\item Less than $500ms$ response time, on \emph{all} actions
+				\item Use encryption for storage should be viable for at least 5 years.
+				\item Use encryption for communication should be viable for at least 5 years.
+				\item Secure communications, using only TLS 1.2 or newer.
+				\item A user should never wait more than at maximum $500ms$ after any action in the user interface, before the changes take effect.
+			\end{itemize}
