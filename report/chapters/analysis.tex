@@ -1,10 +1,11 @@
 \chapter{Analysis}
 \label{chap:analysis}
-	As with so many projects, toy never start from scratch. In this chapter I will investigate exising solutions solving the same problem -- or one fairly similar to -- as desribed in chapter \ref{chap:intro}.
+	As is to be expected, solutions for solving the problem already exist. In this chapter these solutions are investigated and evaluated, as to how well they solve the problem at hand. While finding solutions that match the problem described in  \emph{completely} might be difficult, solutions that are fairly similar are also considered.
+
+	Furthermore, available academic research papers will be studied, for solutions that would solve a problem similar to that in \ref{chap:intro_sec:problem}, or a interesting techniques for handling sub-problems.
 
 	\section{Existing Available Tools}
-		Having reseached which tools are currently available, I've condensed my findings into the following list. 
-
+		Having several available tools which -- more or less -- \emph{could} be used to solve the problems, the findings have been condensed into the following list.
 		\begin{itemize}
 			\item LastPass, and Similar Solutions
 			\item KeePass, and Similar Solutions
@@ -23,7 +24,7 @@
 
 		\subsection*{LastPass, and Similar Solutions}
 		\label{subsec:lastpass}
-			In the name of usability services such as LastPass\footnote{https://lastpass.com/}, PassPack\footnote{https://www.passpack.com/}, DashLane\footnote{https://www.dashlane.com/}, and so many others grew popular, and it is easy to understand why. Enabling you to access your passwords from several devices, through native apps or the browser, it seemed like it was the perfect match of usability and security. To not repeat myself over and over again, I will focus on LastPass \emph{(due to them being the most well-known)} as a representation of this group.
+			In the name of usability services such as LastPass\footnote{https://lastpass.com/}, PassPack\footnote{https://www.passpack.com/}, DashLane\footnote{https://www.dashlane.com/}, and so many others grew popular, and it is easy to understand why. Enabling you to access your passwords from several devices, through native apps or the browser, it seemed like it was the perfect match of usability and security. To avoid too much repetition LastPass is picked as a representative of this group, simply due to it being the most well-known.
 
 			If we start by looking at the technical details of LastPass, they quote themselves using 256-bit AES encryption, and applies PBKDF2, in order to make it as difficult as possible, to crack stored data. For maximum security, both encryption and decryption, is done client side\cite{lastpass_cleintsideencryption}, as to avoid transferring the actual password, unencrypted, to their servers. Encryption and decryption is done using the master password, which is never actually sent to their servers. Finally, as is to be expected, all connections to LastPass' servers, are SSL encrypted.
 
@@ -44,7 +45,7 @@
 
 
 		\subsection*{KeePass}
-			As the users grew suspicious of LastPass and the likes, a lot of them moved over to e.g. KeePass\footnote{https://keepass.org}, which allows the user to store the passwords in a local file. While there exists a plethora of tools similar to KeePass, I will focus on KeePass as the representative of the bunch, much as in section \ref{subsec:lastpass}.
+			As the users grew suspicious of LastPass and the likes, a lot of them moved over to e.g. KeePass\footnote{https://keepass.org}, which allows the user to store the passwords in a local file. While there exists a plethora of tools similar to KeePass,  it will be used as a representative of this group, for the same reasons as in \ref{subsec:lastpass}.
 
 			If we again start by examining the technical details, as of version 2.x KeePass only -- per default -- offers AES-256 encryption, which is seen on figure \ref{fig:keepass_create_security} on page \pageref{fig:keepass_create_security}, with additional algorithm choices available through plugins \cite{keepass_security}. This enables users to tailor the encryption security, to their own needs -- and beliefs. 
 
@@ -385,4 +386,32 @@
 
 
 	\section{Academic Research and Tools}
-	\section{Chosen Inspiration}
+		A number of interesting academic articles and papers was discovered, while researching available solutions from this source. The findings of this, has been condensed into the following list.
+
+		\begin{itemize}
+			\item Tapas: Design, Implementation, and Usability Evaluation of a Password Manager \cite{tapas}
+			\item Using CardSpace as a Password Manager \cite{cardspace}
+		\end{itemize}
+
+
+		\subsection*{Tapas: Design, Implementation, and Usability Evaluation of a Password Manager}
+			In \cite{tapas}, a new and novel idea is introduced. Rather than using two-factor authentication, a \emph{dual-possession} authentication is used. The basic concept is, that the user has two devices: A smartphone \emph{(wallet)} and a desktop \emph{(manager)}. While it \emph{specifically} states that the manager is a desktop, it is assumed that it might as well be a laptop. The idea is that the manager stores keys for decrypting login information to various sites, while the wallet stores encrypted blobs. The argument is, that even if either device is stolen, offline attacks cannot happen.
+
+			The authentication for storing and retrieving passwords is then based on the fact that the user is in possession of \emph{both} devices, at the time of login. As they describe their solution, it is only possible to access and use passwords on the manager, while the wallet actually stores them. The proposed protocols are:
+			\begin{itemize}
+				\item Pairing Manager and Wallet
+				\item Storing a Password
+				\item Retrieving a Password
+			\end{itemize}
+
+			Tapas relies on so-called pairing, for easy authentication between wallet and manager, in the remaining protocols. The pairing has to be done in a secret out-of-band channel. During this pairing a private and public key for each device is created, and the public key for the manager is sent to the wallet, and vice versa. This ensures that a secure channel, over a possible hostile connection, can be made in the future.
+
+			While the protocol for storing a password is hardly interesting, the protocol for retrieving a password does present an interesting approach. Retrieval of a password has to be initiated on the \emph{wallet}, or rather smartphone. After authenticating using the previously obtained public keys, they create a secure channel, with perfect forward secrecy, and the wallet sends the encrypted blob to the manager, which then decrypts it and auto-types it in the users browser.
+
+			The team behind Tapas is fairly open regarding what \emph{they} consider the limitations of Tapas. As they see it, there are tree major. First and foremost, the solution relies on an active internet connecting for retrieving passwords. This limitation is unfortunate, but unavoidable with their choice of authentication. It is, however, easily avoided by use of USB tethering or WiFi hotspots, which are standard features in modern smartphones. Secondly, their other limitation is that the smartphone must be charged. Again, a very unavoidable limitation, due to how technology works. The last, and perhaps the only real concern, other than small inconveniences is the fact that Tapas does \emph{not} support multiple devices. It only works with \emph{one} wallet and  \emph{one} manager. Even the wallet cannot access these passwords which is unfortunate, since a lot of the same accounts for a desktop, is also used on a smartphone. All in all, renders it as an unsuited approach to the problem at hand.
+
+
+
+
+
+	\section{Chosen Inspiration} 
