@@ -396,6 +396,22 @@
 			\item Kamouflage: Loss-Resistant Password
 			\item Stronger Password Authentication Using Browser Extensions
 		\end{itemize}
+		%Covered
+		%Tapas: Design, Implemetation, and Usability Evaluation of a Password Manager.pdf
+		%Using CardSpace as a Password Manager.pdf
+		%Implementing PassCard — a CardSpace-based Password Manager.pdf
+		
+
+		%Listed
+		%Kamouflage: Loss-Resistant Password.pdf
+		%Stronger Password Authentication Using Browser Extensions.pdf
+
+
+
+		%Non-Listed
+		%IDKeeper: A Web Password Manager with Roaming Capability Based on USB Key .pdf
+		%A Convenient Method for Securely Managing Passwords.pdf
+
 
 
 		\subsection*{Tapas: Design, Implementation, and Usability Evaluation of a Password Manager}
@@ -415,7 +431,13 @@
 			The team behind Tapas is fairly open regarding what \emph{they} consider the limitations of Tapas. As they see it, there are tree major. First and foremost, the solution relies on an active internet connecting for retrieving passwords. This limitation is unfortunate, but unavoidable with their choice of authentication. It is, however, easily avoided by use of USB tethering or WiFi hotspots, which are standard features in modern smartphones. Secondly, their other limitation is that the smartphone must be charged. Again, a very unavoidable limitation, due to how technology works. The last, and perhaps the only real concern, other than small inconveniences is the fact that Tapas does \emph{not} support multiple devices. It only works with \emph{one} wallet and  \emph{one} manager. Even the wallet cannot access these passwords which is unfortunate, since a lot of the same accounts for a desktop, is also used on a smartphone. All in all, renders it as an unsuited approach to the problem at hand.
 
 
+		\subsection*{Using CardSpace as a Password Manager \& Implementing PassCard - a CardSpace-based Password Manager}
+			In \cite{cardspace,cardspace_impl} the authors design and implement PassCard: A password manager based on CardSpace. CardSpace was Microsoft's client software for their ``Identity Metasystem''. The program was retired as of February 15th 2011, but Microsoft stated that they are working on a replacement \cite{cardspace_cancelled}. This is a service that was discontinued in 2011, and has not been shipped with windows since Windows 8.0. This alone, indicates that this solution is not suitable for any modern devices.
 
+			The basic concept of PassCard, is that the user creates ``Personal Cards''. These cards are able to store various sensitive information, securely. Their solution is a browser extension, which then reads these cards and auto-fills the information. No where in their report, do they describe anything related to adding passwords through PassCard, which leads to believe that his has to be done manually, directly in CardSpace.
 
+			Since CardSpace is a windows only program, this limits the user segment significantly. Additionally, the paper does not mention whether or not they support any kind of multi-device operation, but even if it did it would more than likely be limited to Windows platforms. Hence, the solution is \emph{unusable} for mobile devices, and users of either Mac OS X or Linux. All in all, this solution seems poor in comparison to what we've seen.
+
+		
 
 	\section{Chosen Inspiration} 
