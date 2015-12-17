@@ -438,6 +438,27 @@
 
 			Since CardSpace is a windows only program, this limits the user segment significantly. Additionally, the paper does not mention whether or not they support any kind of multi-device operation, but even if it did it would more than likely be limited to Windows platforms. Hence, the solution is \emph{unusable} for mobile devices, and users of either Mac OS X or Linux. All in all, this solution seems poor in comparison to what we've seen.
 
-		
+		\subsection*{Stronger Password Authentication Using Browser Extensions}
+			In \cite{pwdhash} the implementation of PwdHash is discussed. PwdHash's approach, is using a browser plugin as password manager. Their primary issue, seems to be the issue of sending a cleartext password to a remote server for sign up. Their proposal is centered around password derivation, rather than password generation. When typing the password to a site, PwdHash intercepts the password and creates a derived password, using an un-named pseudo random function. The new password is derived from the users original password and the domain name of the site. This derived function is then input into the password field on the website, and the user has retrieved a secure password seamlessly. Salting with the domain name, ensures that even if the user uses the same password for all websites, a unique password is submitted to each site.
+
+			In the paper, the authors make a point of describing each of their steps for avoiding various attacks. Their solution relies on a ``traffic light'', as they call it. When this is green, the user is inputting a password. When it is red, the user is inputting other -- insecure -- information. 
+
+			Additionally, they suggest that the user either inputs a password-prefix, or uses a ``password-key''. Their example of a prefix is \verb=@@=, which the user would have to type every time he or she logged into a site. As an alternative, they suggest using a dedicated keyboard, which they call a ``password-key'', with a button called \verb=password=. In their prototypes they use the \verb=F2= key as a password key.
+
+			To support devices that does not support plugin development, they have a website set up to derive a password, based on a user password and the URL of the website. Additionally they suggest developing a bookmarklet, down the road. As previously discussed, bookmarklets are essentially a security hazard disguised as a usability feature, and should be avoided for all costs.
+
+
+
+
+			After reviewing the paper thoroughly, it is concluded that PwdHash is much more of a secure password derivation tool, rather than an actual password manager. The horrible fact is, that the user still has to input a password for each login. Since users are -- at heart -- lazy, it can be assumed with a fair degree of accuracy, that the majority will re-use the same password over and over. Hence, the only security is that the password is hashed with a \emph{predictable} and very public hash \emph{(the domain name)}. If an attacker was to discover the base password for one site, he or she would then potentially get access to all the users passwords \emph{(assuming the user is lazy)}.
+
+			If, somehow, the user was \emph{not} lazy and had unique passwords for each site, the original problem would still persist. There would be so many unique passwords to remember, that they would be extremely easy to crack using wordlists or simple bruteforce.
+
+			Finally, despite all of their analysis regarding attacks on remote sites, they fail to see that \emph{all} of the same attacks, applies to their website for deriving passwords, rendering it a security hazard.
+
+			All in all, PwdHash is not a solution suited for the problem at hand, and actually does nothing for the usability of secure passwords.
+
+
+
 
 	\section{Chosen Inspiration} 
