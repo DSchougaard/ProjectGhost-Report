@@ -338,6 +338,32 @@
 
 			Using RoboForm on a single device, renders it as a tool very similar to KeePass, albeit with ``better'' browser integration. Using RoboForm Everywhere results in the same downsides and threats, as previously explained.
 
+		\subsection*{Vaultier}
+			At a first glance, Vaultier\cite{vaultier} seems to be everything one would want in the private cloud: Its self-hosted, the latency for actions in the user interface is close to none, and the design of the frontpage is clean. Even installing it comes easy, as it is shipped with a self-contained docker image. However, digging deeper, short comings starts to arise.
+
+			Their choice of organisation is confusing at first. At first you have a workspace, in which vaults are placed. Inside of these vaults, cards are placed. Inside of these cards, passwords are placed. The real problem comes when trying to add items into the vaults. Inside a single vault, you can at most have six cards shown at a time, on a standard 1080p monitor, cf. \ref{fig:vaultier_cards} on page \pageref{fig:vaultier_cards}. The same issue applies when looking at passwords: At most two passwords can be displayed on screen, at a time, cf \ref{fig:vaultier_passwords} on page \pageref{fig:vaultier_passwords}.
+
+			Since RightClick has chosen to have the git repository's history publicly shown, it can be determined the last time it was maintained. That was the 17th of April, 2015\cite{vaultier_history}. It would seem that the project has been abandoned and is dead. As such, it is not a stretch to assume that the project will not be kept up to date, in regards to deprecated dependencies or new-found bugs and security holes.
+
+
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/vaultier_passwords_lined.png}
+				\caption{List of available passwords inside a card, in Vaultier. The dotted line represents the bottom of the browser window, maximized on a 1080p screen.}
+				\label{fig:vaultier_passwords}
+			\end{figure}
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/vaultier_cards_lined.png}
+				\caption{List of available cards inside a vault, in Vaultier. The dotted line represents the bottom of the browser window, maximized on a 1080p screen.}
+				\label{fig:vaultier_cards}
+			\end{figure}
+
+
+
+
+
 		\subsection*{Comparison Charts}
 
 
@@ -458,9 +484,6 @@
 			Their scheme for applying encryption to this structure is somewhat convoluted. For each set, they create a password relating to the contents. The algorithm for generating this password, is the same as earlier mentioned. Then, using this password, an encryption key is generated. This key is then used to encrypt the set. After successful encryption of a decoy set, the key is deleted. For the \emph{real} set, the users master password is used to generate an encryption key.
 
 			As the paper states, the layout of the encrypted file, is supposed to make it more difficult for an attacker to access the \emph{correct} password, using offline attacks. Based on this, it appears as if the idea behind Kamouflage is that the encrypted file is stored locally. While their idea of decoy sets might be novel and could potentially be a boost in security, their solution does \emph{nothing} towards solving the problem at hand.
-
-		\subsection*{Sesame: A Secure and Convenient Mobile Solution for Passwords}
-			In \cite{sesame} a rather novel idea regarding password managers is described. Their concept, is that a users passwords are stored behind voice recognition.
 
 
 
