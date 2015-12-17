@@ -392,19 +392,19 @@
 		\begin{itemize}
 			\item Tapas: Design, Implementation, and Usability Evaluation of a Password Manager \cite{tapas}
 			\item Using CardSpace as a Password Manager \& Implementing PassCard - a CardSpace-based Password Manager \cite{cardspace,cardspace_impl}
-			\item A Convenient Method for Securely Managing Passwords
-			\item Kamouflage: Loss-Resistant Password
 			\item Stronger Password Authentication Using Browser Extensions
+			%\item A Convenient Method for Securely Managing Passwords
+			\item Kamouflage: Loss-Resistant Password
 		\end{itemize}
 		%Covered
 		%Tapas: Design, Implemetation, and Usability Evaluation of a Password Manager.pdf
 		%Using CardSpace as a Password Manager.pdf
 		%Implementing PassCard — a CardSpace-based Password Manager.pdf
+		%Stronger Password Authentication Using Browser Extensions.pdf
 		
 
 		%Listed
 		%Kamouflage: Loss-Resistant Password.pdf
-		%Stronger Password Authentication Using Browser Extensions.pdf
 
 
 
@@ -454,9 +454,24 @@
 
 			If, somehow, the user was \emph{not} lazy and had unique passwords for each site, the original problem would still persist. There would be so many unique passwords to remember, that they would be extremely easy to crack using wordlists or simple bruteforce.
 
-			Finally, despite all of their analysis regarding attacks on remote sites, they fail to see that \emph{all} of the same attacks, applies to their website for deriving passwords, rendering it a security hazard.
+			Finally, despite all of their analysis regarding attacks on remote sites, they fail to see that \emph{all} of the same attacks applies to their website for deriving passwords, rendering it a security hazard.
 
 			All in all, PwdHash is not a solution suited for the problem at hand, and actually does nothing for the usability of secure passwords.
+
+		\subsection*{Kamouflage: Loss-Resistant Password}
+			In \cite{kamouflage} a whole new paradigm for creating encrypted password databases is suggested: Kamouflage. Kamouflage relies on what they call decoy password sets. One of their primary arguments for implementing Kamouflage is the fact that you can't trust the cloud. Their concern is, that an employee at the cloud service could download the DB and run offline attacks against it. However, they neglect to reason against running this cloud service yourself.
+
+			Imagine a user having a set of passwords, $S$. Then, Kamouflage generates $N$ additional sets, $S_1, \dots S_{N-1}$ to work as decoy password sets. They suggest a default value of $N=1000$. These passwords are generated, using an algorithm based on the work in \cite{cracking}. The aim is generate passwords which are statistically indistinguishable from the \emph{actual} passwords. 
+
+			All of these sets, are then stored side-by-side, in a single file. The idea is then, that the users master password can be run through a cryptographic function and return and index into the file. This index, is then where the \emph{real} password set is stored. A wrong master password would result in another index, which again would result in a decoy password.
+
+			They argue, that with the help of online services, these decoy password sets could be able to be used to detect targeted attacks. However, this both requires that the major websites actually chooses to adopt this technology themselves, and that they need to maintain at least \emph{some} of these passwords on their servers, increasing the needed storage by a decent factor.
+
+			Their scheme for applying encryption to this structure is somewhat convoluted. For each set, they create a password relating to the contents. The algorithm for generating this password, is the same as earlier mentioned. Then, using this password, an encryption key is generated. This key is then used to encrypt the set. After successful encryption of a decoy set, the key is deleted. For the \emph{real} set, the users master password is used to generate an encryption key.
+
+			As the paper states, the layout of the encrypted file, is supposed to make it more difficult for an attacker to access the \emph{correct} password, using offline attacks. Based on this, it appears as if the idea behind Kamouflage is that the encrypted file is stored locally. While their idea of decoy sets might be novel and could potentially be a boost in security, their solution does \emph{nothing} towards solving the problem at hand.
+
+
 
 
 
