@@ -18,13 +18,14 @@
 			\item PassWork
 			\item SimpleVault
 			\item RoboForm
-			\item TeamPass (http://teampass.net)
+			\item TeamPass 
+			\item Vaultier
 			%\item Vault (https://vaultproject.io/)
 		\end{itemize}
 		In the following sections the user experience or the usability of the solution might seem to be attacked often. While this might be true, one simple fact remains: If the solution is not user friendly, the users will not use it. If they do not use the solution, it is effectively worthless.
 
 		\subsection*{LastPass, and Similar Solutions}
-		\label{subsec:lastpass}
+			\label{subsec:lastpass}
 			In the name of usability services such as LastPass\footnote{https://lastpass.com/}, PassPack\footnote{https://www.passpack.com/}, DashLane\footnote{https://www.dashlane.com/}, and so many others grew popular, and it is easy to understand why. Enabling you to access your passwords from several devices, through native apps or the browser, it seemed like it was the perfect match of usability and security. To avoid too much repetition LastPass is picked as a representative of this group, simply due to it being the most well-known.
 
 			If we start by looking at the technical details of LastPass, they quote themselves using 256-bit AES encryption, and applies PBKDF2, in order to make it as difficult as possible, to crack stored data. For maximum security, both encryption and decryption, is done client side\cite{lastpass_cleintsideencryption}, as to avoid transferring the actual password, unencrypted, to their servers. Encryption and decryption is done using the master password, which is never actually sent to their servers. Finally, as is to be expected, all connections to LastPass' servers, are SSL encrypted.
@@ -42,8 +43,6 @@
 				\caption{Screenshot of LastPass' main view, in a browser.}
 				\label{fig:lastpass_main}
 			\end{figure}
-
-
 
 		\subsection*{KeePass}
 			As the users grew suspicious of LastPass and the likes, a lot of them moved over to e.g. KeePass\footnote{https://keepass.org}, which allows the user to store the passwords in a local file. While there exists a plethora of tools similar to KeePass,  it will be used as a representative of this group, for the same reasons as in \ref{subsec:lastpass}.
@@ -126,8 +125,6 @@
 
 			Rattic is developed in Python, using the Django framework and tested on the Apache server.
 
-
-
 		\subsection*{Encryptr}
 			Bordering between the type of LastPass and Rattic, Enryptr \cite{encryptr} relies on the Crypton\cite{crypton} backend\cite{encryptr_backend}, available hosted at SpiderOak\cite{crypton_spideroak}. Per default, Encryptr \emph{only} supports hosting passwords at the Crypton backend, hosted at SpiderOak. However, it \emph{is} possible to run this in the private cloud, with your own Crypton backend. \emph{But} it requires manually editing source files\cite{encryptr_selfhost}, which makes the setup a pain. So not only would you have to set up Crypton, and its requirements, you would have to download the source of the apps, change the specified line of code, compile and \emph{then} you could use it. Because of this technical aspect, usability is virtually zero, as you would need to be fairly confident behind a keyboard, to successfully set this up.
 
@@ -151,7 +148,6 @@
 			\end{figure}
 
 			On the technical side, Crypton -- the backend -- is actually fairly interesting. Using their own definition of zero-knowledge, the developers created a complete framework for securely transferring and storing data at a remote machine\cite{crypton_paper}. They claim, that it is impossible to obtain the unencrypted data on their servers, without actually getting hold of the users private encryption key. The Crypton backend is open source, and available at \cite{crypton_git}. What powers Crypton, cryptographically speaking, is AES-256.
-
 
 		\subsection*{Vault}
 			Vault\emph{(ZOHO)}\cite{vault_zoho} is another piece of software, that requires you to submit your data to their servers. Where this tool differs from LastPass and Encryptr, is that it is \emph{clearly} aimed at enterprise customers, which is clearly evident based on their features, such as LDAP integration.
@@ -177,9 +173,6 @@
 
 
 			Under the hood, Zoho uses a combination of RSA and AES. To enable sharing, a common AES encryption key is retrieved using RSA keypairs, from the admin, and users involved in sharing\cite{vault_zoho_encryption}.
-
-
-
 
 		\subsection*{TeamPasswordManager}
 			TeamPasswordManager\cite{teampasswordmanager_frontpage} \emph{(henceforth referred to as TPM)} is a tool that is fairly similar to Rattic. However, where it differs is the less minimalistic UI. TPM organises passwords in ``Projects'', which is a great indicator that this tool is in fact intended to be used with enterprise in mind. TMP is able to be self-hosted and is platform independent, requiring Apache, PHP and MySQL, which is a great asset.
@@ -280,8 +273,6 @@
 
 			All in all SimpleSafe is a \emph{fairly} sketchy solution. One thing that is pretty neat, is the ability for a user to customise the fields in the different groups. For instance, they allow you to store SSH keys, in a particular field type. This lets the user separate things that require keys / certs, from traditional username/password logins.
 
-
-
 		\subsection*{PassWork}
 			PassWork\cite{passwork} is yet another take, on the same type of solution as SimpleSafe, Rattic, TeamPasswordManager, and Passwordstate. PassWork is available as both a remote and a self-hosted solution, both of which comes with a price tag. 
 
@@ -297,7 +288,6 @@
 			PassWork is another example of developers not describing and documenting their soltion properly. Unfortunately it is impossible to completely determine their encryption scheme, but they use ``256-bit passwords'' and RSA keypairs for sharing passwords. 
 
 			Their less than completely transparency when it comes to choice of encryption algorithm not to mention the hefty price-tag, should one wish to self-host it. Additionally, they completely omit to inform which platform(s) the self-hosted version is able to be run on.
-
 
 		\subsection*{SimpleVault}
 			Taking a bit of a different route from other solutions, SimpleVault\cite{simplevault} chooses to encrypt each individual password, with a different ``passphrase''. Based on their user experience, it would seem that SimpleVault is a proof of concept, more than a release software. Something as simple as headers for the table containing the main information is missing, as seen on figure \ref{fig:simplevault_main} on page \pageref{fig:simplevault_main}.
@@ -348,7 +338,6 @@
 
 			Using RoboForm on a single device, renders it as a tool very similar to KeePass, albeit with ``better'' browser integration. Using RoboForm Everywhere results in the same downsides and threats, as previously explained.
 
-
 		\subsection*{Comparison Charts}
 
 
@@ -395,16 +384,17 @@
 			\item Stronger Password Authentication Using Browser Extensions
 			%\item A Convenient Method for Securely Managing Passwords
 			\item Kamouflage: Loss-Resistant Password
+			\item Sesame: A Secure and Convenient Mobile Solution for Passwords
 		\end{itemize}
 		%Covered
 		%Tapas: Design, Implemetation, and Usability Evaluation of a Password Manager.pdf
 		%Using CardSpace as a Password Manager.pdf
 		%Implementing PassCard — a CardSpace-based Password Manager.pdf
 		%Stronger Password Authentication Using Browser Extensions.pdf
+		%Kamouflage: Loss-Resistant Password.pdf
 		
 
 		%Listed
-		%Kamouflage: Loss-Resistant Password.pdf
 
 
 
@@ -448,8 +438,6 @@
 			To support devices that does not support plugin development, they have a website set up to derive a password, based on a user password and the URL of the website. Additionally they suggest developing a bookmarklet, down the road. As previously discussed, bookmarklets are essentially a security hazard disguised as a usability feature, and should be avoided for all costs.
 
 
-
-
 			After reviewing the paper thoroughly, it is concluded that PwdHash is much more of a secure password derivation tool, rather than an actual password manager. The horrible fact is, that the user still has to input a password for each login. Since users are -- at heart -- lazy, it can be assumed with a fair degree of accuracy, that the majority will re-use the same password over and over. Hence, the only security is that the password is hashed with a \emph{predictable} and very public hash \emph{(the domain name)}. If an attacker was to discover the base password for one site, he or she would then potentially get access to all the users passwords \emph{(assuming the user is lazy)}.
 
 			If, somehow, the user was \emph{not} lazy and had unique passwords for each site, the original problem would still persist. There would be so many unique passwords to remember, that they would be extremely easy to crack using wordlists or simple bruteforce.
@@ -471,6 +459,8 @@
 
 			As the paper states, the layout of the encrypted file, is supposed to make it more difficult for an attacker to access the \emph{correct} password, using offline attacks. Based on this, it appears as if the idea behind Kamouflage is that the encrypted file is stored locally. While their idea of decoy sets might be novel and could potentially be a boost in security, their solution does \emph{nothing} towards solving the problem at hand.
 
+		\subsection*{Sesame: A Secure and Convenient Mobile Solution for Passwords}
+			In \cite{sesame} a rather novel idea regarding password managers is described. Their concept, is that a users passwords are stored behind voice recognition.
 
 
 
