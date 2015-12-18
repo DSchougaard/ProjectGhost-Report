@@ -198,10 +198,7 @@
 
 			Encryption wise, TPM uses the same basic algorithm we've seen over and over again: AES-256. TPM also uses bcrypt as their chosen key derivation function, to make it as difficult for a potential attacker to brute force password hashes. Using Google's Authenticator, it supports two-factor authentication.
 
-
-			
-
-			While this software could essentially suffice, in order to meet the requirements, it would be lacking heavily in the user experience department, while also providing features and information, which would only be of use to super-users, and enterprise users.
+			While this software could essentially suffice, in order to meet the requirements, it would be lacking heavily in the user experience department. Additionally, it provides features and information, which would only be of use to super-users, and enterprise users, and might very well scare off regular users.
 
 		\subsection*{Passwordstate}
 			Passwordstate from ClickStudios\cite{passwordstate} is a solution some-what similar to both TeamPasswordManager and Vault \emph{(Zoho)}. There is not a seconds doubt, that this is a solution aimed at enterprise users, as they state themselves. This is also evident by the feature set, they have: Sporting not only active directory support, they also have built-in options for High Availability and \emph{several} options for two-factor authentication, amongst others. Passwordstate is self-hostable, but requires a windows platform and the IIS server \cite{passwordstate_requirements}.
@@ -285,7 +282,7 @@
 				\label{fig:passwork_adduser}
 			\end{figure}
 
-			PassWork is another example of developers not describing and documenting their soltion properly. Unfortunately it is impossible to completely determine their encryption scheme, but they use ``256-bit passwords'' and RSA keypairs for sharing passwords. 
+			PassWork is another example of developers not describing and documenting their soltion properly. Something as simple as figuring out which platform it supports, prior to purchasing is not possible. Additionally it is impossible to completely determine their encryption scheme, but they use ``256-bit passwords'' and RSA keypairs for sharing passwords. 
 
 			Their less than completely transparency when it comes to choice of encryption algorithm not to mention the hefty price-tag, should one wish to self-host it. Additionally, they completely omit to inform which platform(s) the self-hosted version is able to be run on.
 
@@ -331,7 +328,9 @@
 			\end{figure}
 
 
-			Security wise SimpleVault is quite horrible. With what can be taken from the quite poor description of the security of the system, the encrypted data is actally \emph{stored in clear text} on the remote machine, at some point or other. When adding a new entry, the password is sent in \emph{clear text} to the server, which then encrypts it. The developer argues that this is fine, as long as only HTTPS is used, for communicating with the server, but regardless of which protocol is used the password is \emph{still} stored in clear text.
+			Security wise SimpleVault is quite horrible. With what can be taken from the quite poor description of the security of the system, the encrypted data is actally \emph{stored in clear text} on the remote machine, at some point or other. When adding a new entry, the password is sent in \emph{clear text} to the server, which then encrypts it. The developer argues that this is fine, as long as only HTTPS is used, for communicating with the server, but regardless of which protocol is used the password is \emph{still} stored in clear text. Additionally, SimpleVault does \emph{not} use a database system, but stores all contents in a \verb=.txt= file. 
+
+			All in all, SimpleVault is probably a tool \emph{no one} should use. No matter their problem at hand.
 
 		\subsection*{RoboForm}
 			RoboForm\cite{roboform} is somewhat a hybrid between the likes of KeePass and LastPass. While at heart, RoboForm is a locally stored password manager, it only exists as a browser extension. Since it only exist as a browser plugin, features such as form auto fill etc. are of course in their repertoire. However, from a ux point of view, the plugin stands out quite a bit from the browser. While this is a relatively small complaint, the usage of design guidelines from both Apple and Google, has helped create platform standards for how apps are supposed look, so the user never feels lost. Additionally, they offer ``RoboForm Everywhere'' cloud synchronisation of the encrypted file. This does however, entail trusting them with safe-keeping the encrypted file.
@@ -365,6 +364,61 @@
 
 
 		\subsection*{Comparison Charts}
+			While the previous sections covered an in-depth look at the various solutions, it might seem a little overwhelming. Here, the information will be condensed into tables, for a better picture of the differences between the various solutions.
+
+			\begin{table}
+				\centering
+				\begin{tabular}{| r l l |}
+					\hline
+					Name 						& Web Based 			& Self-Hostable \\
+					\hline
+					LastPass 					& Yes 					& No 			\\
+					KeePass 					& No 					& N/A 			\\
+					Rattic 						& Yes 					& Yes 			\\
+					Encryptr 					& No 					& N/A 			\\
+					Passwordstate 				& Yes 					& Yes 			\\
+					Vault \emph{(Zoho)} 		& Yes 					& No 			\\
+					TeamPasswordManager 		& Yes 					& Yes 			\\
+					Simple Safe 				& Yes 					& Yes 			\\
+					Passwork 					& Yes 					& Yes 			\\
+					SimpleVault 				& Yes 					& Yes 			\\
+					RoboForm 					& No 					& N/A 			\\
+					TeamPass 					& Yes 					& Yes 			\\
+					Vaultier 					& Yes 					& Yes 			\\
+					\hline
+				\end{tabular}
+				\caption{Comparison of access method and ownership model, of the available solutions.}
+				\label{tbl:web_based}
+			\end{table}
+
+			
+			\begin{table}
+				\begin{minipage}{1.0\textwidth}
+					\begin{tabular}{|r l l|}
+						\hline
+						Name 				& Platform Agnostic 									& Database Agnostic 												\\
+						\hline
+						Rattic 				& Yes 													& Yes\footnote{Databases other than MySQL receives less testing.} 	\\
+						Passwordstate 		& No 													& No 																\\
+						TeamPasswordManager & Yes 													& No 																\\
+						Simple Safe 		& Yes  													& No 																\\
+						Passwork 			& N/A\footnote{No information available to determine.} 	& N/A\footnote{No information available to determine.} 				\\
+						SimpleVault 		& Yes 													& No\footnote{Doesn't use a database. Stores passwords in a .txt file.} 				\\
+						TeamPass 			& Yes 													& No 																\\
+						Vaultier 			& Yes 													& No 																\\
+						\hline
+					\end{tabular}
+				\end{minipage}
+
+				\caption{Comparison agnosticity of self-hostable soloutions.}
+				\label{tbl:agnostic}
+			\end{table}
+
+
+
+
+
+
 
 
 			\begin{tabular} {r l l l }
