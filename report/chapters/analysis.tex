@@ -364,94 +364,135 @@
 
 
 		\subsection*{Comparison Charts}
+			% Table color shortcuts
+			\newcommand{\red}[1]{\cellcolor{red!75}#1}
+			\newcommand{\green}[1]{\cellcolor{green!75}#1}
+			\newcommand{\grey}[1]{\cellcolor{gray!75}#1}
+			\newcommand{\yellow}[1]{\cellcolor{yellow!75}#1}
+
+
 			While the previous sections covered an in-depth look at the various solutions, it might seem a little overwhelming. Here, the information will be condensed into tables, for a better picture of the differences between the various solutions.
 
+			First and foremost, on table \ref{tbl:web_based} on page \pageref{tbl:web_based}, a clear cut distinction is seen: The solutions that are \emph{able} to be run in the private cloud, and those who isn't. Focussing only on those which actually \emph{can} exist in the private cloud, on table \ref{tbl:passwords} on page \pageref{tbl:passwords} their default approach to passwords are compared. While all of the systems support multiple users in \emph{some} way, they all pretty much share the same sigh on personal passwords: They should not exist. This is primarily a result of nearly all of these being marketed towards teams. For almost all of the solutions, the same approach to solving this shortcoming is the same: Create a new \emph{personal} group for each individual user, in which personal passwords can be stored. Unfortunately, this \emph{must} be considered a workaround, with the exception of PassWork, in which this group is created automatically. 
+
+			Looking at the more technical aspect of the comparison, on table \ref{tbl:agnostic} on page \pageref{tbl:agnostic} a comparison of their agnosticism is made. Most of the solutions are able to be run on multiple platforms, due to being implemented in PHP. Hence, they only require an Apache \emph{(or nginx)} server to be run. Fortunately, both of these have versions for all major operating systems. Unfortunately, there is only one solution that actually has options for various database solutions. \emph{But} the developers note, that this is done at the user's risk, since they're not tested as rigorously.
+
+			By comparing these three tables, it is unfortunately seen that there isn't \emph{one} completely fulfilling the requirements earlier specified.
+
+
+
 			\begin{table}
-				\centering
-				\begin{tabular}{| r l l |}
-					\hline
-					Name 						& Web Based 			& Self-Hostable \\
-					\hline
-					LastPass 					& Yes 					& No 			\\
-					KeePass 					& No 					& N/A 			\\
-					Rattic 						& Yes 					& Yes 			\\
-					Encryptr 					& No 					& N/A 			\\
-					Passwordstate 				& Yes 					& Yes 			\\
-					Vault \emph{(Zoho)} 		& Yes 					& No 			\\
-					TeamPasswordManager 		& Yes 					& Yes 			\\
-					Simple Safe 				& Yes 					& Yes 			\\
-					Passwork 					& Yes 					& Yes 			\\
-					SimpleVault 				& Yes 					& Yes 			\\
-					RoboForm 					& No 					& N/A 			\\
-					TeamPass 					& Yes 					& Yes 			\\
-					Vaultier 					& Yes 					& Yes 			\\
-					\hline
-				\end{tabular}
+				\begin{minipage}{1.0\textwidth}
+					\begin{tabular}{| r | l | l |}
+						\hline
+						Name 						& Web Based 			& Self-Hostable 		\\
+						\hline
+						LastPass 					& \green{Yes}			& \red{No} 				\\
+						\hline
+						KeePass 					& \red{No} 				& \grey{N/A} 			\\
+						\hline
+						Rattic 						& \green{Yes} 			& \green{Yes}  			\\
+						\hline
+						Encryptr 					& \red{No} 				& \yellow{Yes} \footnote{Requires editing source files and running own Crypton backend.} 			\\
+						\hline
+						Passwordstate 				& \green{Yes} 			& \green{Yes}  			\\
+						\hline
+						Vault \emph{(Zoho)} 		& \green{Yes} 			& \red{No} 				\\
+						\hline
+						TeamPasswordManager 		& \green{Yes} 			& \green{Yes}  			\\
+						\hline
+						Simple Safe 				& \green{Yes} 			& \green{Yes}  			\\
+						\hline
+						Passwork 					& \green{Yes} 			& \green{Yes}  			\\
+						\hline
+						SimpleVault 				& \green{Yes} 			& \green{Yes}  			\\
+						\hline
+						RoboForm 					& \red{No} 				& \grey{N/A} 			\\
+						\hline
+						TeamPass 					& \green{Yes} 			& \green{Yes}  			\\
+						\hline
+						Vaultier 					& \green{Yes} 			& \green{Yes}  			\\
+						\hline
+					\end{tabular}
+				\end{minipage}
 				\caption{Comparison of access method and ownership model, of the available solutions.}
 				\label{tbl:web_based}
 			\end{table}
 
-			
+
+			%% Footnotes for Table tbl:agnostic
+			\newarray\tblPasswordsFN
+			\tblPasswordsFN(1)={Through password grouping.\label{fn:passwords:group}}
+			\tblPasswordsFN(2)={Through a commonly used master passphrase, acting as a work-around.\label{fn:passwords:common_masterpassphrase}}
+			\tblPasswordsFN(3)={By each user, using their own unique passphrase for encrypting their personal passwords.\label{fn:passwords:unique_masterpassphrase}}
 			\begin{table}
-				\begin{minipage}{1.0\textwidth}
-					\begin{tabular}{|r l l|}
+				\begin{minipage}{1.0\linewidth}
+					\begin{tabular}{ | p{0.30\textwidth} | p{0.25\textwidth} | p{0.15\textwidth} | p{0.15\textwidth} | }
 						\hline
-						Name 				& Platform Agnostic 									& Database Agnostic 												\\
+						\textbf{Name}  		& \textbf{Supports Multiple Users} 			& \textbf{Personal Passwords} 					& \textbf{Password Sharing} \\
 						\hline
-						Rattic 				& Yes 													& Yes\footnote{Databases other than MySQL receives less testing.} 	\\
-						Passwordstate 		& No 													& No 																\\
-						TeamPasswordManager & Yes 													& No 																\\
-						Simple Safe 		& Yes  													& No 																\\
-						Passwork 			& N/A\footnote{No information available to determine.} 	& N/A\footnote{No information available to determine.} 				\\
-						SimpleVault 		& Yes 													& No\footnote{Doesn't use a database. Stores passwords in a .txt file.} 				\\
-						TeamPass 			& Yes 													& No 																\\
-						Vaultier 			& Yes 													& No 																\\
+						Rattic 				& \green{Yes} 								& \yellow{Yes}\footnote{\tblPasswordsFN(1)}		& \green{Yes} 				\\
+						\hline
+						Passwordstate 		& \green{Yes} 								& \yellow{Yes}\footref{fn:passwords:group}		& \green{Yes}				\\
+						\hline
+						TeamPasswordManager & \green{Yes} 								& \yellow{Yes}\footref{fn:passwords:group}		& \green{Yes}				\\
+						\hline
+						Simple Safe 		& \green{Yes} 								& \yellow{Yes}\footref{fn:passwords:group}		& \green{Yes}				\\
+						\hline
+						Passwork 			& \green{Yes} 								& \green{Yes}									& \green{Yes}				\\
+						\hline
+						SimpleVault 		& \yellow{Yes}\footnote{\tblPasswordsFN(3)} & \green{Yes}\footnote{\tblPasswordsFN(3)}		& \yellow{Yes}\footref{fn:passwords:common_masterpassphrase}\\
+						\hline
+						TeamPass 			& \green{Yes} 								& \yellow{Yes}\footref{fn:passwords:group}		& \green{Yes}				\\
+						\hline 				
+						Vaultier 			& \green{Yes} 								& \yellow{Yes}\footref{fn:passwords:group}		& \green{Yes}				\\
+						\hline
+	   				\end{tabular}
+	   			\end{minipage}
+
+				\caption{Comparison of password ownership in self-hostable solutions.}
+				\label{tbl:passwords}
+			\end{table}
+
+
+
+			%% Footnotes for Table tbl:agnostic
+			\newarray\tblAgnosticFN
+			\tblAgnosticFN(1)={Databases other than MySQL receives less testing.}
+			\tblAgnosticFN(2)={No information available to determine.\label{fn:agnostic:no_info}}
+			\tblAgnosticFN(3)={Doesn't use a database. Stores passwords in a .txt file.}
+
+			\begin{table}
+				\begin{minipage}{1.0\linewidth}
+					\begin{tabular}{|r | l | l|}
+						\hline
+						Name 				& Platform Agnostic 						& Database Agnostic 						\\
+						\hline
+						Rattic 				& \green{Yes} 								& \yellow{Yes}\footnote{\tblAgnosticFN(1) } \\
+						\hline
+						Passwordstate 		& \red{No} 									& \red{No} 									\\
+						\hline
+						TeamPasswordManager & \green{Yes} 								& \red{No} 									\\
+						\hline
+						Simple Safe 		& \green{Yes}  								& \red{No} 									\\
+						\hline
+						Passwork 			& \grey{N/A}\footnote{\tblAgnosticFN(2)} 	& \grey{N/A}\footref{fn:agnostic:no_info} 	\\
+						\hline
+						SimpleVault 		& \green{Yes} 								& \red{No}\footnote{\tblAgnosticFN(3)} 		\\
+						\hline
+						TeamPass 			& \green{Yes} 								& \red{No} 									\\
+						\hline
+						Vaultier 			& \green{Yes} 								& \red{No} 									\\
 						\hline
 					\end{tabular}
 				\end{minipage}
 
-				\caption{Comparison agnosticity of self-hostable soloutions.}
+				\caption{Comparison agnosticism of self-hostable solutions.}
 				\label{tbl:agnostic}
 			\end{table}
 
+			
 
-
-
-
-
-
-
-			\begin{tabular} {r l l l }
-				Name 				& Web Accessible 	& Bookmarklets	& Self-Hosted 		\\
-				\hline
-				LastPass 			& \cellcolor{green!75}Yes	& \cellcolor{green!75}Yes	& \cellcolor{red!75} No		\\
-				KeePass 			& \cellcolor{red!75}No 		& N/A 						& N/A						\\ 
-				Rattic  			& \cellcolor{green!75}Yes 	& \cellcolor{red!75}No 		& \cellcolor{green!75} Yes	\\
-				Encryptr 			& \cellcolor{green!75}Yes 	& \cellcolor{red!75}No 		& \cellcolor{green!75} Yes* \\
-			\end{tabular}
-
-
-			\begin{tabular}{ r l l l l }
-					Name 				& Desktop Client 	& Web Client 	& Mobile Client 	& Self-Hosted	\\
-					\hline
-					LastPass 			& Yes 				& Yes			& Yes				& No \\
-					KeePass 			& Yes				& No			& \\
-					Rattic  			& Yes						& \\
-					Encryptr 			& Yes					  	& \\
-				\end{tabular}
-
-
-
-			\begin{table}
-				\begin{tabular}{ r l l l l }
-					Name 				& Encryption  & Web Accessible 		& Server Software 		& Language \& Framework 		\\
-					\hline
-					LastPass 			& AES-256 		& Yes			& N/A 				& N/A \\
-					KeePass 			& AES-256 (more available through plugins) & No & N/A & C++ \\
-					Rattic 				& None 			& Yes 			& Apache 		& Python \& Django \\
-					Encryptr 			& AES-256 		& Yes			& Backend / N/A 	& JS \\
-				\end{tabular}
-			\end{table}
 
 
 
