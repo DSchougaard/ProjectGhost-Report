@@ -1,1 +1,53 @@
-\chapter{Design of the System}
+\chapter{Designing the System}
+	In the following chapter, the overall design of the system is discussed. First and foremost, the basic architecture and development platform will be decided, before moving into more technical aspects of designing the software.
+
+
+	\section{The Architecture}
+		Since it's already been determined, that the resulting product is something which should be found in the private cloud, it seems obvious that a Web UI is needed.
+
+		To achieve this, there is a plethora of various languages and tools available, to aid in development of such software. However, since the aim is to create a solution which is able to run on almost any platform, technologies such as Microsoft's IIS, ASP.NET and the lot is automatically excluded.
+
+
+
+		Since it is a web application being developed, the basic architecture can be split up into two groups: Front-end and back-end.
+
+		\subsection{The Front-End}
+
+
+		\subsection{The Back-End}
+			When developing a web application, there are numerous different languages and tools available. 
+
+
+			Web development seems to be centered around four languages, as seen on table \ref{tab:languages}. Note that ASP.NET has purposefully been excluded from this list, due to it running only on Microsoft platforms, which is in conflict with the requirements.
+			
+			\begin{table}
+				\begin{itemize}
+					\item PHP
+					\item JavaScript
+					\item Ruby
+					\item Python
+				\end{itemize}
+				\label{tab:languages}
+			\end{table}
+
+			Some developers argue that choosing between languages is primarily up to personal preference. Additionally, language choice can often be effected by existing technologies used in a company. In this case, however, it's a clean slate. No prior work has been done, and the choice is as such not influenced by this.
+
+			As an astute reader might see, JavaScript makes an appearance on this list. While previously, JavaScript was a front-end only language, with the introduction of Node.JS \todo{Node.JS URL}, around the year 2009, this changed. Suddenly JavaScript was a viable contender for use as a back-end language.
+
+			Looking at GitHub's language trends as of August 19, 2015 \footnote{https://github.com/blog/2047-language-trends-on-github} it is clear that while both Python and Ruby have declined, JavaScript has risen on popularity. However, this graph should not be taken as gospel, at least not completely. It only shows popularity of languages used in repositories hosted on GitHub.
+
+			The following few subsections, will contain a brief description and comparison of the languages.
+
+			\subsubsection*{PHP}
+				PHP is probably the the old and tested, of the languages mentioned in table \ref{tab:languages}. It has existed for ages, and is currently on version 7.
+
+
+
+			\subsubsection*{JavaScript w. NodeJS}
+				While Node.JS stricly speaking only supports a single thread \emph{(unless using the Cluster\footnote{https://nodejs.org/api/cluster.html} module)}, it handles massive amount of traffic easily.
+
+				Node.JS is built using Chrome's V8 JavaScript engine, and is centered around non-blocking I/O, resulting in optimal usage of that one single thread.
+
+				An advantage of Node, is that you can use the same language for front-end and back-end. The JavaScript written for the browser, is virtually no different from the one used in Node for a back-end.
+			\subsubsection*{Ruby}
+			\subsubsection*{Python}
