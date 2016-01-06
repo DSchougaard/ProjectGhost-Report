@@ -26,6 +26,7 @@
 		In the following sections the user experience or the usability of the solution might seem to be attacked often. While this might be true, one simple fact remains: If the solution is not user friendly, the users will not use it. If they do not use the solution, it is effectively worthless.
 
 		\subsection*{In-Browser Password Managers}
+			\label{subsec:in-browser}
 			\todo{Write section about in-password managers}
 			\todo{Missing browsers: Chrome, Firefox, Safari, IE, Opera}
 
@@ -35,7 +36,7 @@
 
 			Additionally it lacks at one very important aspect: It only works for websites accessed through that \emph{specific} type of browser, i.e. only available in Chrome browsers. Passwords for email addresses  \emph{(assuming non-webmail)} for instance, wont be able to be easily retrieved. Already at this point, using the built-in password manager can be dismissed, simply due to its use cases.
 
-			In \cite{browser_saved} they review the different browsers' storage format for their respective password managers. Their primary concern is, that while the passwords might be encrypted, the decryption key is stored directly on disk. From a security perspective, this is horrible. If anyone could dump both files, complete access to all passwords would be given. They note Firefox and Opera as the only browsers supporting a Master Password, which is to be entered every time the user accesses a password stored.	However, their analysis could very well be deprecated by now. The version of Chrome, for instance, they're using is $V21.0$, while the current newest version is $V47.0$. 
+			In \cite{browser_saved} they review the different browsers' storage format for their respective password managers. Their primary concern is, that while the passwords might be encrypted, both Firefox and Opera stores the decryption key directly on disk. If an attacker gets hold of this file, all passwords are available to him or her. Chrome and Safari, however, use Window's built in functions, and encrypts the files using the user accounts password for encryption. They note Firefox and Opera as the only browsers supporting a Master Password, which is to be entered every time the user accesses a password stored, which adds a bit of more security. However, their analysis could very well be deprecated by now. The version of Chrome, for instance, they're using is $V21.0$, while the current newest version is $V47.0$. 
 
 			While this solution might seem interesting to some users, it still leaves a lot to be desired in regards to the requirements defined earlier.
 
@@ -515,27 +516,12 @@
 			\item Tapas: Design, Implementation, and Usability Evaluation of a Password Manager \cite{tapas}
 			\item Using CardSpace as a Password Manager \& Implementing PassCard - a CardSpace-based Password Manager \cite{cardspace,cardspace_impl}
 			\item Stronger Password Authentication Using Browser Extensions
-			%\item A Convenient Method for Securely Managing Passwords
 			\item Kamouflage: Loss-Resistant Password
 			\item Sesame: A Secure and Convenient Mobile Solution for Passwords
+			\item All Your Browser-saved Passwords Could Belong to Us: A Security Analysis and a Cloud-based New Design
+			\item Cloud Based Manager Using Privacy-Preserved Biometrics
 		\end{itemize}
-		%Covered
-		%Tapas: Design, Implemetation, and Usability Evaluation of a Password Manager.pdf
-		%Using CardSpace as a Password Manager.pdf
-		%Implementing PassCard — a CardSpace-based Password Manager.pdf
-		%Stronger Password Authentication Using Browser Extensions.pdf
-		%Kamouflage: Loss-Resistant Password.pdf
 		
-
-		%Listed
-
-
-
-		%Non-Listed
-		%IDKeeper: A Web Password Manager with Roaming Capability Based on USB Key .pdf
-		%A Convenient Method for Securely Managing Passwords.pdf
-
-
 
 		\subsection*{Tapas: Design, Implementation, and Usability Evaluation of a Password Manager}
 			In \cite{tapas}, a new and novel idea is introduced. Rather than using two-factor authentication, a \emph{dual-possession} authentication is used. The basic concept is, that the user has two devices: A smartphone \emph{(wallet)} and a desktop \emph{(manager)}. While it \emph{specifically} states that the manager is a desktop, it is assumed that it might as well be a laptop. The idea is that the manager stores keys for decrypting login information to various sites, while the wallet stores encrypted blobs. The argument is, that even if either device is stolen, offline attacks cannot happen.
@@ -598,8 +584,60 @@
 
 			While the idea is novel, and some user might find it exciting and usable, it is fairly limited in regards to platforms. As the authors write themselves, it is intended for smartphones, tablets, smartwatches etc. Hence, the usage for the problem at hand is rather limited.
 
-		\subsection*{Other Note Worthy Sources}
-			All Your Browser-saved Passwords Could Belong to Us: a Security Analysis and a Cloud-based New Design describes how to change the current in-browser password managers, to work more safely, using a ``Secure \& Reliable Storage'' service, located in the cloud. While this
+		\subsection*{All Your Browser-saved Passwords Could Belong to Us: A Security Analysis and a Cloud-based New Design}
+			In \cite{browser_saved} they suggest a solution to fix the issues the found, as mentioned in section \ref{subsec:in-browser}. They argue that the data is more secure on a remote machine, run by a company. They prefer to rely on a ``Secure \& Reliable Storage'' service, located in the cloud. They have developed an encryption scheme aimed at protecting the passwords of the users, even though they are stored on a remote machine. 
 
+			However, no matter how secure their scheme is, their suggestion goes against some of the very fundamental requirements mentioned in section \ref{sec:requirements}. As such, their solution is dismissed as not suitable for this specific purpose. 
+
+		\subsection*{Passpet: Convenient Password Management and Phishing Protection}
+			In \cite{passpet} a system for managing passwords is suggested: Passpet. It revolves around the idea of petnames. The first time the user uses Passpet, he or she is given a ``persona''. This persona, is essentially a pet, consisting of a random animal logo \emph{(selected from a set of logos)} and a random name. An example of this, is Betty the Fish, as seen on figure \ref{fig:passepet_persona} on page \pageref{fig:passepet_persona}. The randomness is introduced in an attempt to avoid phishing attacks, as the attacker can never know exactly which logo and what name, has been assigned to the user.
+
+			They describe a weird combination of both deriving a password, based on site information and storing data remotely. They derive a password based on a master address \emph{(address of a remote Passpet server)}, a master secret, two constants $k_1$ and $k_2$, and a site label.
+
+			Using passpet only requires the user to press a button, once the correct site label has been entered. This is seen on figure \ref{fig:passpet_main} on page \pageref{fig:passpet_main}.
+
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/passpet_persona.png}
+				\caption{Creation of a Passpet persona. \textbf{Source:} \cite[p.4]{passpet}.}
+				\label{fig:passepet_persona}
+			\end{figure}
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/passpet.png}
+				\caption{Using Passpet. \textbf{Source:} \cite[p.1]{passpet}}
+				\label{fig:passpet_main}
+			\end{figure}
+
+			Unfortunately, there is an ambiguity in the paper. Several places, a ``Passpet server'' is mentioned, however it is never specifically told who owns this server. 
+
+			To access passwords on other devices, the user will have to input the master address and master secret, and the remote machine will store the constants along with the label list, in order to recreate the passwords. Their description of how a user is authenticated for a second device is poorly described.
+
+			This solution suffers from the same basic issue as described in section \ref{subsec:in-browser}: It only works for website logins, and only in the browser the plugin supports. This, combined with the ambiguity of their report leads to the conclusion that their solution is unfit to solve the problem at hand.
+
+
+		\subsection*{Cloud Based Manager Using Privacy-Preserved Biometrics}
+			Most solutions examined so far, has had the same approach to storing these password databases: Protect them behind a master password. In \cite{busch2014}, however, they argue for another approach: Use biometrics for authenticating access. Building on the prior work of Jain, Nandakumar, and Nagar, they employ Biometric Template Protection, to ensure that the original biometric characteristic can not be reverse engineered. This is then used, to authenticate to the cloud, containing the passwords.
+
+
+			While this idea \emph{novel}, the usability is limited by our current technology. It is simply a fact, that not all of our devices are equipped with sensors able to detect biometric characteristics. Additionally, there have been voiced some concerns about using biometrics for authentication. All in all, the usage of their solution is not suitable, for the problem at hand.
+
+		\subsection*{A Password Manager that Doesn’t Remember Passwords}
+			In \cite{stobert2014} another take a password manager is described. In it, they design and implement a prototype of the software Versipass. Much like the previous section, Veripass has a novel take on authenticating the user, in order to access the password database.
+
+			Existing as a bookmarklet, Veripass presents the user with an image cue, to verify the user. In short, an image cue is a image based password. A image is divided up into squares. A password, is then a selection of these squares. An example of this, is seen on figure \ref{fig:versipass_imagecue} on page \pageref{fig:versipass_imagecue}.
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/versipass_imagecue.png}
+				\caption{Versipass' image cue password.}
+				\label{fig:versipass_imagecue}
+			\end{figure}
+
+			Similarly to the previous section, in \cite{stobert2014} 
+
+		\subsection*{Other Note Worthy Sources}
 
 			In \cite{doodles} they describe using doodles.
