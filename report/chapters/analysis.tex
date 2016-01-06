@@ -7,6 +7,7 @@
 	\section{Existing Available Tools}
 		Having several available tools which -- more or less -- \emph{could} be used to solve the problems, the findings have been condensed into the following list.
 		\begin{itemize}
+			\item In-Browser Password Managers
 			\item LastPass, and Similar Solutions
 			\item KeePass, and Similar Solutions
 			\item Rattic
@@ -23,6 +24,21 @@
 			%\item Vault (https://vaultproject.io/)
 		\end{itemize}
 		In the following sections the user experience or the usability of the solution might seem to be attacked often. While this might be true, one simple fact remains: If the solution is not user friendly, the users will not use it. If they do not use the solution, it is effectively worthless.
+
+		\subsection*{In-Browser Password Managers}
+			\todo{Write section about in-password managers}
+			\todo{Missing browsers: Chrome, Firefox, Safari, IE, Opera}
+
+			The most used password manager of all times, is probably the one available to all: The password manager which is built-in into the various browsers. This is a feature most major browsers have adopted: Chrome, FireFox, Internet Explorer \emph{(now known as Edge)}, Safari and Opera.
+
+			While all of the previously mentioned browsers support syncing \emph{(Internet Explorer only supports this using Windows 8.0 or newer.)} the passwords between devices, it requires to upload the passwords to one of the corporations websites.
+
+			Additionally it lacks at one very important aspect: It only works for websites accessed through that \emph{specific} type of browser, i.e. only available in Chrome browsers. Passwords for email addresses  \emph{(assuming non-webmail)} for instance, wont be able to be easily retrieved. Already at this point, using the built-in password manager can be dismissed, simply due to its use cases.
+
+			In \cite{browser_saved} they review the different browsers' storage format for their respective password managers. Their primary concern is, that while the passwords might be encrypted, the decryption key is stored directly on disk. From a security perspective, this is horrible. If anyone could dump both files, complete access to all passwords would be given. They note Firefox and Opera as the only browsers supporting a Master Password, which is to be entered every time the user accesses a password stored.	However, their analysis could very well be deprecated by now. The version of Chrome, for instance, they're using is $V21.0$, while the current newest version is $V47.0$. 
+
+			While this solution might seem interesting to some users, it still leaves a lot to be desired in regards to the requirements defined earlier.
+
 
 		\subsection*{LastPass, and Similar Solutions}
 			\label{subsec:lastpass}
@@ -437,7 +453,7 @@
 						\hline
 						Passwork 			& \green{Yes} 								& \green{Yes}									& \green{Yes}				\\
 						\hline
-						SimpleVault 		& \yellow{Yes}\footnote{\tblPasswordsFN(3)} & \green{Yes}\footnote{\tblPasswordsFN(3)}		& \yellow{Yes}\footref{fn:passwords:common_masterpassphrase}\\
+						SimpleVault 		& \yellow{Yes}\footnote{\tblPasswordsFN(3)} & \green{Yes}\footref{fn:passwords:unique_masterpassphrase}		& \yellow{Yes}\footnote{\tblPasswordsFN(2)}\\
 						\hline
 						TeamPass 			& \green{Yes} 								& \yellow{Yes}\footref{fn:passwords:group}		& \green{Yes}				\\
 						\hline 				
@@ -537,7 +553,6 @@
 
 			The team behind Tapas is fairly open regarding what \emph{they} consider the limitations of Tapas. As they see it, there are tree major. First and foremost, the solution relies on an active internet connecting for retrieving passwords. This limitation is unfortunate, but unavoidable with their choice of authentication. It is, however, easily avoided by use of USB tethering or WiFi hotspots, which are standard features in modern smartphones. Secondly, their other limitation is that the smartphone must be charged. Again, a very unavoidable limitation, due to how technology works. The last, and perhaps the only real concern, other than small inconveniences is the fact that Tapas does \emph{not} support multiple devices. It only works with \emph{one} wallet and  \emph{one} manager. Even the wallet cannot access these passwords which is unfortunate, since a lot of the same accounts for a desktop, is also used on a smartphone. All in all, renders it as an unsuited approach to the problem at hand.
 
-
 		\subsection*{Using CardSpace as a Password Manager \& Implementing PassCard - a CardSpace-based Password Manager}
 			In \cite{cardspace,cardspace_impl} the authors design and implement PassCard: A password manager based on CardSpace. CardSpace was Microsoft's client software for their ``Identity Metasystem''. The program was retired as of February 15th 2011, but Microsoft stated that they are working on a replacement \cite{cardspace_cancelled}. This is a service that was discontinued in 2011, and has not been shipped with windows since Windows 8.0. This alone, indicates that this solution is not suitable for any modern devices.
 
@@ -576,10 +591,15 @@
 
 			As the paper states, the layout of the encrypted file, is supposed to make it more difficult for an attacker to access the \emph{correct} password, using offline attacks. Based on this, it appears as if the idea behind Kamouflage is that the encrypted file is stored locally. While their idea of decoy sets might be novel and could potentially be a boost in security, their solution does \emph{nothing} towards solving the problem at hand.
 
-
 		\subsection*{Sesame: A Secure and Convenient Mobile Solution for Passwords}
 			In \cite{sesame} a rather novel idea regarding password managers is described. While the core of Sesame differs in no way from the different solutions described, the process of unlocking the database is where it differs.
 
 			Sesame can be unlocked using voice recognition. Using a remote server, a piece of recorded voice can be used to unlock the password manager. While on a desktop this might be considered unnecessary, it does save the user some hassle of typing in a password on mobile devices.face
 
 			While the idea is novel, and some user might find it exciting and usable, it is fairly limited in regards to platforms. As the authors write themselves, it is intended for smartphones, tablets, smartwatches etc. Hence, the usage for the problem at hand is rather limited.
+
+		\subsection*{Other Note Worthy Sources}
+			All Your Browser-saved Passwords Could Belong to Us: a Security Analysis and a Cloud-based New Design describes how to change the current in-browser password managers, to work more safely, using a ``Secure \& Reliable Storage'' service, located in the cloud. While this
+
+
+			In \cite{doodles} they describe using doodles.
