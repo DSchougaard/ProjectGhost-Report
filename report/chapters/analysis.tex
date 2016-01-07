@@ -617,7 +617,7 @@
 			Most solutions examined so far, has had the same approach to storing these password databases: Protect them behind a master password. In \cite{busch2014}, however, they argue for another approach: Use biometrics for authenticating access. Building on the prior work of Jain, Nandakumar, and Nagar, they employ Biometric Template Protection, to ensure that the original biometric characteristic can not be reverse engineered. This is then used, to authenticate to the cloud, containing the passwords.
 
 
-			While this idea \emph{novel}, the usability is limited by our current technology. It is simply a fact, that not all of our devices are equipped with sensors able to detect biometric characteristics. Additionally, there have been voiced some concerns about using biometrics for authentication. All in all, the usage of their solution is not suitable, for the problem at hand.
+			While this idea \emph{novel}, the usability is limited by our current technology. It is simply a fact, that not all of our devices are equipped with sensors able to detect biometric characteristics. Additionally, there have been voiced some concerns about using biometrics for authentication. All in all, the usage of their solution is not suitable for the problem at hand.
 
 		\subsection*{A Password Manager that Doesn’t Remember Passwords}
 			In \cite{stobert2014} another take a password manager is described. In it, they design and implement a prototype of the software Versipass. Much like the previous section, Veripass has a novel take on authenticating the user, in order to access the password database.
@@ -626,7 +626,9 @@
 
 			In order to go from a set of squares into a text-based password, each tile is assigned a a string. These strings are then concatenated into a single string, in a fixed order. The resulting string is then salted and hashed, which then returns the password. In contrast to popular approach, the salt in this process is \emph{ partially user selected}. The salt consists of a combination of the sites URL and a user selected salt. This is done in order for the user to be able to change the password for a site, should it be required.
 
-			From a security perspective, there are some shady aspects of their paper. In section 5.1.1 they cite that 21 bits of ``entropy'' is sufficient for an online attack,and quotes \cite{florencio2014}. However, there is a much more frightening problem: Combinations. In their default settings they state that a $5x6$ grid in which 5 tiles are to be selected, in any order, is sufficient. Applying some math, it is evident that there exists $1712304$ different combinations using these settings, cf. equation \ref{eq:combinations}. At first glance this might seem decent, but in fact it offers \emph{less} combinations than a randomly selected $6$ character long password, consisting \emph{only} of lower-case letters, cf. equation \ref{eq:permutations}.
+			From a security perspective, there are some shady aspects of their paper. In section 5.1.1 they cite that 21 bits of ``entropy'' is sufficient for an online attack,and quotes \cite{florencio2014}. However, there is a much more frightening problem: Combinations. In their default settings they state that a $5x6$ grid in which 5 tiles are to be selected, in any order, is sufficient. However, ignoring the advanced analysis
+
+			Applying some math, it is evident that there exists $1712304$ different combinations using these settings, cf. equation \ref{eq:combinations}. At first glance this might seem decent, but in fact it offers \emph{less} combinations than a randomly selected $6$ character long password, consisting \emph{only} of lower-case letters, cf. equation \ref{eq:permutations}. While they do say, that the settings suggested them can be altered to increase security, it still feels like a less secure approach.
 
 			\begin{equation}
 				c = \frac{n!}{(n-r)!(r!)} = \frac{48!}{(48-5)!(5!)} = 1712304
@@ -647,6 +649,23 @@
 
 			Abstracting away from some of the details, this solution is sort of a parallel to the one described in \cite{busch2014}. While the mechanism for unlocking the password is novel, it is just impractical. Hence, it is deemed as an unsuitable solution for the problem at hand.
 
-		\subsection*{Other Note Worthy Sources}
+		\subsection*{Password Management Using Doodles}
+			Much in line with the previously described solutions, \cite{doodles} describes a novel take on the password manager. Their idea is to use doodles to log into websites.
 
-			In \cite{doodles} they describe using doodles.
+			The basic concept is the same as has been seen over and over again; Username, passwords, and site URLs are stored in a database. Accessing these usernames and passwords, requires the user to draw his or her master doodle in a supplied browser plugin, seen on figure \ref{fig:doodle}. If this entered doodle then is a match with a stored ``master doodle'', the username and password is autofilled.
+
+			Unfortunately, they do not disclose how exactly the database is protected. Additionally, the paper makes no effort taking multiple devices into account. As such, their solution is dismissed.
+
+			\begin{figure}[htbp]
+				\centering
+				\includegraphics[width=0.95\textwidth]{figures/analysis/doodle.png}
+				\caption{The Doodle browser plugin}
+				\label{fig:doodle}
+			\end{figure}
+
+		\subsection*{Other Sources}
+			In \cite{halderman2005} they discuss deriving site specific passwords, from a single master password and a site URL. This is done by hashing the concatenated strings, and the resulting hash is then the password for that specific site. This is a solution very similar to the one described in \cite{pwdhash}.
+
+			In \cite{zhang2015} they have some of the same thoughts, as in \cite{pwdhash}, using a dedicated key to signal TrustLogin that confidential information is being entered. However, it differs from PwdHash as TrustLogin does not actually \emph{store} anything. It is ``merely'' a tool for secure input, on a possibly insecure platform. While their paper doesn't describe a password manager as seen previously, it does presents some interesting takes on securing the input of the user.
+
+			In \cite{englert2009} they describe a very classical password management system: An HTTP server and a browser client. The client logs into the server, gets the encrypted data, and decrypts it locally. However, from their description of the system, the encryption key -- or as they call it the ``secret key'' -- is something the user is supposed to remember and input \emph{per} session. 
