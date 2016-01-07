@@ -622,7 +622,21 @@
 		\subsection*{A Password Manager that Doesn’t Remember Passwords}
 			In \cite{stobert2014} another take a password manager is described. In it, they design and implement a prototype of the software Versipass. Much like the previous section, Veripass has a novel take on authenticating the user, in order to access the password database.
 
-			Existing as a bookmarklet, Veripass presents the user with an image cue, to verify the user. In short, an image cue is a image based password. A image is divided up into squares. A password, is then a selection of these squares. An example of this, is seen on figure \ref{fig:versipass_imagecue} on page \pageref{fig:versipass_imagecue}. The squares are chosen at random, by the system. The use of randomly assigned squares, is done to avoid what they call hotspots in the images, which essentially is areas of a picture which is more likely to be chosen by users, than other areas. 
+			Existing as a bookmarklet, Veripass presents the user with an image cue, to verify the user. In short, an image cue is a image based password. An image is divided up into a $6x8$ squares \emph{(default settings)}. A password is then a selection of these squares. An example of this, is seen on figure \ref{fig:versipass_imagecue} on page \pageref{fig:versipass_imagecue}. The squares are chosen at random, by the system. The use of randomly assigned squares, is done to avoid what they call hotspots in the images, which essentially is areas of a picture which is more likely to be chosen by users, than other areas. 
+
+			In order to go from a set of squares into a text-based password, each tile is assigned a a string. These strings are then concatenated into a single string, in a fixed order. The resulting string is then salted and hashed, which then returns the password. In contrast to popular approach, the salt in this process is \emph{ partially user selected}. The salt consists of a combination of the sites URL and a user selected salt. This is done in order for the user to be able to change the password for a site, should it be required.
+
+			From a security perspective, there are some shady aspects of their paper. In section 5.1.1 they cite that 21 bits of ``entropy'' is sufficient for an online attack,and quotes \cite{florencio2014}. However, there is a much more frightening problem: Combinations. In their default settings they state that a $5x6$ grid in which 5 tiles are to be selected, in any order, is sufficient. Applying some math, it is evident that there exists $1712304$ different combinations using these settings, cf. equation \ref{eq:combinations}. At first glance this might seem decent, but in fact it offers \emph{less} combinations than a randomly selected $6$ character long password, consisting \emph{only} of lower-case letters, cf. equation \ref{eq:permutations}.
+
+			\begin{equation}
+				c = \frac{n!}{(n-r)!(r!)} = \frac{48!}{(48-5)!(5!)} = 1712304
+				\label{eq:combinations}
+			\end{equation}
+
+			\begin{equation}
+				p = n^r = 11881376
+				\label{eq:permutations}
+			\end{equation}
 
 			\begin{figure}[htbp]
 				\centering
@@ -631,7 +645,7 @@
 				\label{fig:versipass_imagecue}
 			\end{figure}
 
-			Abstracting away from a lot of details, 
+			Abstracting away from some of the details, this solution is sort of a parallel to the one described in \cite{busch2014}. While the mechanism for unlocking the password is novel, it is just impractical. Hence, it is deemed as an unsuitable solution for the problem at hand.
 
 		\subsection*{Other Note Worthy Sources}
 
