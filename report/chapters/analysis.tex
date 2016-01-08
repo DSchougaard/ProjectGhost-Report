@@ -40,7 +40,6 @@
 
 			While this solution might seem interesting to some users, it still leaves a lot to be desired in regards to the requirements defined earlier.
 
-
 		\subsection*{LastPass, and Similar Solutions}
 			\label{subsec:lastpass}
 			In the name of usability services such as LastPass\footnote{https://lastpass.com/}, PassPack\footnote{https://www.passpack.com/}, DashLane\footnote{https://www.dashlane.com/}, and so many others grew popular, and it is easy to understand why. Enabling you to access your passwords from several devices, through native apps or the browser, it seemed like it was the perfect match of usability and security. To avoid too much repetition LastPass is picked as a representative of this group, simply due to it being the most well-known.
@@ -377,7 +376,24 @@
 			\end{figure}
 
 		\subsection*{TeamPass}
-			\todo{Write Section bashing it}
+			From a technical point of view TeamPass might be considered a decent option. Ensuring platform agnosticism due to being implemented in PHP, it only requires an Apache server and MySQL server to run. 
+
+			Boasting of having an API to ``permit an access to Teampass Items from a third party application'', they a disturbing lack of security concerns. Examining their call for retrieving the password for a specific site, some very odd behaviour is present. First and foremost, what surely should have been a RESTful API, is implemented \emph{only} using the \verb=GET= HTTP method. Secondly, their API states that a user's password is sent \emph{in} the URL, as part of the \verb=GET= call. This is a huge blunder, from the developer's part. 
+
+			Additionally, based on the description of their API, it would appear as if the password is decrypted server-side. This goes against the requirements previously specified.
+			\begin{verbatim}
+				<url to teampass>/api/index.php/auth/<PROTOCOL>/<URL>_
+				/<user login>/<user password>?apikey=<VALID API KEY>
+			\end{verbatim}
+			Where they describe the parameters as
+			\begin{verbatim}
+				< PROTOCOL > : is the protocol used for the URL (example: http	https	ftp	…)
+				< URL > : is the URL without the protocol (example:_
+				 http://www.teampass.net becomes www.teampass.net)
+				< user login > : user’s login
+				< user password > : user clear password
+				< VALID API KEY > : api key for access validation
+			\end{verbatim}
 
 		\subsection{Final Comparisons}
 			% Table color shortcuts
