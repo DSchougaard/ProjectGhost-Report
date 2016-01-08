@@ -410,8 +410,7 @@
 
 			Looking at the more technical aspect of the comparison, on table \ref{tbl:agnostic} on page \pageref{tbl:agnostic} a comparison of their agnosticism is made. Most of the solutions are able to be run on multiple platforms, due to being implemented in PHP. Hence, they only require an Apache \emph{(or nginx)} server to be run. Fortunately, both of these have versions for all major operating systems. Unfortunately, there is only one solution that actually has options for various database solutions. \emph{But} the developers note, that this is done at the user's risk, since they're not tested as rigorously.
 
-			By comparing these three tables, it is unfortunately seen that there isn't \emph{one} completely fulfilling the requirements earlier specified.
-
+			%By comparing these three tables, it is unfortunately seen that there isn't \emph{one} completely fulfilling the requirements earlier specified.
 
 
 			\begin{table}
@@ -524,9 +523,12 @@
 				\label{tbl:agnostic}
 			\end{table}
 
+			However, to better get a clear picture of \emph{all} of the solutions, we need to compare \emph{all} of them, in order to better see if any one of them fulfils \emph{enough} requirements to be considered a viable option.
+
 
 			\subsubsection*{Comparison with the List of Requirements}
-				Finally, we can insert all of the requirements specified in section \ref{sec:requirements}, and \emph{all} of the solutions, into the same table to better compare them. This is found on table \ref{tab:all} on page \pageref{tab:all}. The legend for reading the table is found on table \ref{tbl:all_legend}. For easier reading and referencing, the list of requirements are repeated. 
+				Finally, we can insert all of the requirements specified in section \ref{sec:requirements}, and \emph{all} of the solutions, into the same table to better compare them. Additionally, the solution proposed by this thesis -- ``Ghost'' -- is entered into the table as well. This is found on table \ref{tab:all} on page \pageref{tab:all}. The legend for reading the table is found on table \ref{tbl:all_legend}. For easier reading and referencing, the list of requirements are repeated. 
+
 				\textbf{Functional Requirements (F-Req)}
 					\vspace{-3ex}\begin{enumerate}
 						 \setlength\itemsep{0.1em}
@@ -561,7 +563,10 @@
 					\end{enumerate}
 
 				\input{chapters/analysis/reqComparison_c.tex}
-	
+
+				As it is clearly seen, \emph{no} other solution covers all of the requirements previously stated. Although some of them might come close, they still lack too much to consider a viable option.
+		
+
 	\section{Academic Research and Tools}
 		A number of interesting academic articles and papers was discovered, while researching available solutions from this source. The findings of this, has been condensed into the following list.
 
