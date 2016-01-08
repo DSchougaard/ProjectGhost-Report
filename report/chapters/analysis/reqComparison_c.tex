@@ -1,60 +1,87 @@
-\newcommand{\rot}[1]{\rotatebox[origin=c]{90}{\textbf{ #1}}}%
+\newcommand{\rot}[1]{\rotatebox[origin=l]{90}{\textbf{#1}}}%
 \newcommand{\xmark}{\ding{55}}%
 \newcommand{\cmark}{\ding{51}}%
 
-\begin{longtable}{ p{3cm} l l l l l l l l l l l l l l}
-\rot{}																															& \rot{In-Browser Managers}		& \rot{LastPass, and Similar}		& \rot{KeePass, and Similar}		& \rot{Rattic}			& \rot{Encryptr}			& \rot{Passwordstate}		& \rot{Vault (Zoho)}		& \rot{TeamPasswordManager}		& \rot{Simple Safe}		& \rot{PassWork}			& \rot{SimpleVault}		& \rot{RoboForm}			& \rot{TeamPass}			& \rot{Vaultier}		\\	
+
+\begin{table}
+	\begin{tabular}{ | c | p{300px} | }
+		\hline
+		\green{\cmark} 		& Yes. 																														\\
+		\hline
+		\yellow{\cmark} 	& Yes, with a remark. Only true using a workaround, possibly going against other requirements, or it works less than ideally\\
+		\hline
+		\red{\xmark} 		& No. 																														\\
+		\hline
+		\grey{} 			& Not applicable to the solution. 																							\\
+		\hline
+		\white{} 			& No information is available, to indicate an answer. 																		\\
+		\hline
+	\end{tabular}
+
+	\caption{Legend for table \ref{tab:all}}
+	\label{tbl:all_legend}
+\end{table}
+
+
+
+
+\newcommand{\freq}[1]{F-Req \#\ref{#1}}
+\newcommand{\nfreq}[1]{NF-Req \#\ref{#1}}
+\begin{longtable}{ r l l l l l l l l l l l l l l}
+\rot{} 								& \rot{In-Browser Managers}		& \rot{LastPass, and Similar}		& \rot{KeePass, and Similar}		& \rot{Rattic}			& \rot{Encryptr}			& \rot{Passwordstate}		& \rot{Vault (Zoho)}		& \rot{TeamPasswordManager}		& \rot{Simple Safe}		& \rot{PassWork}			& \rot{SimpleVault}		& \rot{RoboForm}			& \rot{TeamPass}			& \rot{Vaultier}		\\	
 \endhead%
-\textbf{Functional Requirements} 																								&-											&-										&-										&-					&-					&-					&-					&-							&-					&-					&-					&-					&-					&-				\\		
+\textbf{Functional} 				& 											& 										& 										& 					& 					& 					& 					& 							& 					& 					& 					& 					& 					& 				\\		
 \hline 																																																																																																																																													
-Distributed password database																									&\yellow{\cmark}							&\green{\cmark}							&\red{\xmark}							&\green{\cmark}		&\yellow{\cmark}	&\green{\cmark}		&\red{\xmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
-\hline 																																																																																																																																													
-Multi-user support																												&\red{\xmark}								&\green{\cmark}							&\red{\xmark}							&\green{\cmark}		&\yellow{\cmark}	&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\yellow{\cmark}	&\red{\xmark}		&\green{\cmark}		&\green{\cmark}	\\		
-\hline 																																																																																																																																												
-Support differentiating between admin users and regular users.																	&\red{\xmark}								&\red{\xmark}							&\red{\xmark}							&\green{\cmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\red{\xmark}		&\grey{ }			&\green{\cmark}		&\green{\cmark}	\\		
+\freq{item:distrib_password}		&\yellow{\cmark}							&\green{\cmark}							&\red{\xmark}							&\green{\cmark}		&\yellow{\cmark}	&\green{\cmark}		&\red{\xmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
+\hline 																																																																																																																						
+\freq{item:multi_user}				&\red{\xmark}								&\green{\cmark}							&\red{\xmark}							&\green{\cmark}		&\yellow{\cmark}	&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\yellow{\cmark}	&\red{\xmark}		&\green{\cmark}		&\green{\cmark}	\\		
+\hline 																																																																																																																					
+\freq{item:admin_user}				&\red{\xmark}								&\red{\xmark}							&\red{\xmark}							&\green{\cmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\red{\xmark}		&\grey{ }			&\green{\cmark}		&\green{\cmark}	\\		
+\hline 																																																																																																																				
+\freq{item:organization}			&\red{\xmark}								&\green{\cmark}							&\green{\cmark}							&\red{\xmark}		&\red{\xmark}		&\green{\cmark}		&\yellow{\cmark}	&\green{\cmark}				&\yellow{\cmark}	&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\green{\cmark}		&\yellow{\cmark}	\\		
+\hline 																																																																																																																			
+\freq{item:sharing}					&\red{\xmark}								&\green{\cmark}							&\red{\xmark}							&\green{\cmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\yellow{\cmark}	&\red{\xmark}		&\green{\cmark}		&\green{\cmark}	\\		
 \hline 																																																																																																																																											
-Password organization, multiple-levels																							&\red{\xmark}								&\green{\cmark}							&\green{\cmark}							&\red{\xmark}		&\red{\xmark}		&\green{\cmark}		&\yellow{\cmark}	&\green{\cmark}				&\yellow{\cmark}	&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\green{\cmark}		&\yellow{\cmark}	\\		
-\hline 																																																																																																																																										
-Password sharing																												&\red{\xmark}								&\green{\cmark}							&\red{\xmark}							&\green{\cmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\yellow{\cmark}	&\red{\xmark}		&\green{\cmark}		&\green{\cmark}	\\		
+\freq{item:add}						&\grey{}									&\grey{ }								&\grey{ }								&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}				&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\grey{ }			&\red{\xmark}		&\red{\xmark}		\\	
+\hline 																																																																																																																																													
+\freq{item:platform}				&\green{\cmark}								&\green{\cmark}							&\yellow{\cmark}						&\green{\cmark}		&\yellow{\cmark}	&\red{\xmark}		&\grey{ }			&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\yellow{\cmark}	&\green{\cmark}	\\		
+\hline 																																																																																																																																												
+\freq{item:database}				&\grey{}									&\grey{ }								&\red{\xmark}							&\green{\cmark}		&\red{\xmark}		&\red{\xmark}		&\grey{ }			&\red{\xmark}				&\red{\xmark}		&\white{ }			&\yellow{\cmark}	&\grey{ }			&\red{\xmark}		&\red{\xmark}		\\	
 \hline 																																																																																																																																											
-Only admin can add a user to the solution																						&\grey{}									&\grey{ }								&\grey{ }								&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}				&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\grey{ }			&\red{\xmark}		&\red{\xmark}		\\	
+\freq{item:passwords_local}			&\yellow{\cmark}							&\yellow{\cmark}						&\green{\cmark}							&\red{\xmark}		&\white{}			&\white{}			&\white{ }			&\white{ }					&\white{ }			&\white{ }			&\red{\xmark}		&\green{\cmark}		&\red{\xmark}		&\white{ }	\\		
 \hline 																																																																																																																																													
-Platform agnostic																												&\green{\cmark}								&\green{\cmark}							&\yellow{\cmark}						&\green{\cmark}		&\yellow{\cmark}	&\red{\xmark}		&\grey{ }			&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\yellow{\cmark}	&\green{\cmark}	\\		
+\freq{item:new}						&\green{\cmark}								&\green{\cmark}							&\green{\cmark}							&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
+\hline 																																																																																																																																													
+\freq{item:retrieve}				&\green{\cmark}								&\green{\cmark}							&\green{\cmark}							&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
+\hline 																																																																																																																																													
+\freq{item:delete}					&\green{\cmark}								&\green{\cmark}							&\green{\cmark}							&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
+\hline 																																																																																																																																													
+\freq{item:audit}					&\red{\xmark}								&\red{\xmark}							&\red{\xmark}							&\red{\xmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		\\	
 \hline 																																																																																																																																												
-Database agnostic																												&\grey{}									&\grey{ }								&\red{\xmark}							&\green{\cmark}		&\red{\xmark}		&\red{\xmark}		&\grey{ }			&\red{\xmark}				&\red{\xmark}		&\white{ }			&\yellow{\cmark}	&\grey{ }			&\red{\xmark}		&\red{\xmark}		\\	
+\freq{item:auth}					&\yellow{\cmark}							&\green{\cmark}							&\yellow{\cmark}						&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
+\hline 																																																																																																																																													
+\freq{item:change}					&\yellow{\cmark}							&\green{\cmark}							&\green{\cmark}							&\green{\cmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\grey{ }			&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
+\hline 																																																																																																																																													
+\freq{item:two-factor}				&\yellow{\cmark}							&\green{\cmark}							&\red{\xmark}							&\red{\xmark}		&\red{\xmark}		&\green{\cmark}		&\red{\xmark}		&\red{\xmark}				&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\green{\cmark}		&\red{\xmark}		&\red{\xmark}		\\	
+\hline 																																																																																																																																													
+\freq{item:restart}					&\grey{}									&\grey{ }								&\grey{ }								&\green{\cmark}		&\grey{ }			&\green{\cmark}		&\grey{ }			&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\grey{ }			&\green{\cmark}		&\green{\cmark}	\\		
+\hline 																																																																																																																																													
+\textbf{Non-Functional}				& 											& 										& 										& 					& 					& 					& 					& 							& 					& 					& 					& 					& 					& 				\\		
+\hline 																																																																																																																																													
+\nfreq{item:user_storage}			&\yellow{\cmark}							&\red{\xmark}							&\green{\cmark}							&\green{\cmark}		&\yellow{\cmark}	&\green{\cmark}		&\red{\xmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}	\\		
+\hline 																																																																																																																																												
+\nfreq{item:open-source}			&\red{\xmark}								&\red{\xmark}							&\green{\cmark}							&\green{\cmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}				&\red{\xmark}		&\red{\xmark}		&\green{\cmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}	\\		
+\hline 																																																																																																																																												
+\nfreq{item:entries}				&\green{\cmark}								&\green{\cmark}							&\green{\cmark}							&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
+\hline 																																																																																																																																													
+\nfreq{item:encryption}				&\green{\cmark}								&\green{\cmark}							&\green{\cmark}							&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\white{ }			&\white{ }			&\white{ }			&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
+\hline 																																																																																																																																													
+\nfreq{item:comms}					&\green{\cmark}								&\green{\cmark}							&\grey{ }								&\yellow{\cmark}	&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\yellow{\cmark}	&\yellow{\cmark}	&\white{ }			&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
 \hline 																																																																																																																																											
-Passwords and private information should never be stored or handled unencrypted anywhere, other than the local device.			&\yellow{\cmark}							&\yellow{\cmark}						&\green{\cmark}							&\red{\xmark}		&\white{}			&\white{}			&\white{ }			&\white{ }					&\white{ }			&\white{ }			&\red{\xmark}		&\green{\cmark}		&\red{\xmark}		&\white{ }	\\		
-\hline 																																																																																																																																													
-Support adding of new passwords																									&\green{\cmark}								&\green{\cmark}							&\green{\cmark}							&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
-\hline 																																																																																																																																													
-Support retrieving stored password																								&\green{\cmark}								&\green{\cmark}							&\green{\cmark}							&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
-\hline 																																																																																																																																													
-Support deleting stored passwords																								&\green{\cmark}								&\green{\cmark}							&\green{\cmark}							&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
-\hline 																																																																																																																																													
-Extensive auditing																												&\red{\xmark}								&\red{\xmark}							&\red{\xmark}							&\red{\xmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		\\	
+\nfreq{item:tls1.2}					&\red{\xmark}								&\red{\xmark}							&\grey{ }								&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}				&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		\\	
 \hline 																																																																																																																																												
-Allow user authentication based on a single master password, per user															&\yellow{\cmark}							&\green{\cmark}							&\yellow{\cmark}						&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
-\hline 																																																																																																																																													
-Allow the user to change his or her master password																				&\yellow{\cmark}							&\green{\cmark}							&\green{\cmark}							&\green{\cmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\grey{ }			&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
-\hline 																																																																																																																																													
-Support two-factor authentication																								&\yellow{\cmark}							&\green{\cmark}							&\red{\xmark}							&\red{\xmark}		&\red{\xmark}		&\green{\cmark}		&\red{\xmark}		&\red{\xmark}				&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\green{\cmark}		&\red{\xmark}		&\red{\xmark}		\\	
-\hline 																																																																																																																																													
-Automatic start after a hardware reboot																							&\grey{}									&\grey{ }								&\grey{ }								&\green{\cmark}		&\grey{ }			&\green{\cmark}		&\grey{ }			&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\grey{ }			&\green{\cmark}		&\green{\cmark}	\\		
-\hline 																																																																																																																																													
-\textbf{Non-Functional Requirements}																							&-											&-										&-										&-					&-					&-					&-					&-							&-					&-					&-					&-					&-					&-				\\		
-\hline 																																																																																																																																													
-Only use user-controlled storage.																								&\yellow{\cmark}							&\red{\xmark}							&\green{\cmark}							&\green{\cmark}		&\yellow{\cmark}	&\green{\cmark}		&\red{\xmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}	\\		
-\hline 																																																																																																																																												
-Open Source License (MIT for instance).																							&\red{\xmark}								&\red{\xmark}							&\green{\cmark}							&\green{\cmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}				&\red{\xmark}		&\red{\xmark}		&\green{\cmark}		&\red{\xmark}		&\green{\cmark}		&\green{\cmark}	\\		
-\hline 																																																																																																																																												
-Support for at least 100.000 password entries																					&\green{\cmark}								&\green{\cmark}							&\green{\cmark}							&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
-\hline 																																																																																																																																													
-Use encryption for storage should be viable for at least 5 years.																&\green{\cmark}								&\green{\cmark}							&\green{\cmark}							&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\white{ }			&\white{ }			&\white{ }			&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
-\hline 																																																																																																																																													
-Use encryption for communication should be viable for at least 5 years.															&\green{\cmark}								&\green{\cmark}							&\grey{ }								&\yellow{\cmark}	&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}				&\yellow{\cmark}	&\yellow{\cmark}	&\white{ }			&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
-\hline 																																																																																																																																											
-Secure communications, using only TLS 1.2 or newer.																				&\red{\xmark}								&\red{\xmark}							&\grey{ }								&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}				&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		&\red{\xmark}		\\	
-\hline 																																																																																																																																												
-A user should never wait more than at maximum 500ms after any action in the user interface, before the changes take effect.		&\green{\cmark}								&\green{\cmark}							&\green{\cmark}							&\green{\cmark}		&\green{\cmark}		&\white{ }			&\green{\cmark}		&\green{\cmark}				&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
+\nfreq{item:delay}					&\green{\cmark}								&\green{\cmark}							&\green{\cmark}							&\green{\cmark}		&\green{\cmark}		&\white{ }			&\green{\cmark}		&\green{\cmark}				&\red{\xmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}		&\green{\cmark}	\\		
 \hline
+\caption{All solutions compares to requirements list.}
+\label{tab:all}
 \end{longtable}

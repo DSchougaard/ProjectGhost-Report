@@ -121,7 +121,8 @@
 			No password -- or any other sensitive data -- should \emph{ever} be present unencrypted anywhere else, than a local device. This ensures that even if another part of the solution is somehow compromised, data is not revealed on that device.  The users should be able to audit access to their personal data including, but not limited to, retrieving passwords, adding passwords, changing passwords, and deleting passwords. This should be done by logging complete time of access and the remote host, at least. This ensures that a user can detect if unauthorised access has occurred.
 
 			To sum it up, the above requirements have been condensed into a list:
-			\begin{itemize}
+			\vspace{-3ex}\begin{itemize}
+				\setlength\itemsep{0.1em}
 				\item Distributed password database
 				%\item Self-contained
 				\item Multi-user support
@@ -152,7 +153,8 @@
 			Based on the previous sections, we can conclude one very fundamental thing: The passwords needs to be stored somewhere the user has control over. In order to aid development, allowing for use of various open source frameworks and libraries, the solution should be open source and licensed with an appropriate license \emph{(MIT for instance)}. The solution should be able to store a million password entries \emph{(1.000.000)}, spread across all users. The encryption used for the storage of sensitive data should be of industry standard, and should be viable for at least 5 years. The same goes for the encryption used for communication. For maximum security, the solution should \emph{only} accept and use TLS version 1.2 connections, with a limited cypher suite. For the best user experience, there must not be any latency in the user interface, exceeding $500ms$. Any longer, and the user will grow tired of using the software, because of its sluggish feel.
 
 			To sum it up, the above requirements have been condensed into a list:
-			\begin{itemize}
+			\vspace{-3ex}\begin{itemize}
+				\setlength\itemsep{0.1em}
 				\item Only use user-controlled storage.
 				\item Open Source License \emph{(MIT for instance)}.
 				\item Support for \emph{at least} 100.000 password entries

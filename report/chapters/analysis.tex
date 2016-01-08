@@ -397,11 +397,11 @@
 
 		\subsection{Final Comparisons}
 			% Table color shortcuts
-			\newcommand{\red}[1]{\cellcolor{red!75}#1}
-			\newcommand{\green}[1]{\cellcolor{green!75}#1}
-			\newcommand{\grey}[1]{\cellcolor{gray!75}#1}
-			\newcommand{\yellow}[1]{\cellcolor{yellow!75}#1}
-			\newcommand{\white}[1]{\cellcolor{white!75}#1}
+			\newcommand{\red}[1]{\cellcolor{red!50}#1}
+			\newcommand{\green}[1]{\cellcolor{green!50}#1}
+			\newcommand{\grey}[1]{\cellcolor{gray!50}#1}
+			\newcommand{\yellow}[1]{\cellcolor{yellow!50}#1}
+			\newcommand{\white}[1]{\cellcolor{white!50}#1}
 
 
 			While the previous sections covered an in-depth look at the various solutions, it might seem a little overwhelming. Here, the information will be condensed into tables, for a better picture of the differences between the various solutions.
@@ -526,7 +526,41 @@
 
 
 			\subsubsection*{Comparison with the List of Requirements}
-			\input{chapters/analysis/reqComparison.tex}
+				Finally, we can insert all of the requirements specified in section \ref{sec:requirements}, and \emph{all} of the solutions, into the same table to better compare them. This is found on table \ref{tab:all} on page \pageref{tab:all}. The legend for reading the table is found on table \ref{tbl:all_legend}. For easier reading and referencing, the list of requirements are repeated. 
+				\textbf{Functional Requirements (F-Req)}
+					\vspace{-3ex}\begin{enumerate}
+						 \setlength\itemsep{0.1em}
+						\item Distributed password database \label{item:distrib_password}
+						\item Multi-user support \label{item:multi_user}
+						\item Support differentiating between admin users and regular users. \label{item:admin_user}
+						\item Password organization, multiple-levels \label{item:organization}
+						\item Password sharing \label{item:sharing}
+						\item Only admin can add a user -- or invite a user -- to the solution \label{item:add}
+						\item Platform agnostic \label{item:platform}
+						\item Database agnostic \label{item:database}
+						\item Passwords and private information should never be stored or handled unencrypted anywhere, other than the local device. \label{item:passwords_local}
+						\item Support adding of new passwords \label{item:new}
+						\item Support retrieving stored password \label{item:retrieve}
+						\item Support deleting stored passwords \label{item:delete}
+						\item Extensive auditing \label{item:audit}
+						\item Allow user authentication based on a single master password, per user \label{item:auth}
+						\item Allow the user to change his or her master password \label{item:change}
+						\item Support two-factor authentication \label{item:two-factor}
+						\item Automatic start after a hardware reboot \label{item:restart}
+					\end{enumerate}
+				\textbf{Non-Functional Requirements (NF-Req)}
+					\vspace{-3ex}\begin{enumerate}
+						\setlength\itemsep{0.1em}
+						\item Only use user-controlled storage.\label{item:user_storage}
+						\item Open Source License \emph{(MIT for instance)}. \label{item:open-source}
+						\item Support for \emph{at least} 100.000 password entries \label{item:entries}
+						\item Use encryption for storage should be viable for at least 5 years. \label{item:encryption}
+						\item Use encryption for communication should be viable for at least 5 years. \label{item:comms}
+						\item Secure communications, using only TLS 1.2 or newer. \label{item:tls1.2}
+						\item A user should never wait more than at maximum $500ms$ after any action in the user interface, before the changes take effect. \label{item:delay}
+					\end{enumerate}
+
+				\input{chapters/analysis/reqComparison_c.tex}
 	
 	\section{Academic Research and Tools}
 		A number of interesting academic articles and papers was discovered, while researching available solutions from this source. The findings of this, has been condensed into the following list.
