@@ -22,6 +22,7 @@
 			\item Vaultier
 			\item TeamPass 
 			%\item Vault (https://vaultproject.io/)
+			%\item WebPasswordSafe https://github.com/joshdrummond/webpasswordsafe
 		\end{itemize}
 		In the following sections the user experience or the usability of the solution might seem to be attacked often. While this might be true, one simple fact remains: If the solution is not user friendly, the users will not use it. If they do not use the solution, it is effectively worthless.
 
@@ -570,26 +571,17 @@
 	\section{Academic Research and Tools}
 		While looking at commercially available tools might get you so far, it is imperative that one also investigates any relevant technical papers, as they might divulge solutions and ideas, which has not yet reached the commercial market. During this research, a number of interesting academic articles and papers was discovered. 
 
-		In this section, all found
+		Since there are plenty of available papers, regarding passwords, authentication, and password managers, it is important to define a selection criteria.
 
-		For a paper to be relevant, it has the described solution has to be able to run, without changing other infrastructure. Hence, solutions that change \emph{how} a user authenticates with a remote service, is to be disregarded. 
+		First and foremost, for a paper to be relevant, it must describe a either an actual implementation, or a specification for an implementation. Additionally, the solution described must be something that is \emph{only} to be used client side. To be more precise: The use of the solution only requires changes for the user. Changing \emph{how} a user authenticates, should not be required for the solution to work.
 
+		Additionally, the solution should be completely software implementable. Several solutions exist where, for instance, a USB-token is required. While it might theoretically be a security advantage to have physical component required for the product for the solution to function, it is deemed that it diverges too much from the initial requirements. However, solutions \emph{allowing} the use of physical tokens are of course considered.
 
-		Due to the requirements defined earlier, it has been chosen that any papers revolving around physical devices are excluded. While it might theoretically be a security advantage to have physical component required for the product for the solution to function, it also introduces the risk of theft. Hence, papers involving this, is marked as solutions for another problem.
-
-		Additionally, all solutions proposing changes server-side for their solution to work, is also dismissed, simply due to the fact that it would change the underlying problem.
 
 		% ID Keeper 		Requires physical access token
 		% SESS 				Uses smartphone or laptop as physical token
-		%
-
-
-
-		A number of interesting academic articles and papers was discovered, while researching available solutions from this source. 
-
-
-
-		The findings of this, has been condensed into the following list.
+		
+		Based in these selection criteria, the all available articles have been found, and is reviewed in this section. For a better overview, the reviewed articles are found in the list below, in order as they appear.
 
 		\begin{itemize}
 			\item Tapas: Design, Implementation, and Usability Evaluation of a Password Manager \cite{tapas}
@@ -601,9 +593,20 @@
 			\item Cloud Based Manager Using Privacy-Preserved Biometrics
 		\end{itemize}
 
+		% Password Management Solutions for Collaborative Environment
+		%https://is.muni.cz/th/359942/fi_b/KlaraPavelkova-Thesis.pdf
+			
+		% Toward a secure and usable cloud-based password manager for web browsers
+		% http://ac.els-cdn.com.globalproxy.cvt.dk/S0167404814001059/1-s2.0-S0167404814001059-main.pdf?_tid=28bb6d94-db11-11e5-87c1-00000aacb35d&acdnat=1456330425_72917a84821908ae9e7b432ade05a5fc
+
+
+		% CredProxy: A Password Manager for Online Authentication Environments
+		% http://137.122.14.44/bitstream/10393/23611/5/Golrang_Mohammad_Saleh_2012_Thesis.pdf
+
+		% SASy Username and Password Management on the Cloud
+		% https://www.researchgate.net/publication/224857173_SASy_Username_and_Password_Management_on_the_Cloud
 
 		
-
 		\subsection*{Tapas: Design, Implementation, and Usability Evaluation of a Password Manager}
 			In \cite{tapas}, a new and novel idea is introduced. Rather than using two-factor authentication, a \emph{dual-possession} authentication is used. The basic concept is, that the user has two devices: A smartphone \emph{(wallet)} and a desktop \emph{(manager)}. While it \emph{specifically} states that the manager is a desktop, it is assumed that it might as well be a laptop. The idea is that the manager stores keys for decrypting login information to various sites, while the wallet stores encrypted blobs. The argument is, that even if either device is stolen, offline attacks cannot happen.
 
@@ -646,7 +649,7 @@
 			All in all, PwdHash is not a solution suited for the problem at hand, and actually does nothing for the usability of secure passwords.
 
 		\subsection*{Kamouflage: Loss-Resistant Password}
-			In \cite{kamouflage} a whole new paradigm for creating encrypted password databases is suggested: Kamouflage. Kamouflage relies on what they call decoy password sets. One of their primary arguments for implementing Kamouflage is the fact that you can't trust the cloud. Their concern is, that an employee at the cloud service could download the DB and run offline attacks against it. However, they neglect to reason against running this cloud service yourself.
+			In \cite{kamouflage} a whole new paradigm for creating e<ncrypted password databases is suggested: Kamouflage. Kamouflage relies on what they call decoy password sets. One of their primary arguments for implementing Kamouflage is the fact that you can't trust the cloud. Their concern is, that an employee at the cloud service could download the DB and run offline attacks against it. However, they neglect to reason against running this cloud service yourself.
 
 			Imagine a user having a set of passwords, $S$. Then, Kamouflage generates $N$ additional sets, $S_1, \dots S_{N-1}$ to work as decoy password sets. They suggest a default value of $N=1000$. These passwords are generated, using an algorithm based on the work in \cite{cracking}. The aim is generate passwords which are statistically indistinguishable from the \emph{actual} passwords. 
 
@@ -705,7 +708,7 @@
 			While this idea \emph{novel}, the usability is limited by our current technology. It is simply a fact, that not all of our devices are equipped with sensors able to detect biometric characteristics. Additionally, there have been voiced some concerns about using biometrics for authentication. All in all, the usage of their solution is not suitable for the problem at hand.
 
 		\subsection*{A Password Manager that Doesn't Remember Passwords}
-			In \cite{stobert2014} another take a password manager is described. In it, they design and implement a prototype of the software Versipass. Much like the previous section, Veripass has a novel take on authenticating the user, in order to access the password database.
+			In \cite{stobert2014} another take a password manager is described. In it, they design and implement a prototype of the software Versipass. Much like the previous section, Versipass has a novel take on authenticating the user, in order to access the password database.
 
 			Existing as a bookmarklet, Veripass presents the user with an image cue, to verify the user. In short, an image cue is a image based password. An image is divided up into a $6x8$ squares \emph{(default settings)}. A password is then a selection of these squares. An example of this, is seen on figure \ref{fig:versipass_imagecue} on page \pageref{fig:versipass_imagecue}. The squares are chosen at random, by the system. The use of randomly assigned squares, is done to avoid what they call hotspots in the images, which essentially is areas of a picture which is more likely to be chosen by users, than other areas. 
 
@@ -775,3 +778,7 @@
 			\cite{android} actually describes a pretty interesting approach, to implementing a password manager on mobile devices. Their idea is to implement a third party keyboard, which is possible in iOS 8 and newer, and has always been possible in android. This integrates the password manger in a whole other way, than other approaches currently existing. Since their solution is solely focused on mobile platforms, it is not suited for the problem at hand, but their idea and concept is \emph{very} interesting, and could potentially offer an interesting extension of the project later on.
 
 			\cite{sms} describes a password management system, using the SMS infrastructure. Similar to a lot of other solutions, the date is stored remotely, but where it differs is how it is delivered: By SMS to a target phone. 
+
+			In \cite{screen} describes a password derivation system, where a password is derived based on how the user clicks certain parts of the screen. Their solution somehow resembles that of \cite{stobert2014}, but instead of clicking a select image, the user can click the entire screen.
+
+			In \cite{bicakci} they describe a password manager, much like every other available. What is new, is the master password for this manager. Instead of typing a master password, it is derived from a user's selection of icons. While it definitely proposes a new scheme for unlocking a password manager, there is really not much else to say.
