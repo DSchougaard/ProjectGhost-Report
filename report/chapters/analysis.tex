@@ -577,7 +577,6 @@
 
 		Additionally, the solution should be completely software implementable. Several solutions exist where, for instance, a USB-token is required. While it might theoretically be a security advantage to have physical component required for the product for the solution to function, it is deemed that it diverges too much from the initial requirements. However, solutions \emph{allowing} the use of physical tokens are of course considered.
 
-
 		% ID Keeper 		Requires physical access token
 		% SESS 				Uses smartphone or laptop as physical token
 		
@@ -592,13 +591,6 @@
 			\item All Your Browser-saved Passwords Could Belong to Us: A Security Analysis and a Cloud-based New Design
 			\item Cloud Based Manager Using Privacy-Preserved Biometrics
 		\end{itemize}
-
-		% Password Management Solutions for Collaborative Environment
-		%https://is.muni.cz/th/359942/fi_b/KlaraPavelkova-Thesis.pdf
-			
-		% CredProxy: A Password Manager for Online Authentication Environments
-		% http://137.122.14.44/bitstream/10393/23611/5/Golrang_Mohammad_Saleh_2012_Thesis.pdf
-
 
 		\subsection*{Tapas: Design, Implementation, and Usability Evaluation of a Password Manager}
 			In \cite{tapas}, a new and novel idea is introduced. Rather than using two-factor authentication, a \emph{dual-possession} authentication is used. The basic concept is, that the user has two devices: A smartphone \emph{(wallet)} and a desktop \emph{(manager)}. While it \emph{specifically} states that the manager is a desktop, it is assumed that it might as well be a laptop. The idea is that the manager stores keys for decrypting login information to various sites, while the wallet stores encrypted blobs. The argument is, that even if either device is stolen, offline attacks cannot happen.
@@ -786,6 +778,7 @@
 			Having said all of this, there is still one thing, that is less than desirable with CredProxy: The ``vault'' is stored locally. While they've chosen to store the decryption key on a remote machine \emph{(it is assumed that this part could be self-hosted)}, the vault itself is stored locally. As such, it is not user friendly to use, across multiple devices.
 
 			Hence, it is concluded that while their solution is interesting, it is not suited for the problem at hand.
+
 
 
 
