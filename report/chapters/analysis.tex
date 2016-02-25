@@ -596,17 +596,10 @@
 		% Password Management Solutions for Collaborative Environment
 		%https://is.muni.cz/th/359942/fi_b/KlaraPavelkova-Thesis.pdf
 			
-		% Toward a secure and usable cloud-based password manager for web browsers
-		% http://ac.els-cdn.com.globalproxy.cvt.dk/S0167404814001059/1-s2.0-S0167404814001059-main.pdf?_tid=28bb6d94-db11-11e5-87c1-00000aacb35d&acdnat=1456330425_72917a84821908ae9e7b432ade05a5fc
-
-
 		% CredProxy: A Password Manager for Online Authentication Environments
 		% http://137.122.14.44/bitstream/10393/23611/5/Golrang_Mohammad_Saleh_2012_Thesis.pdf
 
-		% SASy Username and Password Management on the Cloud
-		% https://www.researchgate.net/publication/224857173_SASy_Username_and_Password_Management_on_the_Cloud
 
-		
 		\subsection*{Tapas: Design, Implementation, and Usability Evaluation of a Password Manager}
 			In \cite{tapas}, a new and novel idea is introduced. Rather than using two-factor authentication, a \emph{dual-possession} authentication is used. The basic concept is, that the user has two devices: A smartphone \emph{(wallet)} and a desktop \emph{(manager)}. While it \emph{specifically} states that the manager is a desktop, it is assumed that it might as well be a laptop. The idea is that the manager stores keys for decrypting login information to various sites, while the wallet stores encrypted blobs. The argument is, that even if either device is stolen, offline attacks cannot happen.
 
@@ -766,7 +759,39 @@
 
 			Hence, their solution is deemed unfit, for the problem at hand.
 
+		\subsection*{Cloud-based Storage-Free Browser-based Password Manager}
+			In \cite{zhao2014} they describe their take on a good password manger. However, the primary objective for them, seems to be to replace the ``default'' browser-based password managers, which is built into the various browsers.
+
+			As such, at this point, their solution is dismissed as unusable for the problem at hand, since it limits its functionality to the browser only. Additionally, it is cloud-based. So the same arguments that goes for dismissing solutions such as LastPass, fits for their solution as well. 
+
+		\subsection*{CredProxy}
+			In \cite{golrang2012} they describe a unique, and \emph{very} interesting take, on password managers. Instead of being something with which the user interacts, it is in fact -- as the name implies -- a proxy. When CredProxy runs, all requests from the user's browser is routed through it. 
+
+			When the user first installs CredProxy, the user creates an ``alias'' username and password, which is to be used for logging into all websites. When the user wants to log into a website \emph{(which has previously been stored in CredProxy's vault)} the user inputs the username and password. When the request is routed through CredProxy, it automatically replaces the values, with the stored -- secure -- values. Hence, it operates in way which is very non-intrusive to the user, which is a huge benefit.
+
+			This ``vault'' is a single file stored on the user's harddrive. This file is encrypted with an unidentified algorithm. The encryption key is then stored on something called the CredServer, which acts as a repository for decryption keys.
+
+			However, there are certain concerns regarding the way it works. First and foremost, the author states that CredProxy can automatically change the browsers proxy settings:
+			\begin{quote}
+				\emph{Whenever CredProxy is run, it changes the proxy settings of the user’s browsers automatically
+						in order to allow all the communications (HTTP and HTTPS) go through the CredProxy.}\\\cite[p.53]{golrang2013}
+			\end{quote}
+
+			However, the author makes no attempt at explaining actually \emph{how} this is achieved. It would seem like a rather huge security concern, that the browser would even \emph{allow} something like this. However, disregarding this, since it is after all only a quality of life feature, there are still other concerns.
+
+			One of the short comings of the solution, as the author also states, is that CredProxy would need to have details regarding how the authentication request is formatted. Hence, it can only work once a website has been added to the source code. While one could argue that this could be crowd-sourced, it is still a nuisance for the end-user. 
+
+			There is also a slight ambiguity regarding this aspect: It is unclear whether CredProxy replaces all instances of the alias username and password, or it replaces the value of all fields with a given name, on a webpage. Should it be the latter, it could result in some issues. For instance, if the site has an new account functionality. Then the user could end up in a situation, where when creating a new account, the values are replaced with the stored credentials, which huge issue.
+
+			Having said all of this, there is still one thing, that is less than desirable with CredProxy: The ``vault'' is stored locally. While they've chosen to store the decryption key on a remote machine \emph{(it is assumed that this part could be self-hosted)}, the vault itself is stored locally. As such, it is not user friendly to use, across multiple devices.
+
+			Hence, it is concluded that while their solution is interesting, it is not suited for the problem at hand.
+
+
+
 		\subsection*{Other Sources}
+			While the previous sources warranted extensive analysis, some of the found papers are deemed \emph{very similar} to solutions earlier described, or simply only solves a given subset of the problem, and as such does not warrant the same amount of attention. In this section, these sources are briefly mentioned. 
+
 			In \cite{halderman2005} they discuss deriving site specific passwords, from a single master password and a site URL. This is done by hashing the concatenated strings, and the resulting hash is then the password for that specific site. This is a solution very similar to the one described in \cite{pwdhash}.
 
 			In \cite{zhang2015} they have some of the same thoughts, as in \cite{pwdhash}, using a dedicated key to signal TrustLogin that confidential information is being entered. However, it differs from PwdHash as TrustLogin does not actually \emph{store} anything. It is ``merely'' a tool for secure input, on a possibly insecure platform. While their paper doesn't describe a password manager as seen previously, it does presents some interesting takes on securing the input of the user.
@@ -782,3 +807,5 @@
 			In \cite{screen} describes a password derivation system, where a password is derived based on how the user clicks certain parts of the screen. Their solution somehow resembles that of \cite{stobert2014}, but instead of clicking a select image, the user can click the entire screen.
 
 			In \cite{bicakci} they describe a password manager, much like every other available. What is new, is the master password for this manager. Instead of typing a master password, it is derived from a user's selection of icons. While it definitely proposes a new scheme for unlocking a password manager, there is really not much else to say.
+
+			In \cite{nejad2012} they discuss how to \emph{actually} make remote storage of passwords secure. Their core concept, is splitting the data up between several ``well known companies'', in their paper described as Alpha, Beta, and Gamma. While their approach actually \emph{does} work at diminishing some of the concerns stated earlier in this paper, it doesn't change the underlying fact, that the user will still have to trust a third party to store the data.
