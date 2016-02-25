@@ -634,7 +634,7 @@
 			All in all, PwdHash is not a solution suited for the problem at hand, and actually does nothing for the usability of secure passwords.
 
 		\subsection*{Kamouflage: Loss-Resistant Password}
-			In \cite{kamouflage} a whole new paradigm for creating e<ncrypted password databases is suggested: Kamouflage. Kamouflage relies on what they call decoy password sets. One of their primary arguments for implementing Kamouflage is the fact that you can't trust the cloud. Their concern is, that an employee at the cloud service could download the DB and run offline attacks against it. However, they neglect to reason against running this cloud service yourself.
+			In \cite{kamouflage} a whole new paradigm for creating encrypted password databases is suggested: Kamouflage. Kamouflage relies on what they call decoy password sets. One of their primary arguments for implementing Kamouflage is the fact that you can't trust the cloud. Their concern is, that an employee at the cloud service could download the DB and run offline attacks against it. However, they neglect to reason against running this cloud service yourself.
 
 			Imagine a user having a set of passwords, $S$. Then, Kamouflage generates $N$ additional sets, $S_1, \dots S_{N-1}$ to work as decoy password sets. They suggest a default value of $N=1000$. These passwords are generated, using an algorithm based on the work in \cite{cracking}. The aim is generate passwords which are statistically indistinguishable from the \emph{actual} passwords. 
 
@@ -779,9 +779,6 @@
 
 			Hence, it is concluded that while their solution is interesting, it is not suited for the problem at hand.
 
-
-
-
 		\subsection*{Other Sources}
 			While the previous sources warranted extensive analysis, some of the found papers are deemed \emph{very similar} to solutions earlier described, or simply only solves a given subset of the problem, and as such does not warrant the same amount of attention. In this section, these sources are briefly mentioned. 
 
@@ -802,3 +799,7 @@
 			In \cite{bicakci} they describe a password manager, much like every other available. What is new, is the master password for this manager. Instead of typing a master password, it is derived from a user's selection of icons. While it definitely proposes a new scheme for unlocking a password manager, there is really not much else to say.
 
 			In \cite{nejad2012} they discuss how to \emph{actually} make remote storage of passwords secure. Their core concept, is splitting the data up between several ``well known companies'', in their paper described as Alpha, Beta, and Gamma. While their approach actually \emph{does} work at diminishing some of the concerns stated earlier in this paper, it doesn't change the underlying fact, that the user will still have to trust a third party to store the data.
+
+
+		\subsection*{Final Comparison}
+			Whereas the other comparison section was very clear cut, in regards to the initial requirements, this section will have to be a little more lenient. Since it is technical papers that are being reviewed, certain features has to be considered trivial and should be part of the solution.
