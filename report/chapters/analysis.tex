@@ -699,7 +699,7 @@
 
 			In order to go from a set of squares into a text-based password, each tile is assigned a a string. These strings are then concatenated into a single string, in a fixed order. The resulting string is then salted and hashed, which then returns the password. In contrast to popular approach, the salt in this process is \emph{ partially user selected}. The salt consists of a combination of the sites URL and a user selected salt. This is done in order for the user to be able to change the password for a site, should it be required.
 
-			From a security perspective, there are some shady aspects of their paper. In section 5.1.1 they cite that 21 bits of ``entropy'' is sufficient for an online attack,and quotes \cite{florencio2014}. However, there is a much more frightening problem: Combinations. In their default settings they state that a $5x6$ grid in which 5 tiles are to be selected, in any order, is sufficient. However, ignoring the advanced analysis
+			From a security perspective, there are some shady aspects of their paper. In section 5.1.1 they cite that 21 bits of entropy is sufficient for an online attack,and quotes \cite{florencio2014}. However, there is a much more frightening problem: Combinations. In their default settings they state that a $5x6$ grid in which 5 tiles are to be selected, in any order, is sufficient.
 
 			Applying some math, it is evident that there exists $1712304$ different combinations using these settings, cf. equation \ref{eq:combinations}. At first glance this might seem decent, but in fact it offers \emph{less} combinations than a randomly selected $6$ character long password, consisting \emph{only} of lower-case letters, cf. equation \ref{eq:permutations}. While they do say, that the settings suggested them can be altered to increase security, it still feels like a less secure approach.
 
@@ -766,7 +766,7 @@
 			However, there are certain concerns regarding the way it works. First and foremost, the author states that CredProxy can automatically change the browsers proxy settings:
 			\begin{quote}
 				\emph{Whenever CredProxy is run, it changes the proxy settings of the user’s browsers automatically
-						in order to allow all the communications (HTTP and HTTPS) go through the CredProxy.}\\\cite[p.53]{golrang2013}
+						in order to allow all the communications (HTTP and HTTPS) go through the CredProxy.}\\\cite[p.53]{golrang2012}
 			\end{quote}
 
 			However, the author makes no attempt at explaining actually \emph{how} this is achieved. It would seem like a rather huge security concern, that the browser would even \emph{allow} something like this. However, disregarding this, since it is after all only a quality of life feature, there are still other concerns.
@@ -801,5 +801,43 @@
 			In \cite{nejad2012} they discuss how to \emph{actually} make remote storage of passwords secure. Their core concept, is splitting the data up between several ``well known companies'', in their paper described as Alpha, Beta, and Gamma. While their approach actually \emph{does} work at diminishing some of the concerns stated earlier in this paper, it doesn't change the underlying fact, that the user will still have to trust a third party to store the data.
 
 
-		\subsection*{Final Comparison}
-			Whereas the other comparison section was very clear cut, in regards to the initial requirements, this section will have to be a little more lenient. Since it is technical papers that are being reviewed, certain features has to be considered trivial and should be part of the solution.
+		\subsection{Final Comparison}
+			Throughout the previous sections, a lot of different papers have been reviewed. Unfortunately, each and every one of them have had various causes of dismissal, rendering none of the suitable to solve the problem at hand. In this section, these causes are briefly reiterated in table \ref{tab:paper_dismiss} on page \pageref{tab:paper_dismiss}. The list is presented as the same order, they appeared earlier. Unfortunately, not all papers have given their solution a name. These solutions are tagged as ``None Given'', in regards to their name. 
+
+			As it is seen not \emph{one} of these solutions are without causes to be dismissed. There simply does not exist any academic solutions, which fulfils every requirement, stated in section \ref{sec:requirements}. Since no such solution exists, it can be concluded that a new solution is warranted.
+
+			\begin{table}
+				\begin{tabular}{r | c |  p{6cm}}
+					Name 					& Source 										& Cause for Dismissal\\
+					\hline
+					Tapas 					& \cite{tapas} 									& Does not support multiple devices \\
+					\hline
+					CardSpace 				& \cite{cardspace, cardspace_impl} 				& Restricted to the Windows platform \\
+					\hline
+					PwDHash 				& \cite{pwdhash} 								& Password derivation tool. Relies on a single master password to derive logins. \\
+					\hline
+					%Kamouflage 				& \cite{kamouflage} 							& Encryption Scheme instead of Entire Solution. \\
+ 					%\hline
+ 					Sesame 					& \cite{sesame} 								& Intended for smartphones, tablets, smart watches, and etc. \\
+					\hline
+					None Given 				& \cite{browser_saved} 							& Relies on third party servers. \\
+					\hline
+					Passpet 				& \cite{passpet} 								& Only works for website logins, in the browser. \\
+					\hline
+					None Given 				& \cite{busch2014} 								& Not all devices has biometric inputs. \\
+					\hline
+					Versipass 				& \cite{stobert2014}  							& Low amount of permutations and impractical. \\
+					\hline
+					Doodles 				& \cite{doodles} 								& Does not support multiple devices \\
+					\hline
+					PALPAS 					& \cite{palpas} 								& Assumed dependency on third party servers and limited to native applications. \\
+					\hline
+					None Given 				& \cite{zhao2014} 								& Only works for website logins, in the browser. \\
+					\hline
+					CredProxy 				& \cite{golrang2012} 							& Ambiguity in implementation details, no support for multiple devices, and dependency on third party servers.\\
+				\end{tabular}
+				\caption{The papers and their reason for dismissal.}
+				\label{tab:paper_dismiss}
+			\end{table}
+
+		\section{}
