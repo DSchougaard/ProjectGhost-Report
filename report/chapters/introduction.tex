@@ -16,18 +16,18 @@
 
 \chapter{Introduction}
 \label{chap:intro}
-	For many years, IT professionals have preached the importance of strong passwords. Many publications exists, describing exactly what defines a strong password. The general consensus is, that it needs \emph{at least} both upper- and lower-case letters, digits and preferably also symbols \emph{(\#, \_, etc.)}. Additionally, it shouldn't be a word -- or a word where an L is replaced by a 1. And of course it has to be at least 8 characters long. And you're not supposed to use the same password more than once place. With all of these rules for strong passwords, its hardly a surprise that a lot of the regular users of IT systems resort to simple, repetitive passwords.
+	For many years, IT professionals have preached the importance of strong passwords. Many publications exist, describing exactly what defines a strong password. The general consensus is that it needs \emph{at least} both upper- and lower-case letters, digits and preferably also symbols \emph{(\#, \_, etc.)}. Additionally, it shouldn't be a word -- or a word where an L is replaced by a 1. And of course it has to be at least 8 characters long. And you're not supposed to use the same password more than once place. With all of these rules for strong passwords, it is hardly a surprise that a lot of the regular users of IT systems resort to simple and repetitive passwords.
 
-	To help alleviate this problem, a new class of software grew popular: Password managers. Simple tools, protected by a single master password, that generates and stores passwords, in a secure manner. A lot of the IT professionals took these tools to their heart, despite their inherent flaws. 
+	To help alleviate this problem, a new class of software grew popular: Password managers. Simple tools, protected by a single master password, which generate and store passwords in a secure manner. A lot of the IT professionals took these tools to their heart, despite their inherent flaws. 
 
-	As with so many other things in modern society, the users crave convenience. Tools storing an encrypted file locally, was no longer good enough, as the majority of users began to use multiple devices. Hence, the password managers slowly migrated into The Cloud.
+	As with so many other things in modern society, the users crave convenience. Tools storing an encrypted file locally, was no longer sufficient, as the majority of users began to use multiple devices. Hence, the password managers slowly migrated into The Cloud.
 
 	\section{The Cloud}
-		The origin of the term ``The Cloud'' stems from Cloud Computing. Computations too heavy to be performed on a single machine, was divided into several -- usually networked -- machines, which then shared the computationally load. However, when we say the cloud today, it is not \emph{exactly} this, that we speak of.
+		The origin of the term ``The Cloud'' stems from Cloud Computing. Computations too heavy to be performed on a single machine, were divided onto several -- usually networked -- machines, which then shared the computational load. However, when we say the cloud today, it is not \emph{exactly} this we think of.
 
 		The concept of the cloud is simple: Your data, and any computations associated with it, is stored and performed somewhere \emph{else}: In the so called cloud.
 
-		This saves the user from the hassle of managing this, themselves. Applications such as Dropbox, OneDrive and Google Drive is prime examples of what the cloud exactly is: You unload some of the ``responsibilities'' onto something, or someone else. Once that file has been dragged into your Dropbox folder, and that little icon is green instead of blue, you're safe. Your data is now kept for you, available at all times, from any device. It is in the cloud.
+		This saves the users from the hassle of managing this, themselves. Applications such as Dropbox, OneDrive and Google Drive is prime examples of what the cloud exactly is: You unload some of the ``responsibilities'' onto something, or someone else. Once that file has been dragged into your Dropbox folder, and that little icon is green instead of blue, you're safe. Your data is now kept for you, available at all times, from any device. It is in the cloud.
 
 		While the cloud \emph{does} come with its benefits, especially convenience, it has its own drawbacks as well. Let us talk about \emph{trust}.
 
@@ -36,24 +36,23 @@
 
 			Trusting vendors is completely fine. You can't access the web without a certain amount of trust. Just look at the worlds most popular search engine, Google. Unfortunately, sometimes this trust is betrayed.
 
-			Dropbox experienced this, when users discovered that the data they uploaded to Dropbox, was not so private in fact. Using hashing techniques to discover duplicate files, they ``save'' the user's bandwidth, by using an already stored file on their server. While this does sound like a reasonable feature, it does also mean that Dropbox has access to the raw files on their server somehow, which again leads us to question the privacy of Dropbox.
+			Dropbox experienced this, when users discovered that the data they uploaded to Dropbox, was in fact not so private. Using hashing techniques to discover duplicate files, they ``save'' the user's bandwidth, by using an already stored file on their server. While this does sound like a reasonable feature, it also means that Dropbox has access to the raw files on their server somehow, which again leads us to question the privacy of Dropbox.
 
 			Another example of this misplaced trust, is the incident involving LastPass in 2015. As many IT professionals had feared, the online password manager had a breach. Panic arose, and LastPass almost forced their users to change their passwords. Exactly this, is the general issue with the cloud. You have to trust someone else to store it.
 
-
-			This is general issue with the cloud: You trust someone else to store your confidential information. Someone else to ensure that your data does not end up in the hand of someone else.
+			This is the general issue with the cloud: You trust someone else to store your confidential information. Someone else to ensure that your data does not end up in the hand of someone else.
 
 	\section{The Private Cloud}
-		To counteract these issues, more and more people started hosting \emph{(self-hosted)} applications themselves, giving them cloud-like features, without ever relinquishing control or ownership of their data. This concept has evolved, especially during the last few years, into something called ``The Private Cloud''. 
+		To counteract these issues, more and more people started hosting \emph{(self-hosted)} applications themselves, giving them cloud-like features, without ever relinquishing control or ownership of their data. This concept has evolved, especially during the last few years, into something called the ``private cloud''. 
 
-		While the private cloud originally was intended for the various corporations and enterprise solutions, more and more open-source solutions have started to emerge. Individual software engineers, tired of having to practically sign over ownership of their data, to benefit from seamless multi-device integration. 
+		While the private cloud originally was intended for the various corporations and enterprise solutions, more and more open-source solutions have started to emerge. These solutions target users, tired of having to practically sign over ownership of their data, to benefit from seamless multi-device integration. They aim to create functionality, previously limited to the public cloud, by \emph{only} using the user's own hardware.
 
 		Unfortunately, running a private cloud come with its own set of issues. First and foremost there is the issue of finances: A server not only costs money to acquire, but also to run. To run a server 24/7, would cost a fair amount. Secondly, there's the issue of setting this private cloud up. 
 
 		\subsection*{The Financial Cost of the Private Cloud}
-			Previously, it was only enthusiast with their own private \emph{servers} that was able to host these applications. These servers could be made from anything between an old discarded PC, to top of the line server hardware, that the enthusiasts chose to buy. Unfortunately hardware like this, does have decently large power consumption, and if the user wants 100\% availability it needs to run 24/7.
+			Previously, it was only enthusiasts with their own private \emph{servers} who was able to host these applications. These servers could be made from anything between an old discarded PC, to top of the line server hardware which the enthusiasts chose to buy. Unfortunately hardware like this, does have decently large power consumption, and if the user wants 100\% availability it needs to run 24/7.
 
-			This trend however, has been changed a bit recently. With the rise of low powered computers, such as the Raspberry Pi, the Beaglebone, or even the Intel NUC, having a 100\% uptime no longer comes with a equally high cost. Using as little as $2.5W$, depending on the model. While this won't take the place of an ``actual'' server, it will be sufficient to run a single cloud-like application, creating a -- cheap to both acquire and run -- private cloud.
+			This trend however, has been changed a bit recently. With the rise of low powered computers, such as the Raspberry Pi, the Beaglebone, or even the Intel NUC, having a 100\% uptime no longer comes with an equally high cost. Using as little as $2.5W$, depending on the model. While this won't take the place of an ``actual'' server, it will be sufficient to run a single cloud-like application, creating a -- cheap to both acquire and run -- private cloud.
 
 			Determining exactly how many $kWh$ such a device will consume -- over a year -- is quite easy. One simply have to fill out form \ref{eq:kwh} to calculate the total consumption of a device. If no rating of $W$ is given, it can be calculated, cf. equation \ref{eq:w}.
 
@@ -67,14 +66,14 @@
 				\label{eq:w}
 			\end{equation}
 
-			Since the Raspberry Pi Foundation has been so kind, as to provide a little table showing us the power consumptions of the different versions of the raspberry pi \cite{raspberrypi_power}, we can easily calculate the theoretical consumption, shown on equation \ref{eq:rpi_2_b_kwh}.
+			Since the Raspberry Pi Foundation has been so kind, as to provide a little table showing us the power consumptions of the different versions of the Raspberry Pi \cite{raspberrypi_power}, we can easily calculate the theoretical consumption, shown on equation \ref{eq:rpi_2_b_kwh}.
 
 			\begin{equation}
 				kWh_{year} = (1.2A \times 5V ) \times 365.25 \times 24 / 1000 = 52.596kWh
 				\label{eq:rpi_2_b_kwh}
 			\end{equation}
 			\todo{Wrong values used.}
-			Take note, that these values are for both the \emph{newest} and Raspberry Pi, which only has a \emph{maximum} power drain noted, since it is recently new. 
+			Take note, that these values are for both the older models and the \emph{newest} model of the Raspberry Pi. Unfortunately the newest model only has a \emph{maximum} power drain noted, since it is recently new. 
 
 			The Model B+ from the previous generation, has the same maximum power drain, but it also have a significantly lower average power drain, of $0.33A$. They describe this drain, as caused by:
 			\begin{quote}
@@ -83,11 +82,11 @@
 
 			Using $0.33A$ value as a more ``realistic'' rating, the energy consumption for a year is reduced \emph{drastically}, to a mere $14.4639 kWh$, using equation \ref{eq:kwh}. Using prices from the first of November 2015\cite{dong_prices}, running a Raspberry Pi 2 Model B for a year, will cost somewhere between 27DKK and 100DKK. Using the logic from \cite{raspberrypi_power} this value will more than likely be closer to 27, than to 100.
 
-			This leads to the conclusion, that the cost is no longer a cause for only enthusiast and system administrators, to run their own private cloud. However, the cost is not the only issue in regards to running a private cloud.
+			This leads to the conclusion that the cost is no longer a cause for only enthusiast and system administrators, to run their own private cloud. However, the cost is not the only issue in regards to running a private cloud.
 
 
 		\subsection*{Technical Challenges}
-			Unfortunately, the private cloud does not come without its own disadvantages. When using a vendors solution, problems as setup, configuration, and maintenance is their responsibility. Running an enterprise-like RAID environment will more than likely be out of the question, so taking precautions for data loss is definitely a priority.
+			Unfortunately, the private cloud does not come without its own disadvantages. When using a vendor's solution, problems such as setup, configuration, and maintenance is their responsibility. Running an enterprise-like RAID environment will more than likely be out of the question, so taking precautions for data loss is definitely a priority.
 
 
 
@@ -97,7 +96,7 @@
 
 	\section{The Problem}
 		\label{chap:intro_sec:problem}
-		The problem is passwords. Either they're too easy bruteforce or guess using social engineering, or they're so difficult to remember, that the user inadvertently returns to using the same password, over and over again, simply because of too many passwords. It is simply impossible, due to the shear number of different, and unique, passwords that would need to be memorized.
+		The problem is passwords. There are two primary scenarios. One, they're too easy to bruteforce or simply guess, using social engineering. Or two, they're so difficult to remember that the user inadvertently returns to using the same password, over and over again, simply because of having to remember too many passwords. 
 
 		Additionally, choosing the paranoid path, the passwords can \emph{not} be stored on a device not controlled by the user. This is mainly due to recent concerns regarding privacy of public hosts, such as LastPass.
 
@@ -107,7 +106,7 @@
 
 	\section{Requirements}
 		\label{sec:requirements}
-		The requirements in the following sections are the requirements for the solution as a \emph{whole} and will there for be independent of which technical structure is selected, during the design-phase.
+		The requirements in the following sections are the requirements for the solution as a \emph{whole} and will therefore be independent of which technical structure is selected, during the design-phase.
 
 
 
@@ -127,14 +126,14 @@
 				%\item Self-contained
 				\item Multi-user support
 				\item Support differentiating between admin users and regular users.
-				\item Password organization, multiple-levels
+				\item Password organisation, multiple levels
 				\item Password sharing
 				\item Only admin can add a user -- or invite a user -- to the solution
 				\item Platform agnostic
 				\item Database agnostic
 				\item Passwords and private information should never be stored or handled unencrypted anywhere, other than the local device.
 				\item Support adding of new passwords
-				\item Support retrieving stored password
+				\item Support retrieving stored passwords
 				\item Support deleting stored passwords
 				%\item Log when a password is added and from where.
 				%\item Log when a password is changed, and from where.
@@ -150,17 +149,17 @@
 
 
 		\subsection*{Non-Functional Requirements}
-			Based on the previous sections, we can conclude one very fundamental thing: The passwords needs to be stored somewhere the user has control over. In order to aid development, allowing for use of various open source frameworks and libraries, the solution should be open source and licensed with an appropriate license \emph{(MIT for instance)}. The solution should be able to store a million password entries \emph{(1.000.000)}, spread across all users. The encryption used for the storage of sensitive data should be of industry standard, and should be viable for at least 5 years. The same goes for the encryption used for communication. For maximum security, the solution should \emph{only} accept and use TLS version 1.2 connections, with a limited cypher suite. For the best user experience, there must not be any latency in the user interface, exceeding $500ms$. Any longer, and the user will grow tired of using the software, because of its sluggish feel.
+			Based on the previous sections, we can conclude one very fundamental thing: The passwords need to be stored somewhere the user has control over. In order to aid development, allowing for use of various open source frameworks and libraries, the solution should be open source and licensed with an appropriate license \emph{(MIT for instance)}. The solution should be able to store a million password entries \emph{(1.000.000)}, spread across all users. The encryption used for the storage of sensitive data should be of industry standard, and should be viable for at least 5 years. The same goes for the encryption used for communication. For maximum security, the solution should \emph{only} accept and use TLS version 1.2 connections, with a limited cypher suite. For the best user experience, there must not be any latency in the user interface, exceeding $500ms$. Any longer, and the user will grow tired of using the software, because of its sluggish feel.
 
 			To sum it up, the above requirements have been condensed into a list:
 			\vspace{-3ex}\begin{itemize}
 				\setlength\itemsep{0.1em}
-				\item Only use user-controlled storage.
-				\item Open Source License \emph{(MIT for instance)}.
+				\item Only use user-controlled storage
+				\item Open Source License \emph{(MIT for instance)}
 				\item Support for \emph{at least} 100.000 password entries
 				%\item Less than $500ms$ response time, on \emph{all} actions
-				\item Use encryption for storage should be viable for at least 5 years.
-				\item Use encryption for communication should be viable for at least 5 years.
-				\item Secure communications, using only TLS 1.2 or newer.
-				\item A user should never wait more than at maximum $500ms$ after any action in the user interface, before the changes take effect.
+				\item Use encryption for storage should be viable for at least 5 years
+				\item Use encryption for communication should be viable for at least 5 years
+				\item Secure communications, using only TLS 1.2 or newer
+				\item A user should never wait more than maximum $500ms$ after any action in the user interface, before the changes take effect
 			\end{itemize}
