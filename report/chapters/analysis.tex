@@ -586,10 +586,15 @@
 			\item Tapas: Design, Implementation, and Usability Evaluation of a Password Manager \cite{tapas}
 			\item Using CardSpace as a Password Manager \& Implementing PassCard - a CardSpace-based Password Manager \cite{cardspace,cardspace_impl}
 			\item Stronger Password Authentication Using Browser Extensions
-			\item Kamouflage: Loss-Resistant Password
+			%\item Kamouflage: Loss-Resistant Password
 			\item Sesame: A Secure and Convenient Mobile Solution for Passwords
 			\item All Your Browser-saved Passwords Could Belong to Us: A Security Analysis and a Cloud-based New Design
 			\item Cloud Based Manager Using Privacy-Preserved Biometrics
+			\item A Password Manager that Doesn't Remember Password
+			\item Password Management Using Doodles
+			\item PALPAS -- PAssword Less PAssword Synchronization
+			\item Cloud-based Storage-Free Browser-based Password Manager
+			\item CredProxy
 		\end{itemize}
 
 		\subsection*{Tapas: Design, Implementation, and Usability Evaluation of a Password Manager}
@@ -633,18 +638,18 @@
 
 			All in all, PwdHash is not a solution suited for the problem at hand, and actually does nothing for the usability of secure passwords.
 
-		\subsection*{Kamouflage: Loss-Resistant Password}
-			In \cite{kamouflage} a whole new paradigm for creating encrypted password databases is suggested: Kamouflage. Kamouflage relies on what they call decoy password sets. One of their primary arguments for implementing Kamouflage is the fact that you can't trust the cloud. Their concern is, that an employee at the cloud service could download the DB and run offline attacks against it. However, they neglect to reason against running this cloud service yourself.
+		%\subsection*{Kamouflage: Loss-Resistant Password}
+		%	In \cite{kamouflage} a whole new paradigm for creating encrypted password databases is suggested: Kamouflage. Kamouflage relies on what they call decoy password sets. One of their primary arguments for implementing Kamouflage is the fact that you can't trust the cloud. Their concern is, that an employee at the cloud service could download the DB and run offline attacks against it. However, they neglect to reason against running this cloud service yourself.
 
-			Imagine a user having a set of passwords, $S$. Then, Kamouflage generates $N$ additional sets, $S_1, \dots S_{N-1}$ to work as decoy password sets. They suggest a default value of $N=1000$. These passwords are generated, using an algorithm based on the work in \cite{cracking}. The aim is generate passwords which are statistically indistinguishable from the \emph{actual} passwords. 
+		%	Imagine a user having a set of passwords, $S$. Then, Kamouflage generates $N$ additional sets, $S_1, \dots S_{N-1}$ to work as decoy password sets. They suggest a default value of $N=1000$. These passwords are generated, using an algorithm based on the work in \cite{cracking}. The aim is generate passwords which are statistically indistinguishable from the \emph{actual} passwords. 
 
-			All of these sets, are then stored side-by-side, in a single file. The idea is then, that the users master password can be run through a cryptographic function and return and index into the file. This index, is then where the \emph{real} password set is stored. A wrong master password would result in another index, which again would result in a decoy password.
+		%	All of these sets, are then stored side-by-side, in a single file. The idea is then, that the users master password can be run through a cryptographic function and return and index into the file. This index, is then where the \emph{real} password set is stored. A wrong master password would result in another index, which again would result in a decoy password.
 
-			They argue, that with the help of online services, these decoy password sets could be able to be used to detect targeted attacks. However, this both requires that the major websites actually chooses to adopt this technology themselves, and that they need to maintain at least \emph{some} of these passwords on their servers, increasing the needed storage by a decent factor.
+		%	They argue, that with the help of online services, these decoy password sets could be able to be used to detect targeted attacks. However, this both requires that the major websites actually chooses to adopt this technology themselves, and that they need to maintain at least \emph{some} of these passwords on their servers, increasing the needed storage by a decent factor.
 
-			Their scheme for applying encryption to this structure is somewhat convoluted. For each set, they create a password relating to the contents. The algorithm for generating this password, is the same as earlier mentioned. Then, using this password, an encryption key is generated. This key is then used to encrypt the set. After successful encryption of a decoy set, the key is deleted. For the \emph{real} set, the users master password is used to generate an encryption key.
+		%	Their scheme for applying encryption to this structure is somewhat convoluted. For each set, they create a password relating to the contents. The algorithm for generating this password, is the same as earlier mentioned. Then, using this password, an encryption key is generated. This key is then used to encrypt the set. After successful encryption of a decoy set, the key is deleted. For the \emph{real} set, the users master password is used to generate an encryption key.
 
-			As the paper states, the layout of the encrypted file, is supposed to make it more difficult for an attacker to access the \emph{correct} password, using offline attacks. Based on this, it appears as if the idea behind Kamouflage is that the encrypted file is stored locally. While their idea of decoy sets might be novel and could potentially be a boost in security, their solution does \emph{nothing} towards solving the problem at hand.
+		%	As the paper states, the layout of the encrypted file, is supposed to make it more difficult for an attacker to access the \emph{correct} password, using offline attacks. Based on this, it appears as if the idea behind Kamouflage is that the encrypted file is stored locally. While their idea of decoy sets might be novel and could potentially be a boost in security, their solution does \emph{nothing} towards solving the problem at hand.
 
 		\subsection*{Sesame: A Secure and Convenient Mobile Solution for Passwords}
 			In \cite{sesame} a rather novel idea regarding password managers is described. While the core of Sesame differs in no way from the different solutions described, the process of unlocking the database is where it differs.
@@ -801,14 +806,14 @@
 			In \cite{nejad2012} they discuss how to \emph{actually} make remote storage of passwords secure. Their core concept, is splitting the data up between several ``well known companies'', in their paper described as Alpha, Beta, and Gamma. While their approach actually \emph{does} work at diminishing some of the concerns stated earlier in this paper, it doesn't change the underlying fact, that the user will still have to trust a third party to store the data.
 
 
-		\subsection{Final Comparison}
+		\subsection{Final Thoughts}
 			Throughout the previous sections, a lot of different papers have been reviewed. Unfortunately, each and every one of them have had various causes of dismissal, rendering none of the suitable to solve the problem at hand. In this section, these causes are briefly reiterated in table \ref{tab:paper_dismiss} on page \pageref{tab:paper_dismiss}. The list is presented as the same order, they appeared earlier. Unfortunately, not all papers have given their solution a name. These solutions are tagged as ``None Given'', in regards to their name. 
 
 			As it is seen not \emph{one} of these solutions are without causes to be dismissed. There simply does not exist any academic solutions, which fulfils every requirement, stated in section \ref{sec:requirements}. Since no such solution exists, it can be concluded that a new solution is warranted.
 
 			\begin{table}
 				\begin{tabular}{r | c |  p{6cm}}
-					Name 					& Source 										& Cause for Dismissal\\
+					Name 					& Source 										& Weakness \\
 					\hline
 					Tapas 					& \cite{tapas} 									& Does not support multiple devices \\
 					\hline
