@@ -69,9 +69,9 @@
 			Looking at the main UI, of which an example is shown on figure \ref{fig:keepass_main} on page \pageref{fig:keepass_main}, KeePass features exactly that which could be improved in LastPass: A tree like structure, in order to completely organise passwords. Other than that, there isn't anything noteworthy to say about their UI: It features the necessary and that's about it. A final thing worth mentioning, is that their password generator is completely customisable, as seen on figure \ref{fig:keepass_newpassword_passwordgen} on page \pageref{fig:keepass_newpassword_passwordgen}. You can manually choose which character sets, the password is to be generated from, enabling you to have passwords using local accents \emph{(should the target system support it)} which is a really nifty feature.
 
 
-			However, having praised the features of KeePass, it does lack something extremely important: Usability. More precisely, it lacks distribution. Since KeePass works on a local file, it would only inherently work on a \emph{single} device. Should one wish to distribute it, another tool has to be involved. File synchronisation tools, such as Dropbox, Google Drive, or Syncthing could be used, in order to create a distributed-ish feel to KeePass. However, you do still rely on a third party tool, which is a drawback. Additionally, there is the lack of cross-platform compatibility, since \emph{officially} KeePass only supports Windows. Granted, there exists unofficial ports for Linux, OS X, Android, etc., but you have to trust the developers of these unofficial applications. By extension, this introduces the threat of security breaches. Another negative in regards to usability, is the lack of a browser extension. While there exists third party solutions for this, the authors personal experiences with setting these up and using them, is \emph{quite} negative.	
+			However, having praised the features of KeePass, it does lack something extremely important: Usability. More precisely, it lacks distribution. Since KeePass works on a local file, it would only inherently work on a \emph{single} device. Should one wish to distribute it, another tool has to be involved. File synchronisation tools, such as Dropbox, Google Drive, or Syncthing could be used, in order to create a distributed-ish feel to KeePass. However, you do still rely on a third party tool, which is a drawback. Additionally, there is the lack of cross-platform compatibility, since \emph{officially} KeePass only supports Windows. Granted, there exists unofficial ports for Linux, OS X, Android, etc., but you have to trust the developers of these unofficial applications. By extension, this introduces the threat of security breaches. 
 
-			Hence, all things taken into consideration, while KeePass has its moments it is an less than ideal solution.
+			Hence, all things taken into consideration, while KeePass has its moments it is a less than ideal solution.
 
 			
 			\begin{figure}[h!]
@@ -109,11 +109,11 @@
 				\emph{RatticDB is a password management database designed for humans. We have focused on making it able to manage passwords for a team and to make that as easy as possible.}\\\cite{rattic_frontpage}
 			\end{quote}
 
-			Since Rattic \emph{is} meant for teams it has multi-user support. Rattic organises passwords and users in groups, and these groups are used for access control. A group is a collection of users, which can access the same passwords. An example of this could be \verb=DevelopmentTeam1= and \verb=DevelopmentTeam2=. Members of team one, can access their own passwords, and members of team two can access theirs, but unless specifically stated, they can not access each others. Additionally it supports tags for their passwords, allowing for even further organisation, for their users allowing quick access to similar passwords, from across different groups.
+			Since Rattic \emph{is} meant for teams it has multi-user support. Rattic organises passwords and users in groups, and these groups are used for access control. A group is a collection of users, which can access the same passwords. An example of this could be \verb=DevelopmentTeam1= and \verb=DevelopmentTeam2=. Members of team one, can access their own passwords, and members of team two can access theirs, but unless specifically stated, they can not access each other's. Additionally it supports tags for their passwords, allowing for even further organisation, for their users allowing quick access to similar passwords, from across different groups.
 
 			However, the fact that Rattic markets itself at teams, rather than individual users is evident by the fact that as per default, you can not create ``private'' passwords, which only a single user can access. To achieve that, you would need to manually create a new group -- per user -- with only said user as member. While this would work, it is very much a work-around of Rattic's default behaviour, for it to work that way.
 
-			From a user experience point of view, Rattic is a rather friendly tool. On figure \ref{fig:rattic_main} on page \pageref{fig:rattic_main}, you see a clean, minimalistic view of available passwords. Granted, this figure is from an Admin's point of view, hence he can access both the \verb=DevelopmentTeam1= and \verb=DevelopmentTeam2= groups, and consequently passwords stored under them.
+			From a user experience point of view, Rattic is a rather friendly tool. On figure \ref{fig:rattic_main} on page \pageref{fig:rattic_main}, you see a clean, minimalistic view of available passwords. Granted, this figure is from an admin's point of view, hence he can access both the \verb=DevelopmentTeam1= and \verb=DevelopmentTeam2= groups, and consequently passwords stored under them.
 
 			\begin{figure}[h!]
 				\centering
@@ -138,16 +138,16 @@
 				\label{fig:rattic_newpassword_passwordgen}
 			\end{figure}
 
-			Having said that, there are some technical concerns, regarding Rattic. Rattic does \emph{not} encrypt passwords stored in the database -- something they are very open about. In \cite{rattic_encryption} they argue heavily for their lack of encryption, due to requiring less code and tests. They do, however, highly recommend storing the database on an encrypted drive, to ensure database protection. However, this \emph{does} mean that a sysadmin can access \emph{all} passwords, should he or she have the encryption key for the drive. Due to this, the deployment of Rattic is fairly complex, as they admit themselves. 
+			Having said that, there are some technical concerns, regarding Rattic. Rattic does \emph{not} encrypt passwords stored in the database -- something they are very open about. In \cite{rattic_encryption} they argue heavily for their lack of encryption, due to requiring less code and tests. They do, however, highly recommend storing the database on an encrypted drive, to ensure database protection. However, this \emph{does} mean that a system administrator can access \emph{all} passwords, should he or she have the encryption key for the drive. Due to this, the deployment of Rattic is fairly complex, as they admit themselves. 
 
 			Rattic is developed in Python, using the Django framework and tested on the Apache server.
 
 		\subsection*{Encryptr}
-			Bordering between the type of LastPass and Rattic, Enryptr \cite{encryptr} relies on the Crypton\cite{crypton} backend\cite{encryptr_backend}, available hosted at SpiderOak\cite{crypton_spideroak}. Per default, Encryptr \emph{only} supports hosting passwords at the Crypton backend, hosted at SpiderOak. However, it \emph{is} possible to run this in the private cloud, with your own Crypton backend. \emph{But} it requires manually editing source files\cite{encryptr_selfhost}, which makes the setup a pain. So not only would you have to set up Crypton, and its requirements, you would have to download the source of the apps, change the specified line of code, compile and \emph{then} you could use it. Because of this technical aspect, usability is virtually zero, as you would need to be fairly confident behind a keyboard, to successfully set this up.
+			Bordering between the type of LastPass and Rattic, Enryptr \cite{encryptr} relies on the Crypton\cite{crypton} backend\cite{encryptr_backend}, available hosted at SpiderOak\cite{crypton_spideroak}. Per default, Encryptr \emph{only} supports hosting passwords at the Crypton backend, hosted at SpiderOak. However, it \emph{is} possible to run this in the private cloud, with your own Crypton backend. \emph{But} it requires manually editing source files\cite{encryptr_selfhost}, which makes the setup a extremely difficult. So not only would you have to set up Crypton, and its requirements, you would have to download the source of the apps, change the specified line of code, compile and \emph{then} you could use it. Because of this technical aspect, usability is virtually zero, as you would need to be fairly confident behind a keyboard, to successfully set this up.
 
-			Having said that, the UI of Encryptr is \emph{very} minimalistic and sleek, which both is a good and a bad thing. As seen on figure \ref{fig:encryptr_main} on page \pageref{fig:encryptr_main}, all passwords are stored in a \emph{single} list: There is \emph{no} organisation, other than labels. Granted, they do support searching, but somehow that still makes it very confusing, if more than a handful of passwords or secrets are stored, and since Encryptr not only supports storing passwords, but also credit card information and general secrets, this could be achieved fairly quickly.
+			Having said that, the UI of Encryptr is \emph{very} minimalistic and sleek, which is both a good \emph{and} a bad thing. As seen on figure \ref{fig:encryptr_main} on page \pageref{fig:encryptr_main}, all passwords are stored in a \emph{single} list: There is \emph{no} organisation, other than labels. Granted, they do support searching, but somehow that still makes it very confusing, if more than a handful of passwords or secrets are stored. Since Encryptr not only supports storing passwords, but also credit card information and general secrets, this could easily happen.
 
-			Adding a passwords shows something disturbing: Lack of a decent password generator, cf. figure \ref{fig:encryptr_newpassword} on page \pageref{fig:encryptr_newpassword}. Once the form for adding a new password is opened, a password is generated as per some default behaviour. There is no customising entropy of the password, or even something as simple as the length.
+			Adding a password shows something disturbing: Lack of a decent password generator, cf. figure \ref{fig:encryptr_newpassword} on page \pageref{fig:encryptr_newpassword}. Once the form for adding a new password is opened, a password is generated as per some default behaviour. There is no customising entropy of the password, or even something as simple as the length.
 
 			\begin{figure}[h!]
 				\centering
@@ -164,10 +164,10 @@
 				\label{fig:encryptr_newpassword}
 			\end{figure}
 
-			On the technical side, Crypton -- the backend -- is actually fairly interesting. Using their own definition of zero-knowledge, the developers created a complete framework for securely transferring and storing data at a remote machine\cite{crypton_paper}. They claim, that it is impossible to obtain the unencrypted data on their servers, without actually getting hold of the users private encryption key. The Crypton backend is open source, and available at \cite{crypton_git}. What powers Crypton, cryptographically speaking, is AES-256.
+			On the technical side, Crypton -- the backend -- is actually fairly interesting. Using their own definition of zero-knowledge, the developers created a complete framework for securely transferring and storing data at a remote machine\cite{crypton_paper}. They claim that it is impossible to obtain the unencrypted data on their servers, without actually getting hold of the users' private encryption keys. The Crypton backend is open source, and available at \cite{crypton_git}. What powers Crypton, cryptographically speaking, is AES-256.
 
 		\subsection*{Vault}
-			Vault\emph{(ZOHO)}\cite{vault_zoho} is another piece of software, that requires you to submit your data to their servers. Where this tool differs from LastPass and Encryptr, is that it is \emph{clearly} aimed at enterprise customers, which is clearly evident based on their features, such as LDAP integration.
+			Vault\emph{(ZOHO)}\cite{vault_zoho} is another piece of software that requires you to submit your data to their servers. Where this tool differs from LastPass and Encryptr, is that it is \emph{clearly} aimed at enterprise customers, which is evident by their features, such as LDAP integration.
 
 			Vault organises the passwords in so called Chambers. Each password \emph{can} be added to one or more chambers, but is not necessary. Seen on figure \ref{fig:vaultzoho_main_secrets} on page \pageref{fig:vaultzoho_main_secrets} we see how it lists all available passwords, in a single list. Using this main list quickly becomes very confusing. Looking at the Chambers list, which is found on figure \ref{fig:vaultzoho_main_chambers} on page \pageref{fig:vaultzoho_main_chambers}, the same pattern arises again. A large list, showing only the important information -- the passwords -- in the smallest part of the UI. All in all, performing simple tasks is very clunky.
 
@@ -218,18 +218,18 @@
 			While this software could essentially suffice, in order to meet the requirements, it would be lacking heavily in the user experience department. Additionally, it provides features and information, which would only be of use to super-users, and enterprise users, and might very well scare off regular users.
 
 		\subsection*{Passwordstate}
-			Passwordstate from ClickStudios\cite{passwordstate} is a solution some-what similar to both TeamPasswordManager and Vault \emph{(Zoho)}. There is not a seconds doubt, that this is a solution aimed at enterprise users, as they state themselves. This is also evident by the feature set, they have: Sporting not only active directory support, they also have built-in options for High Availability and \emph{several} options for two-factor authentication, amongst others. Passwordstate is self-hostable, but requires a windows platform and the IIS server \cite{passwordstate_requirements}.
+			Passwordstate from ClickStudios\cite{passwordstate} is a solution some-what similar to both TeamPasswordManager and Vault \emph{(Zoho)}. There is not a second's doubt that this is a solution aimed at enterprise users, as they state themselves. This is also evident by the feature set they have: Sporting not only active directory support, they also have built-in options for High Availability and \emph{several} options for two-factor authentication, amongst others. Passwordstate is self-hostable, but requires a Windows platform and the IIS server \cite{passwordstate_requirements}.
 
-			Inspecting the user experience, reveals that Passwordstate is a fresh breeze. This solutions actually manages to give the most important information, the most screen-space. On figure \ref{fig:passwordstate_main} on page \pageref{fig:passwordstate_main}, we see how password state allows for the same tree-like structure, that we've seen before. This creates excellent organisational options, for the users. On the frontpage the user is presented with his or hers favourite passwords list, and recently accessed passwords. Alas, here is where Passwordstate falls short. Instead of keeping a minimalistic UI, the user is presented with information, only interesting to enterprise users, or super-users. A host list, is with a high probability useless for the majority of regular users, as well as the little graph that shows password statistics, as seen on figure \ref{fig:passwordstate_graph} on page \pageref{fig:passwordstate_graph}. This particular graph, presented at this particular place, seems very much to be a graph for the sake of a graph. 
+			Inspecting the user experience, reveals that Passwordstate is a fresh breeze. This solution actually manages to give the most important information, the most screen-space. On figure \ref{fig:passwordstate_main} on page \pageref{fig:passwordstate_main}, we see how password state allows for the same tree-like structure that we've seen before. This creates excellent organisational options for the users. On the front page the user is presented with a list of his or her favourite passwords, and recently accessed passwords. Alas, here is where Passwordstate falls short. Instead of keeping a minimalistic UI, the user is presented with information, only interesting to enterprise users, or super-users. A host list is with a high probability useless for the majority of regular users, as well as the little graph that shows password statistics, as seen on figure \ref{fig:passwordstate_graph} on page \pageref{fig:passwordstate_graph}. This particular graph, presented at this particular place, seems very much to be a graph for the sake of a graph. 
 
-			Additionally, accessing passwords is not straight forward: Again, Passwordstate presents the user with a \emph{lot} of enterprise options, which is far from beneficial for a regular user. The available options can be seen on figure \ref{fig:passwordstate_getpassword} on page \pageref{fig:passwordstate_getpassword}. Taken all of these things into consideration, Passwordstate is an excellent password manager for enterprises, already running Windows as their server software. However, for regular home users, the software is simply \emph{far} too complex.
+			Additionally, accessing passwords is not straightforward: Again, Passwordstate presents the user with a \emph{lot} of enterprise options, which is far from beneficial for a regular user. The available options can be seen on figure \ref{fig:passwordstate_getpassword} on page \pageref{fig:passwordstate_getpassword}. Taken all of these things into consideration, Passwordstate is an excellent password manager for enterprises, already running Windows as their server software. However, for regular home users, the software is simply \emph{far} too complex.
 
-			Passwordstate has the options to completely customise the rules, that a password is generated by, much like KeePass. On figure \ref{fig:passwordstate_newpassword_passwordgen} on page \pageref{fig:passwordstate_newpassword_passwordgen} you see the \emph{extensive} options, enabling the user to customise the password to their needs.
+			Passwordstate has the options to completely customise the rules that a password is generated by, much like KeePass. On figure \ref{fig:passwordstate_newpassword_passwordgen} on page \pageref{fig:passwordstate_newpassword_passwordgen} you see the \emph{extensive} options, enabling the user to customise the password to their needs.
 
 			\begin{figure}[htbp]
 				\centering
 				\includegraphics[width=0.95\textwidth]{figures/analysis/passwordstate_main.png}
-				\caption{Frontpage of the PasswordState website. \figsrc{fig:passwordstate_main} }
+				\caption{Front page of the PasswordState website. \figsrc{fig:passwordstate_main} }
 				\label{fig:passwordstate_main}
 			\end{figure}
 
@@ -290,7 +290,7 @@
 		\subsection*{PassWork}
 			PassWork\cite{passwork} is yet another take, on the same type of solution as SimpleSafe, Rattic, TeamPasswordManager, and Passwordstate. PassWork is available as both a remote and a self-hosted solution, both of which comes with a price tag. 
 
-			PassWork organises passwords in groups, which in return can contain sub-groups -- or folders as the icon resembles. Each group has a list of users, currently allowed to access passwords in said group. As figure \ref{fig:passwork_adduser} on page \pageref{fig:passwork_adduser} shows, users can be added to groups, with permissions ``Full Access'', ``Edit'', and ``Read''. While differentiating between ``Edit'' and ``Full Access'' might be difficult, the option of setting permissions \emph{that} easily, when adding a user, is surprisingly a very good feature. Per default a group called a ``My passwords'' group is created, in which the user can place private passwords. 
+			PassWork organises passwords in groups, which in return can contain sub-groups -- or folders as the icon resembles. Each group has a list of users, currently allowed to access passwords in said group. As figure \ref{fig:passwork_adduser} on page \pageref{fig:passwork_adduser} shows, users can be added to groups, with permissions ``Full Access'', ``Edit'', and ``Read''. While differentiating between ``Edit'' and ``Full Access'' might be difficult, the option of setting permissions \emph{that} easily -- when adding a user -- is a very good feature. Per default a group called ``My passwords'' is created, in which the user can place private passwords. 
 
 			\begin{figure}[htbp]
 				\centering
@@ -299,16 +299,17 @@
 				\label{fig:passwork_adduser}
 			\end{figure}
 
-			PassWork is another example of developers not describing and documenting their soltion properly. Something as simple as figuring out which platform it supports, prior to purchasing is not possible. Additionally it is impossible to completely determine their encryption scheme, but they use ``256-bit passwords'' and RSA keypairs for sharing passwords. 
+			PassWork is another example of developers not describing and documenting their solution properly. Something as simple as figuring out which platform it supports, prior to purchasing is not possible. Additionally, it is impossible to completely determine their encryption scheme, but they use ``256-bit passwords'' and RSA keypairs for sharing passwords. 
 
-			Their less than completely transparency when it comes to choice of encryption algorithm not to mention the hefty price-tag, should one wish to self-host it. Additionally, they completely omit to inform which platform(s) the self-hosted version is able to be run on.
+			Taking their less than complete transparency when it comes to choice of encryption algorithm, a rather hefty price-tag should one wish to self-host it, and lack of information regarding which platforms it can run on, it is deemed unwise to use it at all.
+
 
 		\subsection*{SimpleVault}
 			Taking a bit of a different route from other solutions, SimpleVault\cite{simplevault} chooses to encrypt each individual password, with a different ``passphrase''. Based on their user experience, it would seem that SimpleVault is a proof of concept, more than a release software. Something as simple as headers for the table containing the main information is missing, as seen on figure \ref{fig:simplevault_main} on page \pageref{fig:simplevault_main}.
 
-			Adding a password, on figure \ref{fig:simplevault_addpassword}, shows the same lack of attention to the user experience, having two fields completely undescribed. One thing that SimpleVault \emph{does} get right in this context, is the option to generate passwords. Three buttons exists for generating passwords, with increasinly ``rare'' symbols. While options for passwords of specific length lacks, it seems to -- per default -- generate password of suitable length. 
+			Adding a password, seen on figure \ref{fig:simplevault_addpassword} on page \pageref{fig:simplevault_addpassword}, shows the same lack of attention to the user experience, having two fields completely undescribed. One thing that SimpleVault \emph{does} get right in this context, is the option to generate passwords. Three buttons exist for generating passwords, with increasingly ``rare'' symbols. While options for passwords of specific length lacks, it seems to -- per default -- generate password of suitable length. 
 
-			Retrieving a password, on figure \ref{fig:simplevault_getpassword}, requires the user to type in the passphrase. The choice of this per-password passphrase, will undoubtedly only result in the user using the same password over and over again. However, this choice \emph{does} allow for the system to be used by multiple users, each just using their own master passphrase for all of their passwords.
+			Retrieving a password, seen on figure \ref{fig:simplevault_getpassword} on page \pageref{fig:simplevault_getpassword}, requires the user to type in the passphrase. The choice of this per-password passphrase, will undoubtedly only result in the user using the same password over and over again. However, this choice \emph{does} allow for the system to be used by multiple users, each just using their own master passphrase for all of their passwords.
 
 			\begin{figure}[htbp]
 				\centering
@@ -350,16 +351,16 @@
 			All in all, SimpleVault is probably a tool \emph{no one} should use. No matter their problem at hand.
 
 		\subsection*{RoboForm}
-			RoboForm\cite{roboform} is somewhat a hybrid between the likes of KeePass and LastPass. While at heart, RoboForm is a locally stored password manager, it only exists as a browser extension. Since it only exist as a browser plugin, features such as form auto fill etc. are of course in their repertoire. However, from a ux point of view, the plugin stands out quite a bit from the browser. While this is a relatively small complaint, the usage of design guidelines from both Apple and Google, has helped create platform standards for how apps are supposed look, so the user never feels lost. Additionally, they offer ``RoboForm Everywhere'' cloud synchronisation of the encrypted file. This does however, entail trusting them with safe-keeping the encrypted file.
+			RoboForm\cite{roboform} is somewhat a hybrid between the likes of KeePass and LastPass. While at heart, RoboForm is a locally stored password manager, it only exists as a browser extension. Since it only exists as a browser plugin, features such as form auto fill etc. are of course in their repertoire. However, from a user experience point of view, the plugin stands out quite a bit from the browser. While this is a relatively small complaint, the usage of design guidelines from both Apple and Google, has helped create platform standards for how apps are supposed look, so the user never feels lost. Additionally, they offer ``RoboForm Everywhere'' cloud synchronisation of the encrypted file. This does however, entail trusting them with safe-keeping the encrypted file.
 
 			Using RoboForm on a single device, renders it as a tool very similar to KeePass, albeit with ``better'' browser integration. Using RoboForm Everywhere results in the same downsides and threats, as previously explained.
 
 		\subsection*{Vaultier}
-			At a first glance, Vaultier\cite{vaultier} seems to be everything one would want in the private cloud: Its self-hosted, the latency for actions in the user interface is close to none, and the design of the frontpage is clean. Even installing it comes easy, as it is shipped with a self-contained docker image. However, digging deeper, short comings starts to arise.
+			At a first glance, Vaultier\cite{vaultier} seems to be everything one would want in the private cloud: It is self-hosted, the latency for actions in the user interface is close to none, and the design of the front page is clean. Even installing it comes easy, as it is shipped with a self-contained docker image. However, digging deeper, shortcomings start to arise.
 
-			Their choice of organisation is confusing at first. At first you have a workspace, in which vaults are placed. Inside of these vaults, cards are placed. Inside of these cards, passwords are placed. The real problem comes when trying to add items into the vaults. Inside a single vault, you can at most have six cards shown at a time, on a standard 1080p monitor, cf. \ref{fig:vaultier_cards} on page \pageref{fig:vaultier_cards}. The same issue applies when looking at passwords: At most two passwords can be displayed on screen, at a time, cf \ref{fig:vaultier_passwords} on page \pageref{fig:vaultier_passwords}.
+			Their choice of organisation is confusing at first. At first you have a workspace, in which vaults are placed. Inside of these vaults, cards are placed. Inside of these cards, passwords are placed. The real problem comes when trying to add items into the vaults. Inside a single vault, you can have at most six cards shown at a time, on a standard 1080p monitor, cf. \ref{fig:vaultier_cards} on page \pageref{fig:vaultier_cards}. The same issue applies when looking at passwords: At most two passwords can be displayed on screen, at a time, cf \ref{fig:vaultier_passwords} on page \pageref{fig:vaultier_passwords}.
 
-			Since RightClick has chosen to have the git repository's history publicly shown, it can be determined the last time it was maintained. That was the 17th of April, 2015\cite{vaultier_history}. It would seem that the project has been abandoned and is dead. As such, it is not a stretch to assume that the project will not be kept up to date, in regards to deprecated dependencies or new-found bugs and security holes.
+			Since RightClick has chosen to have the git repository's history publicly shown, the last time it was maintained can be determined. That was the 17th of April, 2015\cite{vaultier_history}. As such, it would seem that the project has been abandoned. As such, it is not a stretch to assume that the project will not be kept up to date, in regards to deprecated dependencies or new-found bugs and security holes.
 
 
 
@@ -379,7 +380,7 @@
 		\subsection*{TeamPass}
 			From a technical point of view TeamPass might be considered a decent option. Ensuring platform agnosticism due to being implemented in PHP, it only requires an Apache server and MySQL server to run. 
 
-			Boasting of having an API to ``permit an access to Teampass Items from a third party application'', they a disturbing lack of security concerns. Examining their call for retrieving the password for a specific site, some very odd behaviour is present. First and foremost, what surely should have been a RESTful API, is implemented \emph{only} using the \verb=GET= HTTP method. Secondly, their API states that a user's password is sent \emph{in} the URL, as part of the \verb=GET= call. This is a huge blunder, from the developer's part. 
+			Boasting of having an API to ``permit an access to Teampass Items from a third party application'', they show a disturbing lack of concern for security. Examining their call for retrieving the password for a specific site, some very odd behaviour is present. First and foremost, what surely should have been a RESTful API, is implemented \emph{only} using the \verb=GET= HTTP method. Secondly, their API states that a user's password is sent \emph{in} the URL, as part of the \verb=GET= call. This is a huge blunder, from the developer's part. 
 
 			Additionally, based on the description of their API, it would appear as if the password is decrypted server-side. This goes against the requirements previously specified.
 			\begin{verbatim}
@@ -407,9 +408,9 @@
 
 			While the previous sections covered an in-depth look at the various solutions, it might seem a little overwhelming. Here, the information will be condensed into tables, for a better picture of the differences between the various solutions.
 
-			First and foremost, on table \ref{tbl:web_based} on page \pageref{tbl:web_based}, a clear cut distinction is seen: The solutions that are \emph{able} to be run in the private cloud, and those who isn't. Focussing only on those which actually \emph{can} exist in the private cloud, on table \ref{tbl:passwords} on page \pageref{tbl:passwords} their default approach to passwords are compared. While all of the systems support multiple users in \emph{some} way, they all pretty much share the same sigh on personal passwords: They should not exist. This is primarily a result of nearly all of these being marketed towards teams. For almost all of the solutions, the same approach to solving this shortcoming is the same: Create a new \emph{personal} group for each individual user, in which personal passwords can be stored. Unfortunately, this \emph{must} be considered a workaround, with the exception of PassWork, in which this group is created automatically. 
+			First and foremost, on table \ref{tbl:web_based} on page \pageref{tbl:web_based}, a clear cut distinction is seen: The solutions that are \emph{able} to be run in the private cloud, and those who isn't. Focussing only on those which actually \emph{can} exist in the private cloud, on table \ref{tbl:passwords} on page \pageref{tbl:passwords} their default approach to passwords are compared. While all of the systems support multiple users in \emph{some} way, they all consider personal passwords the same: They should not exist. This is primarily a result of nearly all of these being marketed towards teams. For almost all of the solutions, the same approach to solving this shortcoming is the same: Create a new \emph{personal} group for each individual user, in which personal passwords can be stored. Unfortunately, this \emph{must} be considered a workaround, with the exception of PassWork, in which this group is created automatically. 
 
-			Looking at the more technical aspect of the comparison, on table \ref{tbl:agnostic} on page \pageref{tbl:agnostic} a comparison of their agnosticism is made. Most of the solutions are able to be run on multiple platforms, due to being implemented in PHP. Hence, they only require an Apache \emph{(or nginx)} server to be run. Fortunately, both of these have versions for all major operating systems. Unfortunately, there is only one solution that actually has options for various database solutions. \emph{But} the developers note, that this is done at the user's risk, since they're not tested as rigorously.
+			Looking at the more technical aspect of the comparison, on table \ref{tbl:agnostic} on page \pageref{tbl:agnostic} a comparison of their agnosticism is made. Most of the solutions are able to run on multiple platforms, due to being implemented in PHP. Hence, they only require an Apache \emph{(or nginx)} server to run. Fortunately, both of these have versions for all major operating systems. Unfortunately, there is only one solution that actually has options for various database solutions. \emph{But} the developers note that this is done at the user's risk, since they're not tested as rigorously.
 
 			%By comparing these three tables, it is unfortunately seen that there isn't \emph{one} completely fulfilling the requirements earlier specified.
 
@@ -456,7 +457,7 @@
 			%% Footnotes for Table tbl:agnostic
 			\newarray\tblPasswordsFN
 			\tblPasswordsFN(1)={Through password grouping.\label{fn:passwords:group}}
-			\tblPasswordsFN(2)={Through a commonly used master passphrase, acting as a work-around.\label{fn:passwords:common_masterpassphrase}}
+			\tblPasswordsFN(2)={Through a commonly used master passphrase, acting as a workaround.\label{fn:passwords:common_masterpassphrase}}
 			\tblPasswordsFN(3)={By each user, using their own unique passphrase for encrypting their personal passwords.\label{fn:passwords:unique_masterpassphrase}}
 			\begin{table}
 				\begin{minipage}{1.0\linewidth}
@@ -474,7 +475,7 @@
 						\hline
 						Passwork 			& \green{Yes} 								& \green{Yes}									& \green{Yes}				\\
 						\hline
-						SimpleVault 		& \yellow{Yes}\footnote{\tblPasswordsFN(3)} & \green{Yes}\footref{fn:passwords:unique_masterpassphrase}		& \yellow{Yes}\footnote{\tblPasswordsFN(2)}\\
+						SimpleVault 		& \yellow{Yes}\footnote{\tblPasswordsFN(3)} & \yellow{Yes}\footref{fn:passwords:unique_masterpassphrase}		& \yellow{Yes}\footnote{\tblPasswordsFN(2)}\\
 						\hline
 						TeamPass 			& \green{Yes} 								& \yellow{Yes}\footref{fn:passwords:group}		& \green{Yes}				\\
 						\hline 				
@@ -520,7 +521,7 @@
 					\end{tabular}
 				\end{minipage}
 
-				\caption{Comparison agnosticism of self-hostable solutions.}
+				\caption{Comparison of agnosticism of self-hostable solutions.}
 				\label{tbl:agnostic}
 			\end{table}
 
@@ -536,14 +537,14 @@
 						\item Distributed password database \label{item:distrib_password}
 						\item Multi-user support \label{item:multi_user}
 						\item Support differentiating between admin users and regular users. \label{item:admin_user}
-						\item Password organization, multiple-levels \label{item:organization}
+						\item Password organisation, multiple-levels \label{item:organization}
 						\item Password sharing \label{item:sharing}
 						\item Only admin can add a user -- or invite a user -- to the solution \label{item:add}
 						\item Platform agnostic \label{item:platform}
 						\item Database agnostic \label{item:database}
-						\item Passwords and private information should never be stored or handled unencrypted anywhere, other than the local device. \label{item:passwords_local}
+						\item Passwords and private information should never be stored or handled unencrypted anywhere, other than the local device \label{item:passwords_local}
 						\item Support adding of new passwords \label{item:new}
-						\item Support retrieving stored password \label{item:retrieve}
+						\item Support retrieving stored passwords \label{item:retrieve}
 						\item Support deleting stored passwords \label{item:delete}
 						\item Extensive auditing \label{item:audit}
 						\item Allow user authentication based on a single master password, per user \label{item:auth}
@@ -554,13 +555,13 @@
 				\textbf{Non-Functional Requirements (NF-Req)}
 					\vspace{-3ex}\begin{enumerate}
 						\setlength\itemsep{0.1em}
-						\item Only use user-controlled storage.\label{item:user_storage}
-						\item Open Source License \emph{(MIT for instance)}. \label{item:open-source}
+						\item Only use user-controlled storage\label{item:user_storage}
+						\item Open Source License \emph{(MIT for instance)} \label{item:open-source}
 						\item Support for \emph{at least} 100.000 password entries \label{item:entries}
-						\item Use encryption for storage should be viable for at least 5 years. \label{item:encryption}
-						\item Use encryption for communication should be viable for at least 5 years. \label{item:comms}
-						\item Secure communications, using only TLS 1.2 or newer. \label{item:tls1.2}
-						\item A user should never wait more than at maximum $500ms$ after any action in the user interface, before the changes take effect. \label{item:delay}
+						\item Use encryption for storage should be viable for at least 5 years \label{item:encryption}
+						\item Use encryption for communication should be viable for at least 5 years \label{item:comms}
+						\item Secure communications, using only TLS 1.2 or newer \label{item:tls1.2}
+						\item A user should never wait more than at maximum $500ms$ after any action in the user interface, before the changes take effect \label{item:delay}
 					\end{enumerate}
 
 				\input{chapters/analysis/reqComparison_c.tex}
@@ -573,7 +574,7 @@
 
 		Since there are plenty of available papers, regarding passwords, authentication, and password managers, it is important to define a selection criteria.
 
-		First and foremost, for a paper to be relevant, it must describe a either an actual implementation, or a specification for an implementation. Additionally, the solution described must be something that is \emph{only} to be used client side. To be more precise: The use of the solution only requires changes for the user. Changing \emph{how} a user authenticates, should not be required for the solution to work.
+		First and foremost, for a paper to be relevant, it must describe either an actual implementation, or a specification of an implementation. Additionally, the solution described must be something that is \emph{only} to be used client side. To be more precise: The use of the solution only requires changes for the user. Changing \emph{how} a user authenticates, should not be required for the solution to work.
 
 		Additionally, the solution should be completely software implementable. Several solutions exist where, for instance, a USB-token is required. While it might theoretically be a security advantage to have physical component required for the product for the solution to function, it is deemed that it diverges too much from the initial requirements. However, solutions \emph{allowing} the use of physical tokens are of course considered.
 
@@ -589,8 +590,9 @@
 			%\item Kamouflage: Loss-Resistant Password
 			\item Sesame: A Secure and Convenient Mobile Solution for Passwords
 			\item All Your Browser-saved Passwords Could Belong to Us: A Security Analysis and a Cloud-based New Design
+			\item Passpet: Convenient Password Management and Phishing Protection
 			\item Cloud Based Manager Using Privacy-Preserved Biometrics
-			\item A Password Manager that Doesn't Remember Password
+			\item A Password Manager that Doesn't Remember Passwords
 			\item Password Management Using Doodles
 			\item PALPAS -- PAssword Less PAssword Synchronization
 			\item Cloud-based Storage-Free Browser-based Password Manager
@@ -609,16 +611,16 @@
 
 			Tapas relies on so-called pairing, for easy authentication between wallet and manager, in the remaining protocols. The pairing has to be done in a secret out-of-band channel. During this pairing a private and public key for each device is created, and the public key for the manager is sent to the wallet, and vice versa. This ensures that a secure channel, over a possible hostile connection, can be made in the future.
 
-			While the protocol for storing a password is hardly interesting, the protocol for retrieving a password does present an interesting approach. Retrieval of a password has to be initiated on the \emph{wallet}, or rather smartphone. After authenticating using the previously obtained public keys, they create a secure channel, with perfect forward secrecy, and the wallet sends the encrypted blob to the manager, which then decrypts it and auto-types it in the users browser.
+			While the protocol for storing a password is hardly interesting, the protocol for retrieving a password does present an interesting approach. Retrieval of a password has to be initiated on the \emph{wallet}, or rather smartphone. After authenticating using the previously obtained public keys, they create a secure channel, with perfect forward secrecy, and the wallet sends the encrypted blob to the manager, which then decrypts it and auto-types it in the user's browser.
 
-			The team behind Tapas is fairly open regarding what \emph{they} consider the limitations of Tapas. As they see it, there are tree major. First and foremost, the solution relies on an active internet connecting for retrieving passwords. This limitation is unfortunate, but unavoidable with their choice of authentication. It is, however, easily avoided by use of USB tethering or WiFi hotspots, which are standard features in modern smartphones. Secondly, their other limitation is that the smartphone must be charged. Again, a very unavoidable limitation, due to how technology works. The last, and perhaps the only real concern, other than small inconveniences is the fact that Tapas does \emph{not} support multiple devices. It only works with \emph{one} wallet and  \emph{one} manager. Even the wallet cannot access these passwords which is unfortunate, since a lot of the same accounts for a desktop, is also used on a smartphone. All in all, renders it as an unsuited approach to the problem at hand.
+			The team behind Tapas is fairly open regarding what \emph{they} consider the limitations of Tapas. As they see it, there are three major. First and foremost, the solution relies on an active internet connecting for retrieving passwords. This limitation is unfortunate, but unavoidable with their choice of authentication. It is, however, easily avoided by use of USB tethering or WiFi hotspots, which are standard features in modern smartphones. Secondly, their other limitation is that the smartphone must be charged. Again, a very unavoidable limitation, due to how technology works. The last, and perhaps the only real concern, other than small inconveniences is the fact that Tapas does \emph{not} support multiple devices. It only works with \emph{one} wallet and  \emph{one} manager. Even the wallet cannot access these passwords which is unfortunate, since a lot of the same accounts for a desktop, is also used on a smartphone. All in all, this renders it as an unsuited approach to the problem at hand.
 
 		\subsection*{Using CardSpace as a Password Manager \& Implementing PassCard - a CardSpace-based Password Manager}
-			In \cite{cardspace,cardspace_impl} the authors design and implement PassCard: A password manager based on CardSpace. CardSpace was Microsoft's client software for their ``Identity Metasystem''. The program was retired as of February 15th 2011, but Microsoft stated that they are working on a replacement \cite{cardspace_cancelled}. This is a service that was discontinued in 2011, and has not been shipped with windows since Windows 8.0. This alone, indicates that this solution is not suitable for any modern devices.
+			In \cite{cardspace,cardspace_impl} the authors' design and implement PassCard: A password manager based on CardSpace. CardSpace was Microsoft's client software for their ``Identity Metasystem''. The program was retired as of February 15th 2011, but Microsoft stated that they are working on a replacement \cite{cardspace_cancelled}. This is a service that was discontinued in 2011, and has not been shipped with Windows since Windows 8.0. This alone, indicates that this solution is not suitable for any modern devices.
 
-			The basic concept of PassCard, is that the user creates ``Personal Cards''. These cards are able to store various sensitive information, securely. Their solution is a browser extension, which then reads these cards and auto-fills the information. No where in their report, do they describe anything related to adding passwords through PassCard, which leads to believe that his has to be done manually, directly in CardSpace.
+			The basic concept of PassCard, is that the user creates ``Personal Cards''. These cards are able to store various sensitive information, securely. Their solution is a browser extension, which then reads these cards and auto-fills the information. Nowhere in their report, do they describe anything related to adding passwords through PassCard, which leads to believe that his has to be done manually, directly in CardSpace.
 
-			Since CardSpace is a windows only program, this limits the user segment significantly. Additionally, the paper does not mention whether or not they support any kind of multi-device operation, but even if it did it would more than likely be limited to Windows platforms. Hence, the solution is \emph{unusable} for mobile devices, and users of either Mac OS X or Linux. All in all, this solution seems poor in comparison to what we've seen.
+			Since CardSpace is a Windows only program, this limits the user segment significantly. Additionally, the paper does not mention whether or not they support any kind of multi-device operation, but even if it did it would more than likely be limited to Windows platforms. Hence, the solution is \emph{unusable} for mobile devices, and users of either Mac OS X or Linux. All in all, this solution seems poor in comparison to what we've seen.
 
 		\subsection*{Stronger Password Authentication Using Browser Extensions}
 			In \cite{pwdhash} the implementation of PwdHash is discussed. PwdHash's approach, is using a browser plugin as password manager. Their primary issue, seems to be the issue of sending a cleartext password to a remote server for sign up. Their proposal is centered around password derivation, rather than password generation. When typing the password to a site, PwdHash intercepts the password and creates a derived password, using an un-named pseudo random function. The new password is derived from the users original password and the domain name of the site. This derived function is then input into the password field on the website, and the user has retrieved a secure password seamlessly. Salting with the domain name, ensures that even if the user uses the same password for all websites, a unique password is submitted to each site.
@@ -630,22 +632,22 @@
 			To support devices that does not support plugin development, they have a website set up to derive a password, based on a user password and the URL of the website. Additionally they suggest developing a bookmarklet, down the road. As previously discussed, bookmarklets are essentially a security hazard disguised as a usability feature, and should be avoided for all costs.
 
 
-			After reviewing the paper thoroughly, it is concluded that PwdHash is much more of a secure password derivation tool, rather than an actual password manager. The horrible fact is, that the user still has to input a password for each login. Since users are -- at heart -- lazy, it can be assumed with a fair degree of accuracy, that the majority will re-use the same password over and over. Hence, the only security is that the password is hashed with a \emph{predictable} and very public hash \emph{(the domain name)}. If an attacker was to discover the base password for one site, he or she would then potentially get access to all the users passwords \emph{(assuming the user is lazy)}.
+			After reviewing the paper thoroughly, it is concluded that PwdHash is much more of a secure password derivation tool, rather than an actual password manager. The horrible fact is that the user still has to input a password for each login. Since users are -- at heart -- lazy, it can be assumed with a fair degree of accuracy that the majority will re-use the same password over and over. Hence, the only security is that the password is hashed with a \emph{predictable} and very public hash \emph{(the domain name)}. If an attacker was to discover the base password for one site, he or she would then potentially get access to all the user's passwords \emph{(assuming the user is lazy)}.
 
-			If, somehow, the user was \emph{not} lazy and had unique passwords for each site, the original problem would still persist. There would be so many unique passwords to remember, that they would be extremely easy to crack using wordlists or simple bruteforce.
+			If, somehow, the user was \emph{not} lazy and had unique passwords for each site, the original problem would still persist. There would be so many unique passwords to remember that they would be extremely easy to crack using wordlists or simple brute force.
 
-			Finally, despite all of their analysis regarding attacks on remote sites, they fail to see that \emph{all} of the same attacks applies to their website for deriving passwords, rendering it a security hazard.
+			Finally, despite all of their analysis regarding attacks on remote sites, they fail to see that \emph{all} of the same attacks apply to their website for deriving passwords, rendering it a security hazard.
 
 			All in all, PwdHash is not a solution suited for the problem at hand, and actually does nothing for the usability of secure passwords.
 
 		%\subsection*{Kamouflage: Loss-Resistant Password}
 		%	In \cite{kamouflage} a whole new paradigm for creating encrypted password databases is suggested: Kamouflage. Kamouflage relies on what they call decoy password sets. One of their primary arguments for implementing Kamouflage is the fact that you can't trust the cloud. Their concern is, that an employee at the cloud service could download the DB and run offline attacks against it. However, they neglect to reason against running this cloud service yourself.
 
-		%	Imagine a user having a set of passwords, $S$. Then, Kamouflage generates $N$ additional sets, $S_1, \dots S_{N-1}$ to work as decoy password sets. They suggest a default value of $N=1000$. These passwords are generated, using an algorithm based on the work in \cite{cracking}. The aim is generate passwords which are statistically indistinguishable from the \emph{actual} passwords. 
+		%	Imagine a user having a set of passwords, $S$. Then, Kamouflage generates $N$ additional sets, $S_1, \dots S_{N-1}$ to work as decoy password sets. They suggest a default value of $N=1000$. These passwords are generated, using an algorithm based on the work in \cite{cracking}. The aim is to generate passwords which are statistically indistinguishable from the \emph{actual} passwords. 
 
-		%	All of these sets, are then stored side-by-side, in a single file. The idea is then, that the users master password can be run through a cryptographic function and return and index into the file. This index, is then where the \emph{real} password set is stored. A wrong master password would result in another index, which again would result in a decoy password.
+		%	All of these sets, are then stored side-by-side, in a single file. The idea is then that the user's master password can be run through a cryptographic function and return and index into the file. This index, is then where the \emph{real} password set is stored. A wrong master password would result in another index, which again would result in a decoy password.
 
-		%	They argue, that with the help of online services, these decoy password sets could be able to be used to detect targeted attacks. However, this both requires that the major websites actually chooses to adopt this technology themselves, and that they need to maintain at least \emph{some} of these passwords on their servers, increasing the needed storage by a decent factor.
+		%	They argue, that with the help of online services, these decoy password sets could be used to detect targeted attacks. However, this both requires that the major websites actually choose to adopt this technology themselves, and that they need to maintain at least \emph{some} of these passwords on their servers, increasing the needed storage by a decent factor.
 
 		%	Their scheme for applying encryption to this structure is somewhat convoluted. For each set, they create a password relating to the contents. The algorithm for generating this password, is the same as earlier mentioned. Then, using this password, an encryption key is generated. This key is then used to encrypt the set. After successful encryption of a decoy set, the key is deleted. For the \emph{real} set, the users master password is used to generate an encryption key.
 
@@ -654,12 +656,12 @@
 		\subsection*{Sesame: A Secure and Convenient Mobile Solution for Passwords}
 			In \cite{sesame} a rather novel idea regarding password managers is described. While the core of Sesame differs in no way from the different solutions described, the process of unlocking the database is where it differs.
 
-			Sesame can be unlocked using voice recognition. Using a remote server, a piece of recorded voice can be used to unlock the password manager. While on a desktop this might be considered unnecessary, it does save the user some hassle of typing in a password on mobile devices.face
+			Sesame can be unlocked using voice recognition. Using a remote server, a piece of recorded voice can be used to unlock the password manager. While on a desktop this might be considered unnecessary, it does save the user some hassle of typing in a password on mobile devices.
 
 			While the idea is novel, and some user might find it exciting and usable, it is fairly limited in regards to platforms. As the authors write themselves, it is intended for smartphones, tablets, smartwatches etc. Hence, the usage for the problem at hand is rather limited.
 
 		\subsection*{All Your Browser-saved Passwords Could Belong to Us: A Security Analysis and a Cloud-based New Design}
-			In \cite{browser_saved} they suggest a solution to fix the issues the found, as mentioned in section \ref{subsec:in-browser}. They argue that the data is more secure on a remote machine, run by a company. They prefer to rely on a ``Secure \& Reliable Storage'' service, located in the cloud. They have developed an encryption scheme aimed at protecting the passwords of the users, even though they are stored on a remote machine. 
+			In \cite{browser_saved} they suggest a solution to fix the same issues mentioned in section \ref{subsec:in-browser}. They argue that the data is more secure on a remote machine, run by a company. They prefer to rely on a ``Secure \& Reliable Storage'' service, located in the cloud. They have developed an encryption scheme aimed at protecting the passwords of the users, even though they are stored on a remote machine. 
 
 			However, no matter how secure their scheme is, their suggestion goes against some of the very fundamental requirements mentioned in section \ref{sec:requirements}. As such, their solution is dismissed as not suitable for this specific purpose. 
 
@@ -695,26 +697,28 @@
 			Most solutions examined so far, has had the same approach to storing these password databases: Protect them behind a master password. In \cite{busch2014}, however, they argue for another approach: Use biometrics for authenticating access. Building on the prior work of Jain, Nandakumar, and Nagar, they employ Biometric Template Protection, to ensure that the original biometric characteristic can not be reverse engineered. This is then used, to authenticate to the cloud, containing the passwords.
 
 
-			While this idea \emph{novel}, the usability is limited by our current technology. It is simply a fact, that not all of our devices are equipped with sensors able to detect biometric characteristics. Additionally, there have been voiced some concerns about using biometrics for authentication. All in all, the usage of their solution is not suitable for the problem at hand.
+			While this idea is \emph{novel}, the usability is limited by our current technology. It is simply a fact that not all of our devices are equipped with sensors able to detect biometric characteristics. Additionally, there have been voiced some concerns about using biometrics for authentication. All in all, the usage of their solution is not suitable for the problem at hand.
 
 		\subsection*{A Password Manager that Doesn't Remember Passwords}
 			In \cite{stobert2014} another take a password manager is described. In it, they design and implement a prototype of the software Versipass. Much like the previous section, Versipass has a novel take on authenticating the user, in order to access the password database.
 
-			Existing as a bookmarklet, Veripass presents the user with an image cue, to verify the user. In short, an image cue is a image based password. An image is divided up into a $6x8$ squares \emph{(default settings)}. A password is then a selection of these squares. An example of this, is seen on figure \ref{fig:versipass_imagecue} on page \pageref{fig:versipass_imagecue}. The squares are chosen at random, by the system. The use of randomly assigned squares, is done to avoid what they call hotspots in the images, which essentially is areas of a picture which is more likely to be chosen by users, than other areas. 
+			Existing as a bookmarklet, Veripass presents the user with an image cue, to verify the user. In short, an image cue is an image based password. An image is divided up into a $6x8$ squares \emph{(default settings)}. A password is then a selection of these squares. An example of this, is seen on figure \ref{fig:versipass_imagecue} on page \pageref{fig:versipass_imagecue}. The squares are chosen at random, by the system. The use of randomly assigned squares, is done to avoid what they call hotspots in the images, which essentially are areas of a picture which are more likely to be chosen by users, than other areas. 
 
-			In order to go from a set of squares into a text-based password, each tile is assigned a a string. These strings are then concatenated into a single string, in a fixed order. The resulting string is then salted and hashed, which then returns the password. In contrast to popular approach, the salt in this process is \emph{ partially user selected}. The salt consists of a combination of the sites URL and a user selected salt. This is done in order for the user to be able to change the password for a site, should it be required.
+			In order to go from a set of squares into a text-based password, each tile is assigned a string. These strings are then concatenated into a single string, in a fixed order. The resulting string is then salted and hashed, which then returns the password. In contrast to popular approach, the salt in this process is \emph{ partially user selected}. The salt consists of a combination of the sites URL and a user selected salt. This is done in order for the user to be able to change the password for a site, should it be required.
 
 			From a security perspective, there are some shady aspects of their paper. In section 5.1.1 they cite that 21 bits of entropy is sufficient for an online attack,and quotes \cite{florencio2014}. However, there is a much more frightening problem: Combinations. In their default settings they state that a $5x6$ grid in which 5 tiles are to be selected, in any order, is sufficient.
 
-			Applying some math, it is evident that there exists $1712304$ different combinations using these settings, cf. equation \ref{eq:combinations}. At first glance this might seem decent, but in fact it offers \emph{less} combinations than a randomly selected $6$ character long password, consisting \emph{only} of lower-case letters, cf. equation \ref{eq:permutations}. While they do say, that the settings suggested them can be altered to increase security, it still feels like a less secure approach.
+			Applying some math, it is evident that there exist $1712304$ different combinations using these settings, cf. equation \ref{eq:combinations}. At first glance this might seem decent, but in fact it offers \emph{less} combinations than a randomly selected $6$ character long password, consisting \emph{only} of lower-case letters, cf. equation \ref{eq:permutations}. While they do say, that the settings suggested by them can be altered to increase security, it still seems like a less secure approach.
 
 			\begin{equation}
 				c = \frac{n!}{(n-r)!(r!)} = \frac{48!}{(48-5)!(5!)} = 1712304
 				\label{eq:combinations}
 			\end{equation}
 
+
+			% 11881376
 			\begin{equation}
-				p = n^r = 11881376
+				p = n^r = 26^6 = 11881376
 				\label{eq:permutations}
 			\end{equation}
 
@@ -748,23 +752,23 @@
 
 			This SSS stores the different salts, and synchronises it between the different devices. Each device has a unique private-/public-key pair which is used to authenticate it, to the SSS in order to retrieve salts. The process of adding a new device to the account, is ambiguously described, unfortunately.
 
-			Their primary concern, that storing passwords in a single central database, could result in attackers performing offline attacks against the stored data. Their argument, is that by using salts and a private seed, their circumvent this risk. The strength of their solution, is that any seed and salt combination, produces a password. There is no way for an attacker to ensure that the output is a valid password, other than simply attempting to authorize to a service and see if the password is accepted.
+			Their primary concern, that storing passwords in a single central database, could result in attackers performing offline attacks against the stored data. Their argument, is that by using salts and a private seed, they circumvent this risk. The strength of their solution, is that any seed and salt combination, produces a password. There is no way for an attacker to ensure that the output is a valid password, other than simply attempting to authorise to a service and see if the password is accepted.
 
-			However, they also introduces annoyances, when transferring the seed to a new device. In their risk analysis they take into account that theft of a device is a problem. However, since the user can revoke the certificate for said device, the time window of vulnerability is fairly low. In this time, the data is protected by the users master password, which would have to be cracked in that timeframe, in order for data to leak.
+			However, they also introduce annoyances, when transferring the seed to a new device. In their risk analysis they take into account that theft of a device is a problem. However, since the user can revoke the certificate for said device, the time window of vulnerability is fairly low. In this time, the data is protected by the users master password, which would have to be cracked in that timeframe, in order for data to leak.
 
-			Whether the SSS is something which is hosted online, by a third company, or something the user can host themselves, is not mentioned anywhere in the paper. Addtionally, it is assumed that an implementation of Palpas would require dedicated applications, on devices, due to the requirement of storing the private and \emph{(encrypted)} public keys locally. This reduces the availability of the solution significantly.
+			Whether the SSS is something which is hosted online, by a third company, or something the user can host themselves, is not mentioned anywhere in the paper. Addtionally, it is assumed that an implementation of Palpas would require dedicated applications on devices, due to the requirement of storing the private and \emph{(encrypted)} public keys locally. This reduces the availability of the solution significantly.
 
 			Hence, their solution is deemed unfit, for the problem at hand.
 
 		\subsection*{Cloud-based Storage-Free Browser-based Password Manager}
-			In \cite{zhao2014} they describe their take on a good password manger. However, the primary objective for them, seems to be to replace the ``default'' browser-based password managers, which is built into the various browsers.
+			In \cite{zhao2014} they describe their take on a good password manager. However, the primary objective for them, seems to be to replace the ``default'' browser-based password managers, which is built into the various browsers.
 
 			As such, at this point, their solution is dismissed as unusable for the problem at hand, since it limits its functionality to the browser only. Additionally, it is cloud-based. So the same arguments that goes for dismissing solutions such as LastPass, fits for their solution as well. 
 
 		\subsection*{CredProxy}
 			In \cite{golrang2012} they describe a unique, and \emph{very} interesting take, on password managers. Instead of being something with which the user interacts, it is in fact -- as the name implies -- a proxy. When CredProxy runs, all requests from the user's browser is routed through it. 
 
-			When the user first installs CredProxy, the user creates an ``alias'' username and password, which is to be used for logging into all websites. When the user wants to log into a website \emph{(which has previously been stored in CredProxy's vault)} the user inputs the username and password. When the request is routed through CredProxy, it automatically replaces the values, with the stored -- secure -- values. Hence, it operates in way which is very non-intrusive to the user, which is a huge benefit.
+			When the user first installs CredProxy, the user creates an ``alias'' username and password, which is to be used for logging into all websites. When the user wants to log into a website \emph{(which has previously been stored in CredProxy's vault)} the user inputs the username and password. When the request is routed through CredProxy, it automatically replaces the values, with the stored -- secure -- values. Hence, it operates in a way which is very non-intrusive to the user, which is a huge benefit.
 
 			This ``vault'' is a single file stored on the user's harddrive. This file is encrypted with an unidentified algorithm. The encryption key is then stored on something called the CredServer, which acts as a repository for decryption keys.
 
@@ -776,9 +780,9 @@
 
 			However, the author makes no attempt at explaining actually \emph{how} this is achieved. It would seem like a rather huge security concern, that the browser would even \emph{allow} something like this. However, disregarding this, since it is after all only a quality of life feature, there are still other concerns.
 
-			One of the short comings of the solution, as the author also states, is that CredProxy would need to have details regarding how the authentication request is formatted. Hence, it can only work once a website has been added to the source code. While one could argue that this could be crowd-sourced, it is still a nuisance for the end-user. 
+			One of the shortcomings of the solution, as the author also states, is that CredProxy would need to have details regarding how the authentication request is formatted. Hence, it can only work once a website has been added to the source code. While one could argue that this could be crowd-sourced, it is still a nuisance for the end-user. 
 
-			There is also a slight ambiguity regarding this aspect: It is unclear whether CredProxy replaces all instances of the alias username and password, or it replaces the value of all fields with a given name, on a webpage. Should it be the latter, it could result in some issues. For instance, if the site has an new account functionality. Then the user could end up in a situation, where when creating a new account, the values are replaced with the stored credentials, which huge issue.
+			There is also a slight ambiguity regarding this aspect: It is unclear whether CredProxy replaces all instances of the alias username and password, or it replaces the value of all fields with a given name, on a webpage. Should it be the latter, it could result in some issues. For instance, if the site has an new account functionality. Then the user could end up in a situation, where when creating a new account, the values are replaced with the stored credentials, which would be a huge issue.
 
 			Having said all of this, there is still one thing, that is less than desirable with CredProxy: The ``vault'' is stored locally. While they've chosen to store the decryption key on a remote machine \emph{(it is assumed that this part could be self-hosted)}, the vault itself is stored locally. As such, it is not user friendly to use, across multiple devices.
 
@@ -789,13 +793,13 @@
 
 			In \cite{halderman2005} they discuss deriving site specific passwords, from a single master password and a site URL. This is done by hashing the concatenated strings, and the resulting hash is then the password for that specific site. This is a solution very similar to the one described in \cite{pwdhash}.
 
-			In \cite{zhang2015} they have some of the same thoughts, as in \cite{pwdhash}, using a dedicated key to signal TrustLogin that confidential information is being entered. However, it differs from PwdHash as TrustLogin does not actually \emph{store} anything. It is ``merely'' a tool for secure input, on a possibly insecure platform. While their paper doesn't describe a password manager as seen previously, it does presents some interesting takes on securing the input of the user.
+			In \cite{zhang2015} they have some of the same thoughts, as in \cite{pwdhash}, using a dedicated key to signal TrustLogin that confidential information is being entered. However, it differs from PwdHash as TrustLogin does not actually \emph{store} anything. It is ``merely'' a tool for secure input, on a possibly insecure platform. While their paper doesn't describe a password manager as seen previously, it does present an interesting take on securing the input of the user.
 
 			In \cite{englert2009} they describe a very classical password management system: An HTTP server and a browser client. The client logs into the server, gets the encrypted data, and decrypts it locally. However, from their description of the system, the encryption key -- or as they call it the ``secret key'' -- is something the user is supposed to remember and input \emph{per} session. 
 
-			\cite{huang2015} describes what they call a Searchable Conditional Proxy Re-Encryption scheme. Their solution, CloudKeyBank, is based on this SC-PRE scheme is claimed to not only guarantee confidentiality and privacy of the users keys, but also ensuring the privacy in regards to other attributes to each key, amongst others. However, part of their assumptions is the use of a CloudKeyBank provider, i.e. a third party, much like services such as LastPass. As such, their solution is primarily focussed on ensuring that no other person than the owner, can access data even when uploaded to third party servers.
+			\cite{huang2015} describes what they call a Searchable Conditional Proxy Re-Encryption scheme. Their solution, CloudKeyBank, is based on this SC-PRE scheme is claimed to not only guarantee confidentiality and privacy of the users' keys, but also ensuring the privacy in regards to other attributes to each key, amongst others. However, part of their assumptions is the use of a CloudKeyBank provider, i.e. a third party, much like services such as LastPass. As such, their solution is primarily focused on ensuring that no other person than the owner, can access the data even when uploaded to third party servers.
 
-			\cite{android} actually describes a pretty interesting approach, to implementing a password manager on mobile devices. Their idea is to implement a third party keyboard, which is possible in iOS 8 and newer, and has always been possible in android. This integrates the password manger in a whole other way, than other approaches currently existing. Since their solution is solely focused on mobile platforms, it is not suited for the problem at hand, but their idea and concept is \emph{very} interesting, and could potentially offer an interesting extension of the project later on.
+			\cite{android} actually describes a pretty interesting approach, to implementing a password manager on mobile devices. Their idea is to implement a third party keyboard, which is possible in iOS 8 and newer, and has always been possible in Android. This integrates the password manager in a whole other way, than other approaches currently existing. Since their solution is solely focused on mobile platforms, it is not suited for the problem at hand, but their idea and concept is \emph{very} interesting, and could potentially offer an interesting extension of the project later on.
 
 			\cite{sms} describes a password management system, using the SMS infrastructure. Similar to a lot of other solutions, the date is stored remotely, but where it differs is how it is delivered: By SMS to a target phone. 
 
