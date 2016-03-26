@@ -28,9 +28,6 @@
 
 		\subsection*{In-Browser Password Managers}
 			\label{subsec:in-browser}
-			\todo{Write section about in-password managers}
-			\todo{Missing browsers: Chrome, Firefox, Safari, IE, Opera}
-
 			The most used password manager of all time, is probably the one available to all: The password manager which is built-in into the various browsers. This is a feature most major browsers have adopted: Chrome, FireFox, Internet Explorer \emph{(now known as Edge)}, Safari and Opera.
 
 			While all of the previously mentioned browsers support syncing \emph{(Internet Explorer only supports this using Windows 8.0 or newer.)} the passwords between devices, it requires to upload the passwords to one of the corporations' websites.
@@ -47,7 +44,9 @@
 
 			If we start by looking at the technical details of LastPass, they quote themselves using 256-bit AES encryption, and applies PBKDF2, in order to make it as difficult as possible to crack stored data. For maximum security, both encryption and decryption is performed client side\cite{lastpass_cleintsideencryption}, as to avoid transferring the actual password, unencrypted, to their servers. Encryption and decryption is done using the master password, which is never actually sent to their servers. Finally, as is to be expected, all connections to LastPass' servers, are SSL encrypted.
 
-			Having examined the technical aspect, we need to pay attention to the usability as well. Looking at their web UI, it shows a reasonably straightforward design. Allowing the user to organise passwords in folders, creating a two-level structure, as seen on figure \ref{fig:lastpass_main} on page \pageref{fig:lastpass_main}. While this \emph{does} allow the user some level of organisation, several levels would have been preferable. Additionally, LastPass is renowned for their apps and plugins, covering all major operating systems and browsers, creating a near seamless integration, when it comes to addition of new passwords and auto-filling stored passwords.
+			%Having examined the technical aspect, we need to pay attention to the usability as well. Looking at their web UI, it shows a reasonably straightforward design. Allowing the user to organise passwords in folders, creating a two-level structure, as seen on figure \ref{fig:lastpass_main} on page \pageref{fig:lastpass_main}. While this \emph{does} allow the user some level of organisation, several levels would have been preferable. Additionally, LastPass is renowned for their apps and plugins, covering all major operating systems and browsers, creating a near seamless integration, when it comes to addition of new passwords and auto-filling stored passwords.
+
+			Having examined the technical aspect, we need to pay attention to the usability as well. Looking at their web UI, it shows a reasonably straightforward design. Allowing the user to organise passwords in folders, creating the tree-like structure, which has been seen before. One point worth noting, is the way they expand folders, as seen on figure \ref{fig:lastpass_main_expanded} on page \ref{fig:lastpass_main_expanded}. While the ``Folder1-1-1'' \emph{is} a child of ``Folder1-1'' this fact is not immediately obvious.
 
 			For devices without a browser supporting plugins, LastPass offers a so-called bookmarklet\cite{lastpass_bookmarklet}. A bookmarklet is a bookmark, which essentially contains JavaScript code, in order to add previously unobtainable features, in a browser. While this on the surface seems like a nifty feature, several studies have shown that the bookmarklets represent a significant security threat. In \cite{bookmarklet} they discuss an attack on LastPass, exploiting the users bookmarklet, to gain access to virtually all of the users stored credentials.
 
@@ -56,10 +55,18 @@
 
 			\begin{figure}[h!]
 				\centering
-				\includegraphics[width=\textwidth]{figures/analysis/lastpass_main.png}
+				\includegraphics[width=\textwidth]{figures/analysis/lastpass_main_2.png}
 				\caption{Screenshot of LastPass' main view, in a browser.}
 				\label{fig:lastpass_main}
 			\end{figure}
+
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=\textwidth]{figures/analysis/lastpass_main_2_expanded.png}
+				\caption{LastPass folders expanded}
+				\label{fig:lastpass_main_expanded}
+			\end{figure}
+
 
 		\subsection*{KeePass, and Similar Solutions}
 			As the users grew suspicious of LastPass and the likes, a lot of them moved over to e.g. KeePass\footnote{https://keepass.org}, which allows the user to store the passwords in a local file. While there exists a plethora of tools similar to KeePass,  it will be used as a representative of this group, for the same reasons as in \ref{subsec:lastpass}.
@@ -568,7 +575,6 @@
 
 				As it is clearly seen, \emph{no} other solution covers all of the requirements previously stated. Although some of them might come close, they still lack too much to consider a viable option.
 		
-
 	\section{Academic Research and Tools}
 		While looking at commercially available tools might get you so far, it is imperative that one also investigates any relevant technical papers, as they might divulge solutions and ideas, which has not yet reached the commercial market. During this research, a number of interesting academic articles and papers was discovered. 
 
@@ -848,8 +854,6 @@
 				\caption{The papers and their reason for dismissal.}
 				\label{tab:paper_dismiss}
 			\end{table}
-
-
 
 	\section{Drawing a Conclusion}
 		As we have discovered there currently is no solution available, to fulfil the requirement. All of the commercially available tools have their own drawbacks, making them less than optimal. The same trend is spotted in the academic papers. None of the reviewed solutions simply cut it.
