@@ -38,7 +38,7 @@
 
 			Dropbox experienced this, when users discovered that the data they uploaded to Dropbox, was in fact not so private. Using hashing techniques to discover duplicate files, they ``save'' the user's bandwidth, by using an already stored file on their server. While this does sound like a reasonable feature, it also means that Dropbox has access to the raw files on their server somehow, which again leads us to question the privacy of Dropbox.
 
-			Another example of this misplaced trust, is the incident involving LastPass in 2015. As many IT professionals had feared, the online password manager had a breach. Panic arose, and LastPass almost forced their users to change their passwords. Exactly this, is the general issue with the cloud. You have to trust someone else to store it.
+			Another example of this misplaced trust, is the incident involving LastPass in 2015. As many IT professionals had feared, the online password manager had a breach. Panic arose and LastPass almost forced their users to change their passwords. Exactly this, is the general issue with the cloud. You have to trust someone else to store it.
 
 			This is the general issue with the cloud: You trust someone else to store your confidential information. Someone else to ensure that your data does not end up in the hand of someone else.
 
@@ -66,23 +66,30 @@
 				\label{eq:w}
 			\end{equation}
 
-			Since the Raspberry Pi Foundation has been so kind, as to provide a little table showing us the power consumptions of the different versions of the Raspberry Pi \cite{raspberrypi_power}, we can easily calculate the theoretical consumption, shown on equation \ref{eq:rpi_2_b_kwh}.
+			Using a Raspberry Pi as the reference, an example value can be calculated. The Raspberry Pi Foundation has been generous enough, to post power consumption figures of their models online \cite{raspberrypi_power}. The newest -- and arguably most powerful -- model is the Pi3 B. They note it as having a \emph{maximum} power consumption of $1.34A$. Using this figure as an upper bound, the annual power consumption can be calculated, cf. \ref{eq:rpi_2_b_kwh}.
+
+
+
+			%Since the Raspberry Pi Foundation has been so kind, as to provide a little table showing us the power consumptions of the different versions of the Raspberry Pi \cite{raspberrypi_power}, we can easily calculate the maximum theoretical consumption of a Raspberry Pi 2 B, which is the most powerful Rasberry Pi listed on the page.
+			%shown on equation \ref{eq:rpi_2_b_kwh}.
 
 			\begin{equation}
-				kWh_{year} = (1.2A \times 5V ) \times 365.25 \times 24 / 1000 = 52.596kWh
+				kWh_{year} = (1.34A \times 5V ) \times 365.25 \times 24 / 1000 = 58.7322kWh
 				\label{eq:rpi_2_b_kwh}
 			\end{equation}
-			\todo{Wrong values used.}
-			Take note, that these values are for both the older models and the \emph{newest} model of the Raspberry Pi. Unfortunately the newest model only has a \emph{maximum} power drain noted, since it is recently new. 
 
-			The Model B+ from the previous generation, has the same maximum power drain, but it also have a significantly lower average power drain, of $0.33A$. They describe this drain, as caused by:
-			\begin{quote}
-				\emph{Typical bare-board active current consumption.}\cite{raspberrypi_power}
-			\end{quote}
+			%\todo{Wrong values used.}
+			
+			%Take note, that these values are for both the older models and the \emph{newest} model of the Raspberry Pi. Unfortunately the newest model only has a \emph{maximum} power drain noted, since it is recently new. 
 
-			Using $0.33A$ value as a more ``realistic'' rating, the energy consumption for a year is reduced \emph{drastically}, to a mere $14.4639 kWh$, using equation \ref{eq:kwh}. Using prices from the first of November 2015\cite{dong_prices}, running a Raspberry Pi 2 Model B for a year, will cost somewhere between 27DKK and 100DKK. Using the logic from \cite{raspberrypi_power} this value will more than likely be closer to 27, than to 100.
+			%The Model B+ from the previous generation, has the same maximum power drain, but it also have a significantly lower average power drain, of $0.33A$. They describe this drain, as caused by:
+			%\begin{quote}
+			%	\emph{Typical bare-board active current consumption.}\cite{raspberrypi_power}
+			%\end{quote}
 
-			This leads to the conclusion that the cost is no longer a cause for only enthusiast and system administrators, to run their own private cloud. However, the cost is not the only issue in regards to running a private cloud.
+			However, this value represents the \emph{maximum} draw. In real world applications it is highly unlikely that it would be consuming that amount of power 24/7. Most of the time, the device would be idle, and in this state the Pi3B only uses $0.30A$. Using $0.50A$ as a more reasonable middle ground, the energy consumption for a year is reduced \emph{drastically}, to a mere $21.92kWh$, using equation \ref{eq:kwh}. 
+
+			Taking prices of October 2015, a single kWh costs $2.22DKK$ \cite{energi_price} -- all inclusive. As such, it would cost around $50DKK$ to run a Rasberry Pi 3 Model B, 24/7 in Denmark. This leads to the conclusion that the cost is no longer a cause for only enthusiast and system administrators, to run their own private cloud. However, the cost is not the only issue in regards to running a private cloud.
 
 
 		\subsection*{Technical Challenges}
