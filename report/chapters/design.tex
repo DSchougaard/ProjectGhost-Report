@@ -47,23 +47,91 @@
 	\section{Protocol}
 		Having determined that the solution will be using the client-server paradigm, the next task is to determine how front-end and the back-end will communicate. There are a number of different available technologies and protocols readily available for use in such a scenario.
 
+		One important fact, that needs to be stated that the back-end is practically equivalent to a web service. As such, 
+
 		\begin{itemize}
-			RESTful API
-			SOAP	
-			Sockets
-			Remote Procedure Calls
-			JSON-WSP
+			\item Representational State Transfer
+			\item SOAP	
+			\item Sockets
+			\item Remote Procedure Calls
 		\end{itemize}
 
+		\subsection{Remote Procedure Call}
+			Remote Procedure Calls, or RPC for short, was introduced by Birrell and Nelson \cite{birell1984} in 1984. The basic concept is to hide the implementation details of invoking a method remotely, for the user.
+
+			The core concept of RPC is that invoking remote methods, are no different than invoking a local method. When the program invokes this method, the underlying software then makes the remote call, hiding these details from the programmer. This is the supposed strength of RPC: It is exactly like invoking a local method.
+
+			An example of an RPC method, could be a method to get a user's data:
+			\begin{verbatim}
+				getUser(<ID>)
+			\end{verbatim}
+
+			For simplicity purposes, Remote Method Invocation is considered equivalent to RPC. Likewise implementations of RPC such as XML-RPC, Corba, and so forth, are considered under the same umbrella.
+
+		\subsection{Representational State Transfer}
+			Representational State Transfer, or REST for short, was introduced by Fielding and Taylor \cite{Fielding:2000:PDM:337180.337228} in 2000. REST is an architecture style for designing networked application. It is a stateless, client-server communication protocol, which in most cases uses the Hypertext Transfer Protocol \emph{(HTTP)} protocol and the accompanying HTTP ``verbs''.
+
+			The core notion of REST is that resources are bundled in collections, on which the HTTP verbs are used. The API then exposes these collections as Uniform Resource Identifiers \emph{(URIs)} in what is commonly known as endpoints. Using the various HTTP verbs on these endpoints results in actions being invoked on said collections.
+
+			These verbs are for example -- but not limited to-- \verb=GET=, \verb=POST=, \verb=PUT=, \verb=PATCH=, and \verb=DELETE=. These five verbs roughly translates to the basic CRUD operations, as listed on table \ref{tbl:verbs} on page \pageref{tbl:verbs}. So, for instance if one where to \verb=GET= the endpoint of \verb=/api/users= one would get the list of all users on the system. However, most of the time the distinction between \verb=PUT= and \verb=PATCH= is ignored, and \verb=PUT= is allowed to perform partial updates. Table \ref{tbl:rest_example} on page \pageref{tbl:rest_example} shows an example of an API on the \verb=users= resource, showing the result of the respective verbs and their payload. In the example the host of the endpoints have been removed, the prefix could for example be \verb=https://someapi.com/api=, so that an endpoint would be \verb=https://someapi.com/api/users=.
+
+			\begin{table}
+				\begin{tabular}{r|l}
+					\verb=GET= 		& Read 				\\
+					\verb=POST= 	& Create 			\\
+					\verb=PUT= 		& Complete update 	\\
+					\verb=PATCH= 	& Partial update 	\\
+					\verb=DELETE= 	& Delete 			\\
+				\end{tabular}
+
+				\caption{How HTTP verbs maps to CRUD operations.}
+				\label{tbl:verbs}
+
+			\end{table}
+
+			\begin{table}
+				\begin{tabular}{p{0.15\textwidth} | p{0.30\textwidth} | p{0.15\textwidth} | p{0.25\textwidth}}
+					Method & Request Body & Endpoint & Ouput \\
+					\hline
+					\verb=GET= & Empty & /api/users & List of all users \\
+					\hline
+					\verb=GET= & Empty & /api/users/1 & Details of user with ID of 1 \\
+					\hline
+					\verb=POST= & \{username:"Daniel", phone:"+45 88888888"\} & /api/users & Creates a new User with the name Daniel and the phone number +45 88888888 \\
+					\hline
+					\verb=PUT= & \{username:"John"\} & /api/users/1 & Updates the username of the user with ID of 1\\
+					\hline
+					\verb=DELETE= & Empty & /api/users/1 & Deletes the user with ID of 1\\
+				\end{tabular}
+
+				\caption{Example of HTTP verbs used on a REST API for the collection of users.}
+				\label{tbl:rest_example}
+
+			\end{table}
+
+		\subsection{Simple Object Access Protocol}
+			Simple Object Access Protocol \emph{(SOAP)} was developed by Goshein, Atkinson, Winer, and Box for Microsoft in 1997 \cite{soap_origin}. SOAP was one of the original webservice protocols, and uses XML encoding for its encoding. SOAP can be used with any number of protocols, due to its neutrality, however it is usually used with HTTP or SMPT. Web services relying on SOAP, usually publish a public definition of the available methods, using the Web Service Definition Language \emph{(WSDL)}. This can then be consumed by other clients, making integration with third parties much easier.
+
+			Since SOAP used XML encoding, it is \emph{quite} verbose, and the pure data overhead is significant. Using the same example as from REST, getting the information for a user with ID 1 requires a rather large request body. the XML uses multiple namespaces, the \verb=xmlns= tags are required to define each of them, as \verb=SOAP= and \verb=m= respectively.
+
+			\begin{verbatim}
+				<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+				    <SOAP:Body>
+				        <m:getUser xmlns:m="https://someapi.com/api">
+				            <userId>41</userId>
+				        </m:getUser>
+				    </SOAP:Body>
+				</SOAP:Envelope>
+			\end{verbatim}
 
 
 
-		REST
-		SOAP
-		Sockets
-		Remote Procedure Calls / Remote Procedure Invocation
-		JSON-WSP
-		Corba
+		\subsection{Choosing A Protocol}
+			Right off the gate, the whole RPC deal
+
+
+			http://www.ateam-oracle.com/performance-study-rest-vs-soap-for-mobile-applications/
+
 
 	\section{Authentication}
 		\subsection{OAuth1/2}
