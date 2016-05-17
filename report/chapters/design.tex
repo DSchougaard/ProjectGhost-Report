@@ -184,35 +184,145 @@
 
 			For this feature, an encryption scheme is needed which satisfies the following: Alice can share a single password with Bob, without Bob being able to access the remaining passwords. It should happen purely from Alice's part: No interaction with Bob should be necessary before a password is shared.
 
+
+			\subsubsection{Proxy Re-Encryption}
+				While the exact topic of \emph{password} sharing has not been directly covered in academic literature, topics as secured data sharing has. Since a shared password string is \emph{essentially} data, these techniques and approaches can also apply to this specific case. 
+
+				A fairly new cryptographic concept used for data sharing is proxy re-encryption. A fair amount of academic literature exists on this topic, while \emph{actual} implementations are far more scarce. In ``POSTER: A Certificateless Proxy Re-Encryption Scheme for Cloud-based Data Sharing'' \cite{Wu:2011:PCP:2046707.2093514}, Wi, Xu, and Zhang describe their take on this encryption scheme for data sharing, which they call CL-PRE.
+
+				While a complete analysis of their implementation is far beyond the scope of the current section, a brief overview of how it \emph{fundamentally} works, is seen on fig \ref{fig:sequence:cl-pre} on page \pageref{fig:sequence:cl-pre}.
+
+				In this scenario three parties are involved: Alice, Bob, and a cloud. Both Alice and Bob has their own private/public-key set. Alice wishes to share a password with Bob. The data is encrypted with a symmetric data encryption key \emph{(DEK)}. The encrypted data is then sent to the cloud, alongside an access control list \emph{(ACL)}, a version of the DEK encrypted with Alice's public-key, and a re-encryption key. The re-encryption key is derived from Alice's private-key and Bob's public-key. When Bob requests access to the password, the cloud checks the ACL to see if he has access rights. If he has, the cloud uses a re-encryption algorithm, to transform the DEK into something which can be decrypted by Bob's private-key. Bob then downloads this data, and decrypts it locally using his key.
+
+				%It is quite straight forward how proxy re-encryption could be used for this problem. Each password is encrypted using the DEK. The encrypted DEK is then stored alongside the password. As such, each password has their own unique DEK. When Alice wishes to share a password with Bob, she simply uploads the re-encryption key, derived from her private-key and Bob's public-key, for said password. Bob is then able to access the password. 
+
+				Examining the scalability for this solution, it is shown that it \emph{could} be better. For each password a DEK needs to be stored -- no matter if the password is shared or not. While this is linear scaling, it still creates a fair amount of overhead.
+
+				While this scheme inherently is \emph{everything} that is needed for this particular problem, one slight issue arises. First and foremost it is a recently new technology. This means that implementations are scarce at this point. While this shouldn't matter at this point in time -- since it is the \emph{design} of the solution being discussed -- it \emph{will} have ramifications down the road which needs to be considered. A general rule of thumb is to never ``roll your own'', when it comes to encryption. Existing libraries will have significant more exposure and will possibly have been through one or more security audits. This will most likely mean, that any implementation issues there might have been, should have been discovered and fixed.
+
+				\begin{figure}[h!]
+					\centering
+					\includegraphics[width=\textwidth]{figures/design/sequence_cl-pre.png}
+					\caption{Sequence diagram for sharing a password, using Wi, Xu, and Zhang's CL-PRE encryption scheme.}
+					\label{fig:sequence:cl-pre}
+				\end{figure}
+
+			\subsubsection{Pretty Good Privacy}
+				While the previous section described a start-of-the-art, this approach is more classic. Pretty Good Privacy, or more commonly known simply as PGP, is a scheme dating back to the beginning of the 1990s. 
+
+				PGP uses a combination of symmetric and asymmetric encryption. Whenever a chunk of data needs to be encrypted for sharing, a new symmetric key is generated. The symmetric key is used to encrypt the data. Afterwards, the symmetric key is encrypted using the recipients public-key. Then the encrypted data and the encrypted key is transmitted to the recipient, which can then decrypt the symmetric key, using his own private-key. 
+
+				The reasoning behind this, is that symmetric encryption is \emph{several} magnitudes faster than asymmetric encryption. As such, it is \emph{far} more efficient to encrypt larger documents, using the symmetric key and \emph{then} encrypting said key, than directly encryption the document with an asymmetric key.
+
+				%\textsc{..}
+				Using this approach for the problem at hand is quite similar to the previous one. Each password has a unique symmetric encryption key, $SK$, which is never stored directly on the back-end. All users having access to said password, then has a copy of $SK$ encrypted with their own public-key stored. Sharing a password is then as simple as getting the recipients public-key, encrypting the $SK$ with said key, and uploading it to the server. The previous approach is depicted on figure \ref{fig:sequence:pgp} on page \pageref{fig:sequence:pgp}.
+
+				One of the main arguments for using PGP is the fact that symmetric encryption is by far faster than asymmetric. However, in this case the ciphertext is relatively small: A password most likely no longer than 72 characters. As such, the performance gained using PGP is pretty much gone. It would hardly take longer to encrypt such a password with asymmetric encryption, than it would for PGP to encrypt a symmetric key.
+
+				Additionally, this solution has the same draw-back as proxy re-encryption. It requires that \emph{all} passwords have an symmetric key stored beside them. The same argument as before can be used again: While it in \emph{no} way can be considered ``bad'' scaling, it could be better.
+
+				\begin{figure}[h!]
+					\centering
+					\includegraphics[width=\textwidth]{figures/design/na.png}
+					\caption{Squence diagram for sharing a password using the PGP scheme.}
+					\label{fig:sequence:pgp}
+				\end{figure}
+
+
 			\subsubsection{Asymmetric Encryption}
-				Using asymmetric encryption, the previous conditions are easily met. Each user has both a private-key and a public-key stored on the server. When Alice wish to share a password with Bob, she requests the server for Bob's public-key. Once she gets this, she then re-encrypts the password with \emph{Bob's} public-key, and sends this to the server. This way, the password is never handles un-encrypted anywhere other than Alice's front-end. Finally, Bob can easily decrypt the password, using his own private-key. This sequence of events, is shown on figure \ref{fig:seq:assymetric} on page \pageref{fig:seq:assymetric}.
+				A third option is to directly use asymmetric encryption. Each user has -- like previously -- a private and a public-key pair. Each password is then encrypted using the public-key and stored on the server. To access the password it simply has to be decrypted using the private-key. Sharing the password is simple as well. Simply fetch the public-key of the recipient, encrypt the password using said key, and upload the newly encrypted password. This is shown on figure \ref{fig:sequence:asymmetric} on page \pageref{fig:sequence:asymmetric}.
+
+
+				One of strongest arguments for the PGP scheme, is that generally asymmetric encryption is significantly faster. However, since the ciphertexts would be rather small -- most likely below 100 bytes -- this problem is effectively null and void, leaving this scheme a \emph{viable} candidate.
+
+				Using this approach is easily the most simple so far. Alice wishes to share a password with Bob. She fetches his public-key, encrypts the password with said key, and uploads the encrypted password to the back-end. Bob then merely needs to fetch the password and decrypt it, in a process virtually no different from when accessing his own passwords.
+
+				As the astute reader might have figured out, this \emph{strictly} speaking isn't ``sharing'' a password. It is more of a ``sharing by cloning'' procedure. When the original password needs to be updated, it needs to be encrypted once per user it is shared to. This is \emph{definitely} a draw-back, compared to the previous solutions. From a storage perspective, however, this trumps the previous solutions. Storage wise, this is far more efficient than the previous solutions. When a password is shared, it is cloned and stored encrypted with the recipient's public-key, causing only an increased storage \emph{if} a password is shared.
 
 				\begin{figure}[h!]
 					\centering
 					\includegraphics[width=\textwidth]{figures/design/sequence_perEntry.png}
 					\caption{Squence diagram for sharing a password, when asymmetric encryption is used.}
-					\label{fig:seq:assymetric}
+					\label{fig:sequence:asymmetric}
 				\end{figure}
 
-				As the astute reader might have already thought of, there is a slight short-coming in what was previously described. The private-key -- the key used for \emph{decrypting} passwords -- is stored on the server. If stored in ``clear text'' \emph{(or raw binary)}, this presents a huge security risk. Not only is the server admin \emph{easily} able to decrypt passwords, but \emph{should} a leak of the database happens, all passwords are instantly compromised.
 
-				As such, it is necessary to introduce some sort of encryption for the private-key. But how can this be achieved without merely shifting the issues previously described? It is necessary to derive the encryption key, from the user's input. Translating a user's input -- for instance a password -- to an encryption key is very common, and is best done using a key derivation function. 
+				%Each user has both a private-key and a public-key stored on the server. When Alice wish to share a password with Bob, she requests the server for Bob's public-key. Once she gets this, she then re-encrypts the password with \emph{Bob's} public-key, and sends this to the server. This way, the password is never handles un-encrypted anywhere other than Alice's front-end. Finally, Bob can easily decrypt the password, using his own private-key. This sequence of events, is shown on figure \ref{fig:seq:assymetric} on page \pageref{fig:seq:assymetric}.
 
-				Algorithms such as bcrypt and PBKDF2 exists for this very purpose \emph{(or slightly similar, at least)}. In layman's terms, it basically hashes the same password over and over again, $n$ times, as to slow the process down ``artificially''. This is done so that trying to bruteforce the key, will be several factors more difficult, due to the extra computations.
+			
+				%As the astute reader might have already thought of, there is a slight short-coming in what was previously described. The private-key -- the key used for \emph{decrypting} passwords -- is stored on the server. If stored in ``clear text'' \emph{(or raw binary)}, this presents a huge security risk. Not only is the server admin \emph{easily} able to decrypt passwords, but \emph{should} a leak of the database happens, all passwords are instantly compromised.
+				%As such, it is necessary to introduce some sort of encryption for the private-key. But how can this be achieved without merely shifting the issues previously described? It is necessary to derive the encryption key, from the user's input. Translating a user's input -- for instance a password -- to an encryption key is very common, and is best done using a key derivation function. 
+
+				%Algorithms such as bcrypt and PBKDF2 exists for this very purpose \emph{(or slightly similar, at least)}. In layman's terms, it basically hashes the same password over and over again, $n$ times, as to slow the process down ``artificially''. This is done so that trying to bruteforce the key, will be several factors more difficult, due to the extra computations.
+
+			\subsubsection{Making A Choice}
+				Having described three different approaches to solving the problem, it is time to decide exactly which should be used. All of them have their drawbacks -- all of them have their advantages. Since the asymmetric encryption approach has no acronym, it will be referred to as ``Asymmetric'' in the following tables.
+
+				First and foremost, let us examine the availability of tools, cf. table \ref{table:comp:availability}. Admittedly, this should probably carry less weight in the design of the system, however, as mentioned earlier this \emph{will} effect the implementation heavily, should existing libraries not exist. While CL-PRE is just an example of a proxy re-encryption it is a general truth to these algorithms, that at this point in time they are more theoretical than practical -- unfortunately. In stark contrast to this, both PGP and asymmetric encryption algorithms have a plethora of implementations, for just about any combination of hardware and language available. As such, they're the clear favourites in this regard.
+
+				\begin{table}
+					\center
+					\begin{tabular}{r|l}
+						Solution 		& Available Implementations 	\\
+						\hline
+						CL-PRE 			& \red{Very Rare} 				\\
+						PGP 			& \green{Several} 				\\
+						Asymmetric 		& \green{Several} 				\\
+					\end{tabular}
+					\caption{Comparison of availability of implementations of the three encryption schemes.}
+					\label{table:comp:availability}
+				\end{table}
+
+				Next, it is only fitting to compare the data requirements for these three approaches, cf. \ref{table:comp:data}. As was explained earlier, CL-PRE requires not only an encryption key stored alongside the password, but also a re-encryption key per user said password is shared to. Then there is PGP which only requires an extra encryption key \emph{per} user requiring access. Finally, there is the asymmetric approach which requires no extra data to be stored, due to it only using the users' private and public-keys. As such, the asymmetric approach is \emph{clearly} the favourite in this regard. 
+
+				\begin{table}
+					\center
+					\begin{tabular}{r|l|l}
+						Solution 		& Per Password Value  			& Per Share Value 	\\
+						\hline
+						CL-PRE 			& \red{Yes} 					& \red{Yes}			\\
+						PGP 			& \green{No} 					& \red{Yes} 		\\
+						Asymmetric 		& \green{No} 					& \green{No} 		\\
+					\end{tabular}
+					\caption{Comparison of data usage of the three encryption schemes.}
+					\label{table:comp:data}
+				\end{table}
+
+				Finally, there is the matter of data processing, which is also an important aspect to take into account, cf. \ref{table:comp:data}. Creating a password with CL-PRE involves the following steps: First a symmetric DEK needs to be created, then the password is encrypted with said DEK, and finally the DEK is encrypted using the user's public-key. This totals to $3$ ``cryptographic steps''. PGP is essentially the same. First a new symmetric key is created, then the password is encrypted using that key, and finally the key is encrypted using the user's public-key. Hence, PGP also uses $3$ cryptographic steps. Using asymmetric encryption, however, only a single step is needed: Encrypt the password with the user's public-key.
+
+				For creating a password, the asymmetric approach is clearly the favourite. Not only in the steps involved, but also just from its simplicity. However, this is not \emph{quite} the same when sharing a password. CL-PRE actually only needs a single step for updating a shared a password: Creating the re-encryption key. PGP on the other hand needs two operations: Decrypting the symmetric key, and re-encrypting it with the recipients public-key. Finally, there is the asymmetric approach. This approach needs $n$ operations, per update, where $n$ is the number of people the password is shared to. This \emph{huge} performance loss is due to the fact that it uses sharing by cloning. This is best illustrated with an example: If a password is shared with three people, it means that it exists four times in the back-end: Once encrypted with the owners public-key, and once with each of the people it is shared to. When the password is updated, it needs to be re-encrypted using \emph{each} of these peoples public-keys as well.
+
+				In this case, it is \emph{quite} clear that the asymmetric approach is inferior, when $n$ is large. However, since this overall solution is based around individual password sharing, and not sharing between a group, it is fair to assume that $n$ will be low. As such, the performance loss significantly less than originally assumed.
+
+				All of these three tables are combined into a single large table, on figure \ref{table:comp:complete_schemes} on page \pageref{table:comp:complete_schemes}. Looking at this table, it is quite clear that as long as the assumption of relative few shares per passwords hold, the asymmetric approach is the preferable one to use.
+
+				\begin{table}
+					\center
+					\begin{tabular}{r|l|l}
+						Solution 		& Creating A Password  	& Updating a Password 	\\
+						\hline
+						CL-PRE 			& \green{$3$} 					& \green{$1$}					\\
+						PGP 			& \green{$3$} 					& \green{$2$} 					\\
+						Asymmetric 		& \green{$1$}					& \red{$n$} 					\\
+					\end{tabular}
+					\caption{Comparison of cryptographic steps required for the three encryption schemes.}
+					\label{table:comp:data}
+				\end{table}
 
 
-				 These algorithms are commonly used for 
 
-				Bcrypt is commonly used for password hashing. Bcrypt
-
-
-
-
-		 One example could be to store all of the users entries in a single file, which is then encrypted using an appropriate algorithm. Another solution could be to store all the entries in database, where certain fields are encrypted and stored as blobs. 
-
-		Both of these solutions are equally valid. However, when examining the second requirement, as previously quoted, password sharing is a requirements. This becomes problematic 
-
-
+				\begin{table}
+					\center
+					\begin{tabular}{r|l|l|l|l|l}
+						Solution 		& \rot{Available Implementations} & \rot{Storage Per Password Value}  	& \rot{Storage Per Share Value}	& \rot{Steps for Creating A Password} 	& \rot{Steps for Updating a Password} 	\\
+						\hline
+						CL-PRE 			& \red{Very Rare} 	& \red{Yes}		& \red{Yes} 	& \green{$3$} & \green{$1$} \\
+						PGP 			& \green{Several} 	& \green{No}	& \red{Yes} 	& \green{$3$} & \green{$2$} \\
+						Asymmetric 		& \green{Several} 	& \green{No}	& \green{No} 	& \green{$1$} & \yellow{$n$} \\
+					\end{tabular}
+					\caption{Complete comparison of the three schemes.}
+					\label{table:comp:complete_schemes}
+				\end{table}
 
 
 	\section{Authentication}
