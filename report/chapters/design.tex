@@ -250,10 +250,6 @@
 				%Each user has both a private-key and a public-key stored on the server. When Alice wish to share a password with Bob, she requests the server for Bob's public-key. Once she gets this, she then re-encrypts the password with \emph{Bob's} public-key, and sends this to the server. This way, the password is never handles un-encrypted anywhere other than Alice's front-end. Finally, Bob can easily decrypt the password, using his own private-key. This sequence of events, is shown on figure \ref{fig:seq:assymetric} on page \pageref{fig:seq:assymetric}.
 
 			
-				%As the astute reader might have already thought of, there is a slight short-coming in what was previously described. The private-key -- the key used for \emph{decrypting} passwords -- is stored on the server. If stored in ``clear text'' \emph{(or raw binary)}, this presents a huge security risk. Not only is the server admin \emph{easily} able to decrypt passwords, but \emph{should} a leak of the database happens, all passwords are instantly compromised.
-				%As such, it is necessary to introduce some sort of encryption for the private-key. But how can this be achieved without merely shifting the issues previously described? It is necessary to derive the encryption key, from the user's input. Translating a user's input -- for instance a password -- to an encryption key is very common, and is best done using a key derivation function. 
-
-				%Algorithms such as bcrypt and PBKDF2 exists for this very purpose \emph{(or slightly similar, at least)}. In layman's terms, it basically hashes the same password over and over again, $n$ times, as to slow the process down ``artificially''. This is done so that trying to bruteforce the key, will be several factors more difficult, due to the extra computations.
 
 			\subsubsection{Making A Choice}
 				Having described three different approaches to solving the problem, it is time to decide exactly which should be used. All of them have their drawbacks -- all of them have their advantages. Since the asymmetric encryption approach has no acronym, it will be referred to as ``Asymmetric'' in the following tables.
@@ -324,6 +320,12 @@
 					\label{table:comp:complete_schemes}
 				\end{table}
 
+		\subsection{Key Management}
+			As the astute reader might have realized by now, there is a slight short-coming in what has previously described. The private-key -- the key used for \emph{decrypting} passwords -- is stored on the server. If stored in ``clear text'' \emph{(or raw binary)}, this presents a huge security risk. Not only is the server admin \emph{easily} able to decrypt passwords, but \emph{should} a leak of the database happens, all passwords are instantly compromised.
+			As such, it is necessary to introduce some sort of encryption for the private-key. But how can this be achieved without merely shifting the issues previously described? It is necessary to derive the encryption key, from the user's input. Translating a user's input -- for instance a password -- to an encryption key is very common, and is best done using a key derivation function. 
+
+			Algorithms such as bcrypt and PBKDF2 exists for this very purpose \emph{(or slightly similar, at least)}. In layman's terms, it basically hashes the same password over and over again, $n$ times, as to slow the process down ``artificially''. This is done so that trying to bruteforce the key, will be several factors more difficult, due to the extra computations.
+
 
 	\section{Authentication}
 		\subsection{OAuth1/2}
@@ -342,7 +344,6 @@
 
 	\section{Storing the Data}
 		\section{SQL vs NoSQL}
-		\section{SQLite}
 	\section{Storage Scheme}
 
 	\section{Naming the Solution}
