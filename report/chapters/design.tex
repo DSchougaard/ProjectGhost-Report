@@ -220,18 +220,14 @@
 
 		All of these three clients are by far mutually exclusive. However, due to constraints of this project it is beneficial to limit the scope to a single interface, with the possibility of further development down the road. For initial prototyping a web UI is the most obvious, since it is the quickest way to achieve cross-platform usage. 
 
- 
 	\section{Data Protection \& Encryption}
-		In this section we will discuss	
-
-
-		First, it is needed to re-cap two \emph{very} important requirements:
+		In this section various encryption schemes will be compared and discussed. By the end of it, a single solution will be picked. Before getting in too deep with this section, it is needed to re-cap two \emph{very} important requirements:
 		\begin{enumerate}
 			\item Passwords and private information should never be stored or handled un-encrypted anywhere, other than the local device
 			\item Password sharing
 		\end{enumerate}
 
-		The first requirement states that the passwords needs to be encrypted, when handled in the back-end. Multiple encryption and data schemes could be used for this.
+		The first requirement states that the passwords needs to be encrypted when handled in the back-end. Multiple encryption and data schemes could be used for this.
 
 		\subsection{A Single Encrypted Blob}
 			One solution, is to simply store \emph{one} large encrypted blob in the back-end. When the user then requests access to a password, this blob is transferred to the front-end, decrypted, and the password can be retrieved. 
