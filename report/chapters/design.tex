@@ -207,6 +207,20 @@
 				\label{tab:checklist_arch-comms}
 			\end{table}
 
+	\section{Accessing the Back-End}
+		Since it has already been determined that the basic architecture of the solution is client-server, it is necessary to determine exactly \emph{which} kind of client there will be needed. 
+
+		There are three obvious types of clients which are not mutually exclusive. First and foremost there is the native client. A native client is \emph{any} client which is developed specifically for a certain platform. An example of a native client could be an Android application or a Windows program. Using tools which are unique to each platform, the client can be integrated tightly with the system. Using for instance the Windows' tray icons or Android's widgets has the advantage of giving the user a more seamless integration with the platform. 
+
+		However, that advantage is -- ironically enough -- also the disadvantage. Since each client is separate from the others, it creates a very departmentalized work flow. While some of the core functionality might be able to be shared across the various clients, it is an undeniable fact that a large portion of the code base will be separated. This introduces higher chances of discrepancy between the various clients. This will in return result in a worse user experience, for any users using clients on multiple platforms. Additionally it is also just more code to review for security flaws.
+
+		The other type of client, and the one growing in popularity in the later years, is the web client. This client is accessed through a browser and is in form of a website. While this does put some restrictions in place, in regards to platform specific technologies, it also ensures that the experience is \emph{identical} across devices. It ensures, that if the user feels at home using the application from a browser on a desktop, he or she will feel at home on a smartphone as well. This also ensures that there is only \emph{one} code base for the client. Finally, this also reduces the chances for implementation errors.
+
+		Finally there is browser plug-ins. While this \emph{definitely} is the most popular type of client for password managers, it also goes in stark contrast with the requirements earlier specified. The issue with \emph{only} using a browser plug-in, is that it in most circumstances this confines the user to storing website passwords, which is \emph{not} desirable.
+
+		All of these three clients are by far mutually exclusive. However, due to constraints of this project it is beneficial to limit the scope to a single interface, with the possibility of further development down the road. For initial prototyping a web UI is the most obvious, since it is the quickest way to achieve cross-platform usage. 
+
+ 
 	\section{Data Protection \& Encryption}
 		In this section we will discuss	
 
@@ -463,7 +477,8 @@
 				\caption{Checklist for the requirements fulfilled so far. For a full description of the various requirements, please see section \ref{sec:requirements} on page \pageref{sec:requirements}.}
 				\label{tab:checklist_encryption}
 			\end{table}
-
+	
+	\section{Securing the API}
 
 	\section{Authentication}
 		\subsection{OAuth1/2}
@@ -473,12 +488,6 @@
 			\subsubsection{JSON Web Tokens (JWT)}
 		
 		\subsection{Two-Factor Authentication}
-
-	\section{Securing the API}
-
-	\section{Encryption \& Data Security}
-		\subsection{Pseudo Zero Knowledge}
-
 
 	\section{Storing the Data}
 		\section{SQL vs NoSQL}
