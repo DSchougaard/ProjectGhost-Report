@@ -1,5 +1,5 @@
 \chapter{Designing the System}
-	In the following chapter, the overall design of the system is discussed. First and foremost, the basic architechture is decided, based on the requirements. Then more detailed subjects are covered, such as how authentication will work, how the solution keeps the users' data safe, and generally how it will work under the hood - so to speak.
+	In the following chapter, the overall design of the system is discussed. First and foremost, the basic architecture is decided, based on the requirements. Then more detailed subjects are covered, such as how authentication will work, how the solution keeps the users' data safe, and generally how it will work under the hood - so to speak.
 
 	\section{Architecture}
 		\label{sec:arch}
@@ -206,6 +206,9 @@
 				\caption{Checklist for the requirements fulfilled so far. For a full description of the various requirements, please see section \ref{sec:requirements} on page \pageref{sec:requirements}.}
 				\label{tab:checklist_arch-comms}
 			\end{table}
+
+	\section{Securing the Communication}
+		Disable everything except TLS 1.2 to avoid POODLE, HEARTBLEED etc.
 
 	\section{Accessing the Back-End}
 		Since it has already been determined that the basic architecture of the solution is client-server, it is necessary to determine exactly \emph{which} kind of client there will be needed. 
@@ -475,6 +478,39 @@
 			\end{table}
 	
 	\section{Securing the API}
+		When communicating with the back-end, it is necessary to have some sort of authentication mechanism to ensure that 
+
+
+		For this purpose, there exists a number of different approaches. These range from the built-in protocols in HTTP \emph{(HTTP Basic)} to more advanced enabling users to authenticate using their credentials from Google, for example \emph{(OAuth)}. One important aspect that needs to be stated first, is that this is a \emph{password manager}. Its sole purpose is to enable users to store \emph{strong} passwords to services such as Google. Hence, it would make little to no sense allowing a user to authenticating using their Google account. As such, a very fundamental decision is made here: The authentication scheme \emph{must} work with data stored on the back-end itself.
+
+		\subsection{HTTP Basic}
+			HTTP Basic is, as the name implies, the most basic form of authentication. It uses standard fields in the HTTP header, containing username and password for authentication purposes. Since it is intended to be a \emph{very} basic authentication method, the password is sent Base64 encoded. Since this is easily decoded, it is considered an extremely insecure protocol if used without HTTPS. Additionally, Basic is vulnerable to replay attacks, if used without HTTPS.
+
+			If, however, combined with HTTPS the insecurity is some-what mitigated, as the password is no longer transmitted in cleartext \emph{(base64)}. However, despite some of the insecurities are mitigated, it still serves the issue that the client will have to store the username and password for usage, as it is needed to be sent with \emph{every} request.
+
+		\subsection{HTTP Digest}
+			HTTP Digest is another fairly fundamental approach to authenticating with a server, somewhat akin to Basic. Where Basic only Base64 encodes the password, Digest uses a combination of MD5 hashing and and a nonce to avoid replay attacks. 
+
+		\subsection{Cookies}
+			In the later history of websites, cookies have frequently been used for authentication purposes. Where Basic and Digest requires the credentials to be sent with each request, this approach only requires the so called cookie.
+
+			When the user authenticates to the server, the server issues a cookie. This cookie contains a specific session id, which is also stored on the server. Whenever a request is made to the server, this cookie is then passed along with it. When the server receives said cookie, it checks its internal database and fetches any data relevant to said session. Traditionally cookies are used in combination with stateful websites, which is why it is often not used in RESTful APIs.
+
+		\subsection{Tokens}
+			Speaking in very general terms, tokens are somewhat similar to cookies: They're a little piece of code, stored in the browser. However, where as cookies are tied to a session on the server, tokens are not. Tokens merely represent a subject, or in this case a user. Upon receiving a request with a token attached, the server then checks the tokens validity and verifies that the subject has access to a given resource.
+
+			Where the previous possibilities pretty much only has a single option for each, tokens are a more diverse option. Generally there exist three primary versions of these tokens:
+			\begin{itemize}
+				\item Security Assertion Markup Language \emph{(SAML)}
+				\item Simple Web Token \emph{(SWT)}
+				\item JSON Web Token \emph{(JWT)}
+			\end{itemize}
+			Since the SAML specification requires the use of SOAP, this is disregarded in this context. The difference between SWT and JWT is that SWT can only be signed symmetrically using the HMAC algorithm, JWT supports asymmetric signing using an X.509 certificate\cite{auth0_jwt}.
+
+
+		\subsection{Storing the Token}
+			Cookie vs LocalStorage
+			(CSRF)      (XSS)
 
 	\section{Authentication}
 		\subsection{OAuth1/2}
