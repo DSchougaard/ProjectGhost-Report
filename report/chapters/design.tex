@@ -407,6 +407,8 @@
 
 			Algorithms such as bcrypt and PBKDF2 exists for this very purpose \emph{(or slightly similar, at least)}. In layman's terms, it basically hashes the same password over and over again, $n$ times, as to slow the process down ``artificially''. This is done so that trying to bruteforce the key, will be several factors more difficult, due to the extra computations.
 
+			\todo{MORE WORK HERE!}
+
 		\subsection{Comparison with Requirements}
 			Having made choices regarding data encryption and protection, in the previous sections, it is now suitable to update the checklist found on figure \ref{tab:checklist_arch-comms} on page \pageref{tab:checklist_arch-comms}. Using the asymmetric approach and protecting the users' keys with a password derived symmetric key, it is clear that the following requirements are now fulfilled
 			\begin{itemize}
@@ -526,6 +528,19 @@
 
 			A general consensus amongst professionals using these technologies \emph{(RESTful APIs and JWT tokens)} seem to be, that a simple endpoint expecting a HTTP body with a username and password field, is the way to go, as long as HTTPS is used\cite{jwt.io,auth0_jwt,tkalec}. As such, the same approach will be used for this project.
 
+			Upon receiving the username and password from the user, the back-end compares the password against its database. If it is found to be a match, a new JWT is issued. The process of comparing and validating a user's password is elaborated in section \ref{sec:password}.
+
+		\subsection{Password Storage \& Verification}
+			\label{sec:password}
+
+
+
+			Salting
+			Algorithm Choice
+			Verficiation
+
+		\subsection{}
+
 		\subsection{Multi-Factor Authentication}
 			In the past years there has become more and more focus on security. As a result of this, more and more people are using multi-factor authentication to ensure that access to their personal data is as ``safe'' as possible. 
 
@@ -542,17 +557,88 @@
 			However, there are also pitfalls to using possession as an authentication requirement. First and foremost, it is required that the user has the entity available at all times. Without it, he or she can simply not authenticate any more. So in a case of theft, or simple loss, the user is effectively locked out of his or her account. While this definitely is a weakness to the approach, it is deemed that the gain of security highly outweighs the pitfalls.
 
 			\subsubsection{Choosing the Second Factor}
-				Using ``something you have'' is bar far the easiest additional security factor to add, to an online system. Some companies do this by providing physical tokens and some by developing their own internal system and accompanying app \emph{(Blizzard Entertainment, for instance)}. While this definitely is an option, it is also by far the most expensive. Dedicated hardware needs to be manufactured, or a separate application needs to be developed.
+				Using ``something you have'' as a second factor is by far the easiest additional security factor to add to an online system. This involves sending the user a one-time-password \emph{(OTP)}. Some companies do this by providing physical tokens and some by developing their own internal system and accompanying app \emph{(Blizzard Entertainment, for instance)}. While this definitely is an option, it is also by far the most expensive. Dedicated hardware needs to be manufactured, or a separate application needs to be developed. Other companies choose to use text messages as a way of delivering one-time-passwords. The disadvantage to this approach is that a SMS gateway is required.
 
-				A far more universal -- and partially plug and play -- approach exists, in the two most common algorithms: HMAC-Based One-Time Password Algorithm\cite{rfc4226}, commonly known as HOTP, and Time-Based One-Time Password Algorithm\cite{rfc6238}, commonly known as TOTP.
+				A far more universal -- and partially plug'n'play -- approach exists, in the two most common OTP algorithms: HMAC-Based One-Time Password Algorithm\cite{rfc4226}, commonly known as HOTP, and Time-Based One-Time Password Algorithm\cite{rfc6238}, commonly known as TOTP. 
 
+				\textbf{HOTP}\\
+				HOTP requires to values to work. First and foremost there is a secret, which is shared behind the HOTP client and the back-end. Secondly, both -- separately -- manages a counter of how many times a OTP has been used. Using these two variables and the HMAC hashing algorithm, the OTP is then calculated. 
 
+				\textbf{TOTP}\\
+				TOTP, by many thought to be the successor to HOTP, is roughly the same as HOTP, except it uses a value derived from a timestamp, instead of a counter. The value is derived based on two variables, $X$ and $T0$, where $T0$ is a Unix timestamp from when counting starts, and $X$ is the interval the key is valid for. Usually $T0$ is set to $0$, which is the Unix epoch and $X$ is set to $30$ seconds. The value is then calculated as $T = (now - T0)/X$, cf. \cite[Sec. 4.2]{rfc6238}.
 
+				Both have their respective advantages and disadvantages. The advantage of HOTP is that it is independent from the system clock of the two devices, which is known to drift from time to time. The disadvantage, however, is that the counter needs to be synchronized between the client and the back-end. If the user generates OTPs without using them, they cease to be synchronized. To fix this, they back-end must initiate what the RFC defines as the ``resynch protocol'', which will result in the counter being updated in the back-end. Another drawback is that HOTP requires a counter to be stored in the back-end.
 
+				The advantage of TOTP is that OTPs are generated contentiously. Where the HOTP key lives for a lot longer \emph{(indefinitely)} the TOTP only has a certain window of validity. Common configurations of TOTP lets keys validate for plus/minus two minutes, to account for time drift between the client and the back-end. This, however, is also the weakness of TOTP: Time drift. If the client and the back-end does not operate with the same current time, the OTP will simply not validate.
 
-
+				Taking the pros and cons into consideration, it is chosen that the TOTP algorithm will be supported in this solution. It is believed that the only inherent draw-back in the algorithm, is mitigated for the most part, by modern systems being fairly good at making sure their internal time is correct.
 
 		\subsection{Comparison With The Requirements}
+			Previously in this section, the various options for securing the API and authenticating to the back-end has been covered. As such, it is time to update the checklist in reference to the requirements.
+
+			Having chosen JWT tokens 
+			\begin{table}
+				\center
+				\begin{tabular}{r l c}
+													& \rot{\textbf{Fulfilled}} 	& \rot{Section(s)} \\
+					\textbf{Functional} 			&						&					\\
+					\hline
+					\freq{item:distrib_password} 	& \green{\cmark} 		& \green{ \ref{sec:arch} \& \ref{sec:comms} }			\\
+					\hline
+					\freq{item:multi_user} 			& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\freq{item:admin_user} 			& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\freq{item:organization} 		& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\freq{item:sharing} 			& \green{\cmark}		& \green{ \ref{sec:encryption_choice} \& \ref{sec:keys} }			\\
+					\hline
+					\freq{item:add} 			 	& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\freq{item:platform} 			& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\freq{item:database} 			& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\freq{item:passwords_local} 	& \green{\cmark}		& \green{ \ref{sec:encryption_choice} \& \ref{sec:keys} }			\\
+					\hline
+					\freq{item:new} 				& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\freq{item:retrieve} 			& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\freq{item:delete} 				& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\freq{item:audit} 				& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\freq{item:auth} 				& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\freq{item:change} 				& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\freq{item:two-factor} 			& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\freq{item:restart} 			& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\textbf{Non-Functional} 		&  			 			& 					\\
+					\hline
+					\nfreq{item:user_storage} 		& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\nfreq{item:open-source} 		& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\nfreq{item:entries} 			& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\nfreq{item:encryption} 		& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\nfreq{item:comms} 				& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\nfreq{item:tls1.2} 			& \red{\xmark} 			& \red{ }			\\
+					\hline
+					\nfreq{item:delay} 				& \red{\xmark} 			& \red{ }			\\
+					\hline
+				\end{tabular}
+
+				\caption{Checklist for the requirements fulfilled so far. For a full description of the various requirements, please see section \ref{sec:requirements} on page \pageref{sec:requirements}.}
+				\label{tab:checklist_encryption}
+			\end{table}
+	
 
 	\section{Creating a User}
 		Invites UUID
