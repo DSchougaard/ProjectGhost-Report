@@ -477,49 +477,86 @@
 				\label{tab:checklist_encryption}
 			\end{table}
 	
-	\section{Securing the API}
-		When communicating with the back-end, it is necessary to have some sort of authentication mechanism to ensure that 
-
-
-		For this purpose, there exists a number of different approaches. These range from the built-in protocols in HTTP \emph{(HTTP Basic)} to more advanced enabling users to authenticate using their credentials from Google, for example \emph{(OAuth)}. One important aspect that needs to be stated first, is that this is a \emph{password manager}. Its sole purpose is to enable users to store \emph{strong} passwords to services such as Google. Hence, it would make little to no sense allowing a user to authenticating using their Google account. As such, a very fundamental decision is made here: The authentication scheme \emph{must} work with data stored on the back-end itself.
-
-		\subsection{HTTP Basic}
-			HTTP Basic is, as the name implies, the most basic form of authentication. It uses standard fields in the HTTP header, containing username and password for authentication purposes. Since it is intended to be a \emph{very} basic authentication method, the password is sent Base64 encoded. Since this is easily decoded, it is considered an extremely insecure protocol if used without HTTPS. Additionally, Basic is vulnerable to replay attacks, if used without HTTPS.
-
-			If, however, combined with HTTPS the insecurity is some-what mitigated, as the password is no longer transmitted in cleartext \emph{(base64)}. However, despite some of the insecurities are mitigated, it still serves the issue that the client will have to store the username and password for usage, as it is needed to be sent with \emph{every} request.
-
-		\subsection{HTTP Digest}
-			HTTP Digest is another fairly fundamental approach to authenticating with a server, somewhat akin to Basic. Where Basic only Base64 encodes the password, Digest uses a combination of MD5 hashing and and a nonce to avoid replay attacks. 
-
-		\subsection{Cookies}
-			In the later history of websites, cookies have frequently been used for authentication purposes. Where Basic and Digest requires the credentials to be sent with each request, this approach only requires the so called cookie.
-
-			When the user authenticates to the server, the server issues a cookie. This cookie contains a specific session id, which is also stored on the server. Whenever a request is made to the server, this cookie is then passed along with it. When the server receives said cookie, it checks its internal database and fetches any data relevant to said session. Traditionally cookies are used in combination with stateful websites, which is why it is often not used in RESTful APIs.
-
-		\subsection{Tokens}
-			Speaking in very general terms, tokens are somewhat similar to cookies: They're a little piece of code, stored in the browser. However, where as cookies are tied to a session on the server, tokens are not. Tokens merely represent a subject, or in this case a user. Upon receiving a request with a token attached, the server then checks the tokens validity and verifies that the subject has access to a given resource.
-
-			Where the previous possibilities pretty much only has a single option for each, tokens are a more diverse option. Generally there exist three primary versions of these tokens:
-			\begin{itemize}
-				\item Security Assertion Markup Language \emph{(SAML)}
-				\item Simple Web Token \emph{(SWT)}
-				\item JSON Web Token \emph{(JWT)}
-			\end{itemize}
-			Since the SAML specification requires the use of SOAP, this is disregarded in this context. The difference between SWT and JWT is that SWT can only be signed symmetrically using the HMAC algorithm, JWT supports asymmetric signing using an X.509 certificate\cite{auth0_jwt}.
-
-
-		\subsection{Storing the Token}
-			Cookie vs LocalStorage
-			(CSRF)      (XSS)
 
 	\section{Authentication}
-		\subsection{OAuth1/2}
-		\subsection{Basic Authentication}
-		\subsection{Tokens}
-			\subsubsection{Simple Web Tokens (SWT)}
-			\subsubsection{JSON Web Tokens (JWT)}
-		
-		\subsection{Two-Factor Authentication}
+		As with any program handling users' data, there need to be some sort of authentication method in place. Describing the authentication used for this project, will be split up into two categories: First it will be determined exactly how the API will be secured. Once this has been determined, it will be decided how to actually \emph{perform} this authentication.
+
+		\subsection{Securing the API}
+			There exists a number of different approaches for securing an API. These range from the built-in protocols in HTTP \emph{(HTTP Basic)} to more advanced enabling users to authenticate using their credentials from Google, for example \emph{(OAuth)}. One important aspect that needs to be stated first, is that this is a \emph{password manager}. Its sole purpose is to enable users to store \emph{strong} passwords to services such as Google. Hence, it would make little to no sense allowing a user to authenticating using their Google account. As such, a very fundamental decision is made here: The authentication scheme \emph{must} work with data stored on the back-end itself.
+
+			\subsubsection{HTTP Basic}
+				HTTP Basic is, as the name implies, the most basic form of authentication. It uses standard fields in the HTTP header, containing username and password for authentication purposes. Since it is intended to be a \emph{very} basic authentication method, the password is sent Base64 encoded. Since this is easily decoded, it is considered an extremely insecure protocol if used without HTTPS. Additionally, Basic is vulnerable to replay attacks, if used without HTTPS.
+
+				If, however, combined with HTTPS the insecurity is some-what mitigated, as the password is no longer transmitted in cleartext \emph{(base64)}. However, despite some of the insecurities are mitigated, it still serves the issue that the client will have to store the username and password for usage, as it is needed to be sent with \emph{every} request.
+
+			\subsubsection{HTTP Digest}
+				HTTP Digest is another fairly fundamental approach to authenticating with a server, somewhat akin to Basic. Where Basic only Base64 encodes the password, Digest uses a combination of MD5 hashing and and a nonce to avoid replay attacks. 
+
+			\subsubsection{Cookies}
+				In the later history of websites, cookies have frequently been used for authentication purposes. Where Basic and Digest requires the credentials to be sent with each request, this approach only requires the so called cookie.
+
+				When the user authenticates to the server, the server issues a cookie. This cookie contains a specific session id, which is also stored on the server. Whenever a request is made to the server, this cookie is then passed along with it. When the server receives said cookie, it checks its internal database and fetches any data relevant to said session. Traditionally cookies are used in combination with stateful websites, which is why it is often not used in RESTful APIs.
+
+			\subsubsection{Tokens}
+				Speaking in very general terms, tokens are somewhat similar to cookies: They're a little piece of code, stored in the browser. However, where as cookies are tied to a session on the server, tokens are not. Tokens merely represent a subject, or in this case a user. Upon receiving a request with a token attached, the server then checks the tokens validity and verifies that the subject has access to a given resource. These tokens are also often referred to as ``bearer tokens''.
+
+				Where the previous possibilities pretty much only has a single option for each, tokens are a more diverse option. Generally there exist three primary versions of these tokens:
+				\begin{itemize}
+					\item Security Assertion Markup Language \emph{(SAML)}
+					\item Simple Web Token \emph{(SWT)}
+					\item JSON Web Token \emph{(JWT)}
+				\end{itemize}
+				Since the SAML specification requires the use of SOAP, this is disregarded in this context. The difference between SWT and JWT is that SWT can only be signed symmetrically using the HMAC algorithm, where as JWT \emph{also} supports asymmetric signing using an private/public keypair\cite{auth0_jwt}.
+
+			\subsubsection{Making A Choice}
+				While this aspect of the design might seem trivial to some, it is actually a very fundamental and important aspect: It defines how the front-end authenticates with the back-end. While any of the previous approaches are strictly speaking \emph{valid}, some are more obvious than others. The HTTP Digest, for instance, is almost unnecessary compared to the option of just running Basic over HTTPS, and \emph{of course} HTTPS is required.
+
+				That leaves us with Basic, cookies and tokens. Since it has previously been established that it is beneficial for the back-end to be designed in such a way, that third party clients can connect to it, cookies are not optimal. Cookies are primarily intended for the browser and as such, would most likely end up being a hindrance if one should choose to develop a native client.
+
+				As such it is down to Basic or tokens. Basic only has the option of sending the username and password in Base64, as covered earlier. Tokens, on the other hand have the option of sending an entire JSON payload. This opens the possibility for fine tuning the payload down the road and customizing it better to suit the implementation requirements. 
+
+				Trusting the payload of the token requires a certain level of trust. Using symmetrical signing of the JWT for this purpose is \emph{not} suitable. However, using a keypair for signing the JWT \emph{ensures} that the token originated from the server, and not from the client. As such, a certain level of trust can be implied in the token.
+
+				As such, it is chosen that the API will be secured using JWT tokens which will be signed by a private/public keypair.
+
+		\subsection{Obtaining the Token}
+			In the previous section it was decided that the API will be protected using JWTs. However, the process of obtaining said tokens were not discussed. There exists a number of different ways to obtain this.
+
+			Anyone working within the industry will without a doubt have at least heard of OAuth and OAuth2. These two authentication protocols are used for users to authenticate to a service, without actually revealing their credentials to said service. Instead they reveal them to Google, for instance, which in return issues a token that is used for authenticating to the service. Earlier arguments were made for why these protocols are \emph{not} suited for this problem, however, certain derived protocols of these exists. Commonly they're known as 2-legged-OAuth and 2-legged-OAuth2. The reason to this is that there is only two actors involved: The user and the service. The OAuth provider, as they're called, are taken out of the equation. While this is definitely a valid option, it is deemed that it is simply too much overhead, for which is essentially a \emph{very} authentication purpose.
+
+			A general consensus amongst professionals using these technologies \emph{(RESTful APIs and JWT tokens)} seem to be, that a simple endpoint expecting a HTTP body with a username and password field, is the way to go, as long as HTTPS is used\cite{jwt.io,auth0_jwt,tkalec}. As such, the same approach will be used for this project.
+
+		\subsection{Multi-Factor Authentication}
+			In the past years there has become more and more focus on security. As a result of this, more and more people are using multi-factor authentication to ensure that access to their personal data is as ``safe'' as possible. 
+
+			In the previous sections only single factor authentication was considered, however, as per the requirements, cf. section \ref{sec:requirements}, the solution will have to support two-factor authentication. All authentication forms fall under one of three categories:
+			\begin{enumerate}
+				\item Something you know
+				\item Something you have
+				\item Something you are
+			\end{enumerate}
+			Using a username and password combination, is falls under the category of ``something you know''. As such, an additional factor needs to be added. 
+
+			In many of the existing systems, this ``extra'' factor of authentication usually falls under the category of ``something you have''. Physical one time passwords, text messages to your phone with a pin, or NemID \emph{(limited to Denmark)} all re-presents a physical entity which the user posses. This means that an attacker not only has to have guessed the user's password, but also have stolen the physical entity. This, in theory, makes it a lot safer.
+
+			However, there are also pitfalls to using possession as an authentication requirement. First and foremost, it is required that the user has the entity available at all times. Without it, he or she can simply not authenticate any more. So in a case of theft, or simple loss, the user is effectively locked out of his or her account. While this definitely is a weakness to the approach, it is deemed that the gain of security highly outweighs the pitfalls.
+
+			\subsubsection{Choosing the Second Factor}
+				Using ``something you have'' is bar far the easiest additional security factor to add, to an online system. Some companies do this by providing physical tokens and some by developing their own internal system and accompanying app \emph{(Blizzard Entertainment, for instance)}. While this definitely is an option, it is also by far the most expensive. Dedicated hardware needs to be manufactured, or a separate application needs to be developed.
+
+				A far more universal -- and partially plug and play -- approach exists, in the two most common algorithms: HMAC-Based One-Time Password Algorithm\cite{rfc4226}, commonly known as HOTP, and Time-Based One-Time Password Algorithm\cite{rfc6238}, commonly known as TOTP.
+
+
+
+
+
+
+
+		\subsection{Comparison With The Requirements}
+
+	\section{Creating a User}
+		Invites UUID
+
 
 	\section{Storing the Data}
 		\section{SQL vs NoSQL}
