@@ -223,7 +223,7 @@
 
 		All of these three clients are by far mutually exclusive. However, due to constraints of this project it is beneficial to limit the scope to a single interface, with the possibility of further development down the road. For initial prototyping a web UI is the most obvious, since it is the quickest way to achieve cross-platform usage. 
 
-	\section{Data Protection \& Encryption}
+	\section{Storage Encryption}
 		In this section various encryption schemes will be compared and discussed. By the end of it, a single solution will be picked. Before getting in too deep with this section, it is needed to re-cap two \emph{very} important requirements:
 		\begin{enumerate}
 			\item Passwords and private information should never be stored or handled un-encrypted anywhere, other than the local device
@@ -298,7 +298,7 @@
 				%\textsc{..}
 				Using this approach for the problem at hand is quite similar to the previous one. Each password has a unique symmetric encryption key, $SK$, which is never stored directly on the back-end. All users having access to said password, then has a copy of $SK$ encrypted with their own public-key stored. Sharing a password is then as simple as getting the recipients public-key, encrypting the $SK$ with said key, and uploading it to the server. The previous approach is depicted on figure \ref{fig:sequence:pgp} on page \pageref{fig:sequence:pgp}.
 
-				One of the main arguments for using PGP is the fact that symmetric encryption is by far faster than asymmetric. However, in this case the ciphertext is relatively small: A password most likely no longer than 72 characters. As such, the performance gained using PGP is pretty much gone. It would hardly take longer to encrypt such a password with asymmetric encryption, than it would for PGP to encrypt a symmetric key.
+				One of the main arguments for using PGP is the fact that symmetric encryption is by far faster than asymmetric. However, in this case the plaintext is relatively small: A password most likely no longer than 72 characters. As such, the performance gained using PGP is pretty much gone. It would hardly take longer to encrypt such a password with asymmetric encryption, than it would for PGP to encrypt a symmetric key.
 
 				Additionally, this solution has the same draw-back as proxy re-encryption. It requires that \emph{all} passwords have an symmetric key stored beside them. The same argument as before can be used again: While it in \emph{no} way can be considered ``bad'' scaling, it could be better.
 
@@ -313,8 +313,7 @@
 				\label{sec:assymetric}
 				A third option is to directly use asymmetric encryption. Each user has -- like previously -- a private and a public-key pair. Each password is then encrypted using the public-key and stored on the server. To access the password it simply has to be decrypted using the private-key. Sharing the password is simple as well. Simply fetch the public-key of the recipient, encrypt the password using said key, and upload the newly encrypted password. This is shown on figure \ref{fig:sequence:asymmetric} on page \pageref{fig:sequence:asymmetric}.
 
-
-				One of strongest arguments for the PGP scheme, is that generally asymmetric encryption is significantly faster. However, since the ciphertexts would be rather small -- most likely below 100 bytes -- this problem is effectively null and void, leaving this scheme a \emph{viable} candidate.
+				One of strongest arguments for the PGP scheme, is that generally asymmetric encryption is significantly faster. However, since the plaintext would be rather small -- most likely below 100 bytes -- this problem is effectively null and void, leaving this scheme a \emph{viable} candidate.
 
 				Using this approach is easily the most simple so far. Alice wishes to share a password with Bob. She fetches his public-key, encrypts the password with said key, and uploads the encrypted password to the back-end. Bob then merely needs to fetch the password and decrypt it, in a process virtually no different from when accessing his own passwords.
 
@@ -400,14 +399,48 @@
 					\label{table:comp:complete_schemes}
 				\end{table}
 
+		\subsection{Asymmetric Encryption Algorithm}
+			Having decided on using the asymmetric approach, an algorithm for this needs to be decided. The two contenders for this algorithm is the RSA and ElGamal algorithm. Unfortunately, there does not seem to exist any \emph{sound} papers regarding their comparative strength and efficiency, and as such the choice must be based on something else.
+
+			As such, it is chosen to go with RSA for the reason that its use is simply more widespread. Additionally, a keysize of $4096$ is chosen, as per the recommendations of European Union Agency for Network and Information Security \emph{(ENISA)}\cite[p.37]{enisa}.
+
+			When using RSA, however, it is necessary to be aware of a vulnerability in using ``plain'' RSA. This vulnerability is described in \cite{boneh2000textbook} where an attack reducing the effective security to the half, is described. They also conclude that this can be avoided by using OAEP padding with RSA.
+
 		\subsection{Key Management}
 			\label{sec:keys}
-			As the astute reader might have realized by now, there is a slight short-coming in what has previously described. The private-key -- the key used for \emph{decrypting} passwords -- is stored on the server. If stored in ``clear text'' \emph{(or raw binary)}, this presents a huge security risk. Not only is the server admin \emph{easily} able to decrypt passwords, but \emph{should} a leak of the database happens, all passwords are instantly compromised.
-			As such, it is necessary to introduce some sort of encryption for the private-key. But how can this be achieved without merely shifting the issues previously described? It is necessary to derive the encryption key, from the user's input. Translating a user's input -- for instance a password -- to an encryption key is very common, and is best done using a key derivation function. 
+			As the astute reader might have realized by now, there is a slight short-coming in what has previously been described. How the private and public-key is stored and transported is omitted \emph{(by choice)}. In an ideal world, all users would automatically have access to the rest of the users' public-keys, and their own private-key would be securely distributed to all devices. However, the world is far from ideal.
 
-			Algorithms such as bcrypt and PBKDF2 exists for this very purpose \emph{(or slightly similar, at least)}. In layman's terms, it basically hashes the same password over and over again, $n$ times, as to slow the process down ``artificially''. This is done so that trying to bruteforce the key, will be several factors more difficult, due to the extra computations.
+			Since the public-key is \emph{not} sensitive information. As such the easiest way to distribute these keys, is simply to store them on the server. This also makes it very easy for the client application to access these keys.
 
-			\todo{MORE WORK HERE!}
+			However, that leaves the private-key. The most secure approach would probably be to let the user manage distributing this key themselves. However, this would end up being a very troublesome process and will lower the over-all user experience. Hence, an encryption scheme for storing the private-key on the server needs to be devised.
+
+			\subsubsection{Choosing an Encryption Algorithm}
+				While there exists a plethora of symmetric encryption algorithms, some are more used than others. These are the 3DES, Blowfish, and AES algorithms. As with any of these choices, there exists various pros and cons for each of the algorithms. 
+
+				Several independent papers describe blowfish as the faster algorithm, quoting that since no known vulnerabilities exists for it, it is the best option for symmetric encryption\cite{thakur2011aes,singh2011comparison,verma2011peformance,ramesh2013performance}. While this might very well be true, one can not only compare these algorithms on efficiency, as security is as equally important -- if not more. 
+
+				On the other hand the National Institute of Standards and Technology \emph{(NIST)} -- strictly speaking -- recommends the use of the 3DES and AES algorithms\cite{nist}, in their report for use of the 3DES algorithm they write:
+				\begin{quote}
+					\emph{Note: Through the year 2030, Triple DES (TDEA) and the FIPS 197 Advanced Encryption Standard (AES) will coexist as approved algorithms – thus, allowing for a gradual transition to AES. (The AES is another symmetric-based encryption standard approved by NIST.)}\\
+					\cite{barker2012sp}
+				\end{quote}
+				On top of this, ENISA classifies Blowfish as a legacy algorithm, whereas AES is considered future proof\cite[p.20]{enisa}.
+
+				As a consequence it is decided, that the AES algorithm will be used for protecting the private-key, stored on the server. While AES supports a number of different key sizes, AES-256 is chosen for the added security.
+
+			\subsubsection{Creating an Encryption Key}
+				As with any encryption, AES-256 requires an encryption key. If the key is chosen to be stored on the server, this merely shifts the security risk -- it wont eliminate it. As such, the encryption needs to be based on something which is never stored on the server. The easiest, and by far most logical, way to achieve this, is to use a password. 
+
+				But using a user's password as a asymmetric encryption key will \emph{not} result in enough entropy. Doing this will be \emph{very} insecure. alternatively an encryption key can be \emph{derived} from a password. This is a fairly common task, and is best performed using a so-called Key Derivation Function, or KDF for short. These KDF's are designed to be slow. Where regular hashing algorithms such as SHA-1 are designed to be fast and efficient, KDFs are designed to be exactly the opposite. This is done to slow down a possible brute-force attack against the hash. After all, the regular user will never be the wiser if hashing a single password takes $0.01$ seconds or $1$ seconds. But performing this calculating hundreds of thousands of times will add up, making the computational load for a bruteforce attack \emph{significantly} harder.
+
+				There exists a \emph{plethora} of various KDFs -- way too many to cover all of them in this section. However, the most widespread KDF is the PBKDF2 algorithm\cite{rfc2898}, which is developed by RSA Laboratories. However, in June 2015 the Password Hashing Competition was concluded\cite{pch}. The competition was held in an attempt to develop a new crypto standard for password hashing algorithms \emph{(practically the same as a KDF)}. Their recommendation is to use the Argon2 algorithm\cite{biryukov2015argon}. Based on this, The Open Web Application Security Project \emph{(OWASP)} made the following recommendation, in regards to password hashing:
+				\begin{quote}
+					\emph{Select:
+						Argon2[*7] when it becomes available. Argon2 is the winner of the password hashing competition and should be considered as your first choice when solid implementations are available.
+					}\\\cite{owasp_kdf}
+				\end{quote}
+
+				Since Argon2 is such a new algorithm, ``solid'' implementations might very well be difficult to find. But this project will adhere to OWASP's guidelines, as far as possible. As such, it is preferable if the project derives the symmetric encryption key using the Argon2 algorithm.
 
 		\subsection{Comparison with Requirements}
 			Having made choices regarding data encryption and protection, in the previous sections, it is now suitable to update the checklist found on figure \ref{tab:checklist_arch-comms} on page \pageref{tab:checklist_arch-comms}. Using the asymmetric approach and protecting the users' keys with a password derived symmetric key, it is clear that the following requirements are now fulfilled
@@ -478,7 +511,6 @@
 				\caption{Checklist for the requirements fulfilled so far. For a full description of the various requirements, please see section \ref{sec:requirements} on page \pageref{sec:requirements}.}
 				\label{tab:checklist_encryption}
 			\end{table}
-	
 
 	\section{Authentication}
 		As with any program handling users' data, there need to be some sort of authentication method in place. Describing the authentication used for this project, will be split up into two categories: First it will be determined exactly how the API will be secured. Once this has been determined, it will be decided how to actually \emph{perform} this authentication.
@@ -539,7 +571,6 @@
 			Algorithm Choice
 			Verficiation
 
-		\subsection{}
 
 		\subsection{Multi-Factor Authentication}
 			In the past years there has become more and more focus on security. As a result of this, more and more people are using multi-factor authentication to ensure that access to their personal data is as ``safe'' as possible. 
@@ -639,6 +670,8 @@
 				\label{tab:checklist_encryption}
 			\end{table}
 	
+	\section{Attaining Pseudo-Zero-Knowledge}
+
 
 	\section{Creating a User}
 		Invites UUID
