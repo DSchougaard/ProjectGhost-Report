@@ -210,36 +210,33 @@
 	\section{Securing the Communication}
 		Having established the method of communication, it needs to be established that \emph{all} traffic between the client and the server \emph{shall} be encrypted using HTTPS. However, ``use SSL/TLS'' is not the magic solution that it was once thought it was. Over the past few years, more and more attacks have surfaced primarily exploiting attack vectors in what is generally thought to be ``legacy'' options.
 
-		As such, it is almost \emph{required} to heavily limit the available options for SSL/TLS on a service, for it to be considered ``safe''. Table \ref{table:ssl/tls} on page \pageref{table:ssl/tls} contains some of the more recent attacks, and what their target is.
+		As such, it is almost \emph{required} to heavily limit the available options for SSL/TLS on a service, for it to be considered ``safe''. Table \ref{table:ssl/tls} on page \pageref{table:ssl/tls} contains some of the more recent attacks and what their target is. Previously the recommendation have been to simply use TLS1.0 or higher\cite{ms_tls1.0+}, however this is just no longer viable. 
 
+		As such, a restriction on the choice of implementation platform is made. The chosen library \emph{must} support limiting itself to \emph{only} use TLS 1.2, and likewise it must be able to apply restriction on the cipher suites it supports.
 
 		\begin{table}
 			\begin{tabular}{r | l | l}
-				\textbf{Attack Name}	& \textbf{Vulnerability In}			& \textbf{Source} 	\\
+				\textbf{Attack Name}	& \textbf{Vulnerability In}			& \textbf{Source} 						\\
 				POODLE  				& SSL 3.0							& \cite{moller2014poodle}				\\
-				``POODLE 2.0'' 			& \emph{Possibly} TLS 1.0 \& 1.1 	& \cite{poodlev2,poodlev2_2}					\\
+				``POODLE 2.0'' 			& \emph{Possibly} TLS 1.0 \& 1.1 	& \cite{poodlev2,poodlev2_2}			\\
 				DROWN 					& SSL v2  							& \cite{aviramdrown}					\\
-				Heartbleed 				& OpenSSL Implementation			& \cite{durumeric2014matter}					\\
-				Bar Mitzvah 			& RC4 ciphers and weak keys 		& \cite{mantin2015barmitzvah}				\\
-				FREAK 					& ``RSA\_EXPORT'' cipher suites 	& \cite[p.3]{novotnyimplementation}					\\
-				WinShock 				& Schell Implementation 			& \cite[p.2]{novotnyimplementation}
+				Heartbleed 				& OpenSSL Implementation			& \cite{durumeric2014matter}			\\
+				Bar Mitzvah 			& RC4 ciphers and weak keys 		& \cite{mantin2015barmitzvah}			\\
+				FREAK 					& ``RSA\_EXPORT'' cipher suites 	& \cite[p.3]{novotnyimplementation}		\\
+				WinShock 				& Schell Implementation 			& \cite[p.2]{novotnyimplementation} 	\\
+				BEAST 					& TLS 1.0 							& \cite{beast} 								\\
 			\end{tabular}
 			\caption{Some of the recent SSL/TLS attacks and exploits.}
 			\label{table:ssl/tls}
 		\end{table}
 
 
-
-		POODLE 			SSL 3.0 (Possibly even 1.1?! https://www.globalsign.com/en/blog/poodle-vulnerability-expands-beyond-sslv3-to-tls/) 
-									https://support.globalsign.com/customer/portal/articles/1786853-poodle-vulnerability-affects-tls-1-0-tls-1-1
-		DROWN  			SSL 2.0
-		BEAST 			TLS 1.0
-		Heartbleed 		Everything
-		Bar Mitzvah 	Deprecated RC4 Chipers
-		FREAK 			Everything, if using RSA\_EXPORT ciphers https://freakattack.com/
- 
-
-		Disable everything except TLS 1.2 to avoid POODLE, HEARTBLEED etc.
+		\subsection{Comparison With the Requirements}
+			\label{req:met:tls1.2}
+			While the previous section doesn't add anything new design wise -- strictly speaking -- it applies an implementation \emph{restriction}. As such it is deemed that the following requirement is met:
+			\begin{itemize}
+				Secure communications, using only TLS 1.2 or newer
+			\end{itemize}
 
 	\section{Accessing the Back-End}
 		Since it has already been determined that the basic architecture of the solution is client-server, it is necessary to determine exactly \emph{which} kind of client there will be needed. 
