@@ -235,7 +235,7 @@
 			\label{req:met:tls1.2}
 			While the previous section doesn't add anything new design wise -- strictly speaking -- it applies an implementation \emph{restriction}. As such it is deemed that the following requirement is met:
 			\begin{itemize}
-				Secure communications, using only TLS 1.2 or newer
+				\item Secure communications, using only TLS 1.2 or newer
 			\end{itemize}
 
 	\section{Accessing the Back-End}
@@ -253,10 +253,10 @@
 
 	\section{Storage Encryption}
 		In this section various encryption schemes will be compared and discussed. By the end of it, a single solution will be picked. Before getting in too deep with this section, it is needed to re-cap two \emph{very} important requirements:
-		\begin{enumerate}
+		\begin{itemize}
 			\item Passwords and private information should never be stored or handled un-encrypted anywhere, other than the local device
 			\item Password sharing
-		\end{enumerate}
+		\end{itemize}
 
 		The first requirement states that the passwords need to be encrypted when handled in the back-end. Multiple encryption and data schemes could be used for this.
 
@@ -457,6 +457,7 @@
 				As a consequence it is decided, that the AES algorithm will be used for protecting the private-key, stored on the server. While AES supports a number of different key sizes, AES-256 is chosen for the added security.
 
 			\subsubsection{Creating an Encryption Key}
+				\label{sec:kdf}
 				As with any encryption, AES-256 requires an encryption key. If the key is chosen to be stored on the server, this merely shifts the security risk -- it wont eliminate it. As such, the encryption needs to be based on something which is never stored on the server. The easiest, and by far most logical, way to achieve this, is to use a password. 
 
 				But using a user's password as a asymmetric encryption key will \emph{not} result in enough entropy. Doing this will be \emph{very} insecure. alternatively an encryption key can be \emph{derived} from a password. This is a fairly common task, and is best performed using a so-called Key Derivation Function, or KDF for short. These KDF's are designed to be slow. Where regular hashing algorithms such as SHA-1 are designed to be fast and efficient, KDFs are designed to be exactly the opposite. This is done to slow down a possible brute-force attack against the hash. After all, the regular user will never be the wiser if hashing a single password takes $0.01$ seconds or $1$ seconds. But performing this calculating hundreds of thousands of times will add up, making the computational load for a bruteforce attack \emph{significantly} harder.
@@ -590,14 +591,22 @@
 
 			Upon receiving the username and password from the user, the back-end compares the password against its database. If it is found to be a match, a new JWT is issued. The process of comparing and validating a user's password is elaborated in section \ref{sec:password}.
 
+			\todo{CHAP and such is not needed, when SSL is enforced 100\%}
+
 		\subsection{Password Storage \& Verification}
 			\label{sec:password}
+			In the previous section, the process of the server verifying the user's input password was treated as a sort of black box. In this section this process will be examined.
 
+			Today, it is common knowledge that storing passwords in plain text is a \emph{huge} security risk. Salting and hashing passwords, is proper way to implement storage of passwords. However, when choosing a salting algorithm, it is important not to choose algorithms intended for checksums. Algorithms such as SHA-1 and SHA-256 are \emph{designed} to be fast. When trying to mitigate a bruteforce attack on a leaked database, this is \emph{not} desirable.
 
+			As such, it is by far better to use a key stretching algorithm \emph{(or key derivation function)} which is intended to be slow. Since this \emph{exact} topic has already been covered by section \ref{sec:kdf} on page \pageref{sec:kdf}, the same conclusion is made:
 
-			Salting
-			Algorithm Choice
-			Verficiation
+			\begin{quote}
+				\emph{Select:
+					Argon2[*7] when it becomes available. Argon2 is the winner of the password hashing competition and should be considered as your first choice when solid implementations are available.
+				}\\\cite{owasp_kdf}
+			\end{quote}
+
 
 
 		\subsection{Multi-Factor Authentication}
@@ -699,15 +708,36 @@
 			\end{table}
 	
 	\section{Attaining Pseudo-Zero-Knowledge}
+		As per the requirements it is known that the passwords must never be stored or handled unencrypted on the server. Previously, as an extension of this, it has been argued that letting the back-end as much as having the \emph{ability} of decrypting the stored passwords is ill advised. Hence, there should be no way of inferring the user's password for storing their private-key \emph{(see \ref{sec:encryption_choice} on page \pageref{sec:encryption_choice})} from \emph{anything} stored in the back-end.
+
+		As the reader might have realized by now, the need for \emph{two} passwords are, unfortunately, needed. One password for authentication purposes, and one for decrypting the private-key. From now on, these two passwords are known as the authentication password and the decryption password.
+ 
+		The authentication password is the one which is stored on the server, in its salted and hashed form \emph{(see \ref{sec:password} on page \pageref{sec:password})}. This is sent -- in clear text -- to the server for verification purposes. The decryption password us used, with an salt, to derive the symmetric encryption key, used for the client to decrypt the private-key \emph{(see \ref{sec:keys} on page \pageref{sec:keys})}. At no point in time will the front- or back-end attempt to compare these two passwords, however, it is \emph{strongly} recommended that they be different. As long as they are different it effectively ensures that the back-end can \emph{not} infer the correct decryption key, and as such can never actually inspect the passwords stored on it. This property is dubbed Pseudo-Zero-Knowledge.
+
+		\subsection{Comparison With the Requirements}
+			While this feature does not fulfil a requirement directly, it goes to strengthen the way that the requirement regarding un-encrypted data is handled.
+
+	\section{User Structure \& Creation}
+		\label{sec:user:diff}
+		regular and admin user
 
 
-	\section{Creating a User}
-		Invites UUID
+
+		\subsection{Creating a User}
+			Normally, in a solution like one being designed here, creating the user would be a simple HTTP POST containing the user information. However, the requirements state that this should not be possible. Since this system will be run by individuals, the owner needs control over exactly \emph{which} users are being created.
+
+			As such, creating a user will need an ``invite'' of sorts. 
+
+
+
+		\subsection{Breaking the RESTful Principles On Purpose}
 
 
 	\section{Storing the Data}
 		\section{SQL vs NoSQL}
 	\section{Storage Scheme}
+
+	\section{Audit of Access}
 
 	\section{Naming the Solution}
 
