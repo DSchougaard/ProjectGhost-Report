@@ -712,19 +712,23 @@
 
 		As the reader might have realized by now, the need for \emph{two} passwords are, unfortunately, needed. One password for authentication purposes, and one for decrypting the private-key. From now on, these two passwords are known as the authentication password and the decryption password.
  
-		The authentication password is the one which is stored on the server, in its salted and hashed form \emph{(see \ref{sec:password} on page \pageref{sec:password})}. This is sent -- in clear text -- to the server for verification purposes. The decryption password us used, with an salt, to derive the symmetric encryption key, used for the client to decrypt the private-key \emph{(see \ref{sec:keys} on page \pageref{sec:keys})}. At no point in time will the front- or back-end attempt to compare these two passwords, however, it is \emph{strongly} recommended that they be different. As long as they are different it effectively ensures that the back-end can \emph{not} infer the correct decryption key, and as such can never actually inspect the passwords stored on it. This property is dubbed Pseudo-Zero-Knowledge.
+		The authentication password is the one which is stored on the server, in its salted and hashed form \emph{(see \ref{sec:password} on page \pageref{sec:password})}. This is sent -- in clear text -- to the server for verification purposes. The decryption password is used -- with a salt -- to derive the symmetric encryption key used for the client to decrypt the private-key \emph{(see \ref{sec:keys} on page \pageref{sec:keys})}. At no point in time will the front- or back-end attempt to compare these two passwords, however, it is \emph{strongly} recommended that they be different. As long as they are different it effectively ensures that the back-end can \emph{not} infer the correct decryption key, and as such can never actually inspect the passwords stored on it. This property is dubbed Pseudo-Zero-Knowledge.
 
 		\subsection{Comparison With the Requirements}
 			While this feature does not fulfil a requirement directly, it goes to strengthen the way that the requirement regarding un-encrypted data is handled.
 
 	\section{User Structure \& Creation}
 		\label{sec:user:diff}
-		regular and admin user
+		As per the requirements there need to be differentiation between regular users and an admin user. This is done to make sure that certain administrative functions are not available to users. There are two different schools of thought when it comes to user differentiation: The simple approach and the sophisticated approach.
 
+		The simple approach involved simply storing a boolean value, indicating whether or not the user is an admin or not. While this solution is \emph{very} simple and is most likely the easiest to implement, it has its drawback: There are only two user levels. If one, later down the road, then wanted to add a third user level, this would require large amounts of refactorisation in the code.
 
+		The more sophisticated approach is creating a user hierarchy. This hierarchy would then only consist of two users in the beginning: User and Admin. Based on this hierarchy the solution could enable and disable various aspects based on a user's level. How this is stored in the database is up to the implementation, but something as simple as an integer could be sufficient for storing this.
 
-		\subsection{Creating a User}
-			Normally, in a solution like one being designed here, creating the user would be a simple HTTP POST containing the user information. However, the requirements state that this should not be possible. Since this system will be run by individuals, the owner needs control over exactly \emph{which} users are being created.
+		\subsection{Creating the First User}
+
+		\subsection{Creating New Users}	
+			Normally, in a solution like the one being designed here, creating the user would be a simple HTTP POST containing the user information. However, the requirements state that this should not be possible. Since this system will be run by individuals, the owner needs control over exactly \emph{which} users are being created.
 
 			As such, creating a user will need an ``invite'' of sorts. 
 
