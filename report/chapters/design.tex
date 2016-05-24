@@ -454,13 +454,13 @@
 				\end{quote}
 				On top of this, ENISA classifies Blowfish as a legacy algorithm, whereas AES is considered future proof\cite[p.20]{enisa}.
 
-				As a consequence it is decided, that the AES algorithm will be used for protecting the private-key, stored on the server. While AES supports a number of different key sizes, AES-256 is chosen for the added security.
+				As a consequence it is decided, that the AES algorithm will be used for protecting the private-key, stored on the server. While AES supports a number of different key sizes, AES-256 is chosen for the added security. Additionally, a random IV will need to be generated, due to how AES works.
 
 			\subsubsection{Creating an Encryption Key}
 				\label{sec:kdf}
 				As with any encryption, AES-256 requires an encryption key. If the key is chosen to be stored on the server, this merely shifts the security risk -- it wont eliminate it. As such, the encryption needs to be based on something which is never stored on the server. The easiest, and by far most logical, way to achieve this, is to use a password. 
 
-				But using a user's password as a asymmetric encryption key will \emph{not} result in enough entropy. Doing this will be \emph{very} insecure. alternatively an encryption key can be \emph{derived} from a password. This is a fairly common task, and is best performed using a so-called Key Derivation Function, or KDF for short. These KDF's are designed to be slow. Where regular hashing algorithms such as SHA-1 are designed to be fast and efficient, KDFs are designed to be exactly the opposite. This is done to slow down a possible brute-force attack against the hash. After all, the regular user will never be the wiser if hashing a single password takes $0.01$ seconds or $1$ seconds. But performing this calculating hundreds of thousands of times will add up, making the computational load for a bruteforce attack \emph{significantly} harder.
+				But using a user's password as a asymmetric encryption key will \emph{not} result in enough entropy. Doing this will be \emph{very} insecure. alternatively an encryption key can be \emph{derived} from a password. This is a fairly common task, and is best performed using a so-called Key Derivation Function, or KDF for short. These KDF's are designed to be slow. Where regular hashing algorithms such as SHA-1 are designed to be fast and efficient, KDFs are designed to be exactly the opposite. This is done to slow down a possible brute-force attack against the hash. After all, the regular user will never be the wiser if hashing a single password takes $0.01$ seconds or $1$ seconds. But performing this calculating hundreds of thousands of times will add up, making the computational load for a bruteforce attack \emph{significantly} harder. 
 
 				There exists a \emph{plethora} of various KDFs -- way too many to cover all of them in this section. However, the most widespread KDF is the PBKDF2 algorithm\cite{rfc2898}, which is developed by RSA Laboratories. However, in June 2015 the Password Hashing Competition was concluded\cite{phc}. The competition was held in an attempt to develop a new crypto standard for password hashing algorithms \emph{(practically the same as a KDF)}. Their recommendation is to use the Argon2 algorithm\cite{biryukov2015argon}. Based on this, The Open Web Application Security Project \emph{(OWASP)} made the following recommendation, in regards to password hashing:
 				\begin{quote}
@@ -469,7 +469,8 @@
 					}\\\cite{owasp_kdf}
 				\end{quote}
 
-				Since Argon2 is such a new algorithm, ``solid'' implementations might very well be difficult to find. But this project will adhere to OWASP's guidelines, as far as possible. As such, it is preferable if the project derives the symmetric encryption key using the Argon2 algorithm.
+				Since Argon2 is such a new algorithm, ``solid'' implementations might very well be difficult to find. But this project will adhere to OWASP's guidelines, as far as possible. As such, it is preferable if the project derives the symmetric encryption key using the Argon2 algorithm. As a final note, avoid multiple users having the same encryption key, a salt will need to be added as well. 
+
 
 		\subsection{Comparison With Requirements}
 			Having made choices regarding data encryption and protection, in the previous sections, it is now suitable to update the checklist found on figure \ref{tab:checklist_arch-comms} on page \pageref{tab:checklist_arch-comms}. Using the asymmetric approach and protecting the users' keys with a password derived symmetric key, it is clear that the following requirements are now fulfilled
@@ -610,6 +611,7 @@
 
 
 		\subsection{Multi-Factor Authentication}
+			\label{sec:mfa}
 			In the past years there has become more and more focus on security. As a result of this, more and more people are using multi-factor authentication to ensure that access to their personal data is as ``safe'' as possible. 
 
 			In the previous sections only single factor authentication was considered, however, as per the requirements, cf. section \ref{sec:requirements}, the solution will have to support two-factor authentication. All authentication forms fall under one of three categories:
@@ -717,31 +719,191 @@
 		\subsection{Comparison With the Requirements}
 			While this feature does not fulfil a requirement directly, it goes to strengthen the way that the requirement regarding un-encrypted data is handled.
 
-	\section{User Structure \& Creation}
+	\section{User Hierarchy \& Creation}
 		\label{sec:user:diff}
-		As per the requirements there need to be differentiation between regular users and an admin user. This is done to make sure that certain administrative functions are not available to users. There are two different schools of thought when it comes to user differentiation: The simple approach and the sophisticated approach.
+		As with any system, certain functionality should not be exposed to the regular users. As such, user differentiation is needed. There are two different schools of thought when it comes to this: The simple approach and the sophisticated approach.
 
 		The simple approach involved simply storing a boolean value, indicating whether or not the user is an admin or not. While this solution is \emph{very} simple and is most likely the easiest to implement, it has its drawback: There are only two user levels. If one, later down the road, then wanted to add a third user level, this would require large amounts of refactorisation in the code.
 
-		The more sophisticated approach is creating a user hierarchy. This hierarchy would then only consist of two users in the beginning: User and Admin. Based on this hierarchy the solution could enable and disable various aspects based on a user's level. How this is stored in the database is up to the implementation, but something as simple as an integer could be sufficient for storing this.
+		The more sophisticated approach is creating a user hierarchy. This hierarchy would then only consist of two users in the beginning: User and Admin. Based on this hierarchy the solution could enable and disable various aspects based on a user's level. The benefit of this approach, is that later on, several new levels could be added in between the User and the Admin, with varying privileges. How this is stored in the database is up to the implementation, but something as simple as an integer could be sufficient for storing this.
+
+		Since the functionality that needs to be kept away from the regular user, is nothing more than some administrative functionalities here and there, it can be argued that there never will be a need for more user levels. As such, it is chosen to go with the simple approach. 
+
+		Exactly how this user differentiation will be used, will be discussed in the following sections.
+
+		\subsection{Creating Users}	
+			Normally, in a solution like the one being designed here, creating the user would be a simple HTTP POST containing the user information. However, since this system will be run by individuals, the owner needs control over exactly \emph{which} users are being created. Hence, open registration is not desirable.
+
+			As such, creating a user will need an ``invite'' of sorts. These invites can then be consumed, in order to create a new user. The most straight forward approach is to let the invite ID simply be the database's auto-incremented ID. However, this might not be a good idea. As most database systems utilize auto-incremented IDs, it would be possibly for an attacker to guess the next ID. As such, the token used needs to be non-sequentially generated.
+
+			The easiest way to do this, is to simply generate a new Universally Unique Identifier \emph{(UUID)} for each invite generated. The UUID is then the token used for accepting an invite. Doing it this way, prevents anyone from guessing the ID of the invite issued next. Putting a lifespan on the invite likewise mitigates a guessing attack, in case of unused invites. For practicalities sake the lifespan will be set to 24 hours.
 
 		\subsection{Creating the First User}
+			As was decided in the previous section a user can only be created by an invite issued by an admin. However, when the system is first initalized, the user database would be empty, and there exists no admin who can issue an invite.
 
-		\subsection{Creating New Users}	
-			Normally, in a solution like the one being designed here, creating the user would be a simple HTTP POST containing the user information. However, the requirements state that this should not be possible. Since this system will be run by individuals, the owner needs control over exactly \emph{which} users are being created.
+			As such, during the initialization process, an admin user will \emph{have} to be created. Using the industry standard, the username and password of this first account will be:
+			\begin{verbatim}
+				Username:      admin
+				Password:      admin
+			\end{verbatim}
+			Upon first login, the user will then have to be prompted to change not only the password, but also the username, for security purposes.
 
-			As such, creating a user will need an ``invite'' of sorts. 
+		\subsection{Breaking the REST Principles On Purpose}
+			While one of the pillars of REST APIs is that it should be stateless, sometimes this is just not feasible. One example of this, is when enabling two-factor-authentication for users. The back-end \emph{should} verify that the user has gotten the correct secret \emph{(see \ref{sec:mfa} on page \pageref{sec:mfa})}, before actually storing the secret in the database and enabling two-factor authentication. 
+
+			If this verification is not done, the solution will be susceptible to the following scenario, resulting in a user being locked out:
+			\begin{enumerate}
+				\item User requests to enable 2-Factor-Authentication \emph{(2FA)}
+				\item Back-end generates 2FA secret, sends it to user, and stores it
+				\item User does not receive correct secret, or forgets to save it, or some other scenario where the secret is not stored correctly
+				\item User logs out
+				\item User attempts to log in, using the wrong secret
+			\end{enumerate}
+
+			As such, a verification step \emph{(which is commonly seen)} is required. This can be easily achieved by having the solution store a cached map, between user ID and the 2FA secret. When a new secret is generated, it is deposited in this cache, instead of the database. A specific API endpoint then exists, for verifying this secret. The verification process is exactly the same process which would be used for logging in. Once the cached secret is verified against the received token, the secret is stored in the database and 2FA is enabled for the user.
+
+			While it is recognized that this violates essential principles of REST, it is deemed \emph{necessary} to do so.
+
+
+		\subsection{Comparing with the Requirements}
+			In the previous sections it has been established how the system will differentiate between admins and users, and now invites will work. As such, it is concluded that the solution fulfil the following requirements:
+			\begin{itemize}
+				\item Support differentiating between admin users and regular users
+				\item Only admin can add a user – or invite a user – to the solution
+			\end{itemize}
+
+	\section{Modelling the System}
+		In the previous sections, 
+		\subsection{The User Model}
+			The User model is the most basic structure in the project. It represents -- obviously -- each individual user. As such, three very basic attributes need to be present: Username, password, and salt. The username will appear in cleartext, and the password and salt are the results of the hashing algorithm and is most likely in hexadecimal format. While some hashing functions store the generated salt in the resulting password hash, some do not. As such it has been deemed beneficial to have an dedicated variable for this. Next, in section \ref{sec:user:diff} on page \pageref{sec:user:diff} it was determined that user and admin differentiation would be done using a simple boolean and for this purpose a field called isAdmin is added.
+
+			In sections \ref{sec:encryption_choice} and \ref{sec:kdf} on pages \pageref{sec:encryption_choice} and \pageref{sec:kdf}, respectively, it was determined that asymmetric encryption will be used. As such, a private-key and a public-key will need to be stored, additionally it was determined that a salt and IV needs to be stored. 
+
+			Finally, as per section \ref{sec:mfa} on page \pageref{sec:mfa}, there a 2FA secret will need to be stored. Furthermore, a boolean toggle value determining whether or not 2FA is enabled for said user, is stored as well.
+
+			As such, the final User model contains the fields listed on table \ref{fig:model:user} on page \pageref{fig:model:user}.
+
+			\begin{table}
+				\centering
+				\begin{tabular}{c|c}
+					\textbf{Attribute} 		& \textbf{Type} 		\\
+					ID 						& Unknown 	\\
+					username 				& String 	\\
+					password 				& String 	\\
+					salt 					& String 	\\
+					isAdmin 				& Boolean 	\\
+					privateKey  			& String 	\\
+					publicKey 				& String 	\\
+					IV 						& String 	\\
+					privateKeySalt 			& String 	\\
+				\end{tabular}
+				\caption{Fields of the User model}
+				\label{fig:model:user}
+			\end{table}
+
+		\subsection{The Category Model}
+			As the requirements state, the solution must support password organisation.
+
+		\subsection{The Password Model}
+			The Password model is also very basic. First and foremost it will consist of the fields, that generally make up a password entry: A title, a username, a password, an URL, and a note. However, the passwords needs a way to connect with a user. For this purpose, a reference to the User models ID is needed. This reference is known as owner, i.e. the user who owns the password.
 
 
 
-		\subsection{Breaking the RESTful Principles On Purpose}
+			As such, the final Password model contains the fields listed on table \ref{fig:model:password} on page \pageref{fig:model:password}.
+
+			\begin{table}
+				\centering
+				\begin{tabular}{c|c}
+					\textbf{Attribute} 		& \textbf{Type} 		\\
+					ID 						& Unknown 	\\
+					title 					& String 	\\
+					username 				& String 	\\
+					password 				& String 	\\
+					url						& Boolean 	\\
+					note  					& String 	\\
+					owner 					& String 	\\
+				\end{tabular}
+				\caption{Fields of the Password model}
+				\label{fig:model:password}
+			\end{table}
+
+		\subsection{The Category Model}
+		\subsection{The Shared Password Model}
+		\subsection{The Invite Model}
+		\subsection{The Audit Model}
+
+		\subsection{Combining the Model}
+
+	\section{Audit of Access}
+		Since it is peoples passwords being handles, some sort of audit log is preferable. Simply put, an audit log contains entries of when certain actions took place. For instance, it could be whenever a user authenticates the service, an audit log entry -- or simply entry -- is generated. Later on, the user can review these entries. This way, the user can easily see if an authentication has taken place, somewhere that he or she was not.
+
+		When creating an audit log, it is very tempting to simply create an entry for \emph{everything}. However, while this will contain the data the user would need, it will be \emph{too} much data. Not only for the user to review, but also for the back-end to store. As such, it is needed to determine which actions needs to be audited. 
+
+		An action is defined as being one of four types: Create, read, update, and delete. These are the basic actions, which will be able to be performed. From what has previously been covered, in various sections, there is 
+
+
+
+
+
+	\section{}
 
 
 	\section{Storing the Data}
-		\section{SQL vs NoSQL}
-	\section{Storage Scheme}
+		Up until now the phrase ``database'' has been used as a generic description of persistent storage. In this section, this will be elaborated a bit. Generally speaking, there exist three categories of databases: Relational Database Management Systems \emph{(RLDBM)}, Non-SQL \emph{(NoSQL)}, and finally the newer NewSQL.
 
-	\section{Audit of Access}
+		RLDBM/SQL is the oldest of the bunch. This category covers the first database schemes ever used, dating back to the 70's. This type of database has a very strict structure, compared to the others, requiring a structure of tables, which in turn contains columns. RLDBMs are by far, the most used type of database, if for no other reason, that they've simply existed for a lot longer. Typically RLDBMs uses the Structured Query Language \emph{(SQL)}. An example of a RLDBM table can be seen on table \ref{fig:example:rldb} on page \pageref{fig:example:rldb}, consisting of columns ID, Username, and E-Mail, each entry has one value for each column. RLDBMs often adhere to the ACID qualities: Atomic, Consistent, Isolated, and Durable. These ensures that either a query succeeds or it fails. Additionally, most implementations support transactions. Transactions work by effectively grouping several queries. The smart thing about this, is that either the transaction fails, or it succeeds. I.e. either all of the sub-queries succeeds, or if \emph{one} of them fails, all of the changes are rolled back.
 
-	\section{Naming the Solution}
+		\begin{table}
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{ID} 		& 	\textbf{Username} 		& \textbf{E-Mail} 		\\
+			\hline
+			1 					& Daniel 					& some@mail.com 		\\
+			\hline
+			2 					& John 						& someother@mail.com 	\\
+			\hline
+			3 					& Kylo Ren 					& kren@firstorder.com 	\\
+			\hline
+		\end{tabular}
+		\caption{RLDBM table example}
+		\label{fig:example:rldb}
+		\end{table}
 
+		While generally NoSQL is being used to describe a set of implementations, much like RLDBM is. However, this is not exactly true. There exists no standard for NoSQL databases, and each implementation varies greatly, which unfortunately results in the various implementations API's being vastly different from each other.
+
+		NoSQL databases uses JSON format to represent information in the database. Where as SQL entries are restricted to the columns in the table, NoSQL does not have this constraint. The example from before, is stored as follows, using the JSON syntax. An example of this is found on listing \ref{lst:example:nosql} on page \pageref{lst:example:nosql}. One of the advantages of NoSQL is that since it does not have a strict schema, additional values can easily be added, for instance, it would be perfectly fine if a fourth user was added to the example, containing a field called phone. Where RLDBMs adhere to ACID, NoSQL adhere to BASE: Basic Availability, Soft-state, and Eventual consistency.
+
+		\begin{lstlisting}[style=json2,gobble=8, caption={NoSQL table example},label={lst:example:nosql}]
+        [
+            {
+                "ID": 1,
+                Username: Daniel,
+                E-Mail: some@mail.com
+            },
+            {
+                ID: 2,
+                Username: John,
+                E-Mail: someother@mail.com
+            },
+            {
+                ID: 3,
+                Username: Kylo Ren,
+                E-Mail: kren@firstorder.com
+            }
+        ]
+		\end{lstlisting}
+
+		Finally, there is the NewSQL. NewSQL aims itself at being the hybrid between the two previous types of databases. Using the NoSQL storage approach, while still using SQL for querying. Some claim this re-presents the ``best of both worlds''\cite{progress_blog}.
+
+		First and foremost, it is important to realise that \emph{all} of the technologies are capable of storing what is required. Having said that, one of the most credited advantages of NoSQL is their ability to scale horizontally. It can be spread out over multiple hosts, if need be. However, this project \emph{should} never reach that size. It is not intended to reach that size. As such, that advantage can be disregarded.
+
+		Arguments regarding which database system is the best, has become 
+
+
+
+
+
+	\section{Logging?}
+
+	\section{Final Comparison with the Requirements}
