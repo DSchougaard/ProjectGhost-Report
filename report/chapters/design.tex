@@ -880,7 +880,6 @@
 
 			%\subsubsection{Algorithm: Deleting a Category}
 
-
 		\subsection{The Password Model}
 			Having described the Category model fully, the Password model can now correctly be explained. First and foremost it will consist of the fields that generally make up a password entry: A title, a username, a password, an URL, and a note. However, the passwords needs a way to connect with a user. For this purpose, a reference to the User models ID is needed. This reference is known as owner, i.e. the user who owns the password. Finally, to achieve the structure, as described in the previous section, a password is a child of a category. Hence, the Password model will need a reference to a parent Category's ID.
 
@@ -974,6 +973,7 @@
 
 
 		\subsection{The Invite Model}
+			
 		\subsection{The Audit Model}
 
 		\subsection{Combining the Models}
