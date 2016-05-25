@@ -267,7 +267,7 @@
 
 			\begin{figure}[h!]
 				\centering
-				\includegraphics[width=\textwidth]{figures/design/sequence_blob.png}
+				\includegraphics[width=\textwidth]{figures/design/sequence_blob_small.png}
 				\caption{Squence diagram for creating new password using blob encryption.}
 				\label{fig:seq_blob}
 			\end{figure}
@@ -311,7 +311,7 @@
 
 				\begin{figure}[h!]
 					\centering
-					\includegraphics[width=\textwidth]{figures/design/sequence_cl-pre.png}
+					\includegraphics[width=\textwidth]{figures/design/sequence_cl-pre_small.png}
 					\caption{Sequence diagram for sharing a password, using Wi, Xu, and Zhang's CL-PRE encryption scheme.}
 					\label{fig:sequence:cl-pre}
 				\end{figure}
@@ -349,7 +349,7 @@
 
 				\begin{figure}[h!]
 					\centering
-					\includegraphics[width=\textwidth]{figures/design/sequence_perEntry.png}
+					\includegraphics[width=\textwidth]{figures/design/sequence_perEntry_small.png}
 					\caption{Squence diagram for sharing a password, when asymmetric encryption is used.}
 					\label{fig:sequence:asymmetric}
 				\end{figure}
@@ -470,7 +470,6 @@
 				\end{quote}
 
 				Since Argon2 is such a new algorithm, ``solid'' implementations might very well be difficult to find. But this project will adhere to OWASP's guidelines, as far as possible. As such, it is preferable if the project derives the symmetric encryption key using the Argon2 algorithm. As a final note, avoid multiple users having the same encryption key, a salt will need to be added as well. 
-
 
 		\subsection{Comparison With Requirements}
 			Having made choices regarding data encryption and protection, in the previous sections, it is now suitable to update the checklist found on figure \ref{tab:checklist_arch-comms} on page \pageref{tab:checklist_arch-comms}. Using the asymmetric approach and protecting the users' keys with a password derived symmetric key, it is clear that the following requirements are now fulfilled
@@ -774,6 +773,10 @@
 
 	\section{Modelling the System}
 		In the previous sections, 
+
+		First and foremost
+
+
 		\subsection{The User Model}
 			The User model is the most basic structure in the project. It represents -- obviously -- each individual user. As such, three very basic attributes need to be present: Username, password, and salt. The username will appear in cleartext, and the password and salt are the results of the hashing algorithm and is most likely in hexadecimal format. While some hashing functions store the generated salt in the resulting password hash, some do not. As such it has been deemed beneficial to have an dedicated variable for this. Next, in section \ref{sec:user:diff} on page \pageref{sec:user:diff} it was determined that user and admin differentiation would be done using a simple boolean and for this purpose a field called isAdmin is added.
 
@@ -785,7 +788,7 @@
 
 			\begin{table}
 				\centering
-				\begin{tabular}{c|c}
+				\begin{tabular}{r|l}
 					\textbf{Attribute} 		& \textbf{Type} 		\\
 					ID 						& Unknown 	\\
 					username 				& String 	\\
@@ -802,7 +805,72 @@
 			\end{table}
 
 		\subsection{The Category Model}
-			As the requirements state, the solution must support password organisation.
+			Before delving into the core model, the Password model \emph{(see the following section)} it is required to cover an auxiliary model: The Category. Since it has already been determined that it is required for the solution to structure passwords in multiple levels, a data structure for this is required.
+
+			First and foremost, it is important to realise that the classical ``folder'' structure, is nothing more than what is commonly known as a tree. Trees consists of internal nodes and leafs. Nodes have children. These children can be other nodes, or a leaf. A leaf is a final child -- it is last element in the branch. An example of such a tree is seen on figure \ref{fig:example:tree} on page \pageref{fig:example:tree}.
+
+			This structure can be translated very easily to the structure needed for password organization. The root and the internal nodes represent the various categories, and the leafs represent the passwords. As such, it will look like figure \ref{fig:example:passwordtree} on page \pageref{fig:example:passwordtree}.
+
+			Multiple data structures exists to solve this exact problem. The simplest of them all, is the adjacency list. In this approach, each element simply stores a reference to either its parent, it its children \emph{(top-down or bottom-up)} depending on the database technology in question. This allows for the structure to be stored ``flat'', i.e. in a table, or an array, and when required the actual tree can be built from the data. 
+
+			Examples of these notations are found on tables \ref{table:example:tree:buttomup} and \ref{table:example:tree:topdown} on pages \pageref{table:example:tree:buttomup} and \pageref{table:example:tree:topdown}, respectively. The examples are based on the tree structure from figure \ref{fig:example:passwordtree} on page \pageref{fig:example:passwordtree}.
+
+
+			\begin{table}
+				\centering
+				\begin{tabular}{c|c|c}
+					\textbf{ID} 	& 	\textbf{Name} 	& \textbf{Parent} 	\\
+					\hline
+					\hline
+					1 				& Root 				& Null 				\\
+					2 				& Category1 		& 1 				\\
+					3 				& Category2 		& 1 				\\
+					4 				& Category1.1 		& 2 				\\
+					5 				& Category1.2 		& 2 				\\
+				\end{tabular}
+				\caption{Flat tree structure, using bottom-up adjacency}
+				\label{table:example:tree:buttomup}
+			\end{table}
+			\begin{table}
+				\centering
+				\begin{tabular}{c|c|c}
+					\textbf{ID} 	& 	\textbf{Name} 	& \textbf{Children} \\
+					\hline
+					\hline
+					1 				& Root 				& [1,2] 			\\
+					2 				& Category1 		& [4,5] 			\\
+					3 				& Category2 		& [] 				\\
+					4 				& Category1.1 		& [] 				\\
+					5 				& Category1.2 		& [] 				\\
+				\end{tabular}
+				\caption{Flat tree structure, using bottom-up adjacency}
+				\label{table:example:tree:topdown}
+			\end{table}
+
+
+
+
+			 While this approach might inherently be slower than other algorithms, cf. \cite{heirarchial_database}, it is believed that due to the relatively small datasets -- which is \emph{assumed} to be used -- it will have little effect. As such, the simplicity of the storage scheme a makes it perfect for this use.
+
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=\textwidth]{figures/design/tree_small.png}
+				\caption{Example of a tree.}
+				\label{fig:example:tree}
+			\end{figure}
+		
+			\begin{figure}[h!]
+				\centering
+				\includegraphics[width=\textwidth]{figures/design/password_tree_wnames_small.png}
+				\caption{Example password structure in a tree.}
+				\label{fig:example:passwordtree}
+			\end{figure}
+
+			\subsubsection{Algorithm: Generating the Structure}
+
+
+
+
 
 		\subsection{The Password Model}
 			The Password model is also very basic. First and foremost it will consist of the fields, that generally make up a password entry: A title, a username, a password, an URL, and a note. However, the passwords needs a way to connect with a user. For this purpose, a reference to the User models ID is needed. This reference is known as owner, i.e. the user who owns the password.
@@ -849,9 +917,9 @@
 
 
 	\section{Storing the Data}
-		Up until now the phrase ``database'' has been used as a generic description of persistent storage. In this section, this will be elaborated a bit. Generally speaking, there exist three categories of databases: Relational Database Management Systems \emph{(RLDBM)}, Non-SQL \emph{(NoSQL)}, and finally the newer NewSQL.
+		Up until now the phrase ``database'' has been used as a generic description of persistent storage. In this section, this will be elaborated a bit. Generally speaking, there exist three categories of databases: Relational Database Management Systems \emph{(RDBMS)}, Non-SQL \emph{(NoSQL)}, and finally the newer NewSQL.
 
-		RLDBM/SQL is the oldest of the bunch. This category covers the first database schemes ever used, dating back to the 70's. This type of database has a very strict structure, compared to the others, requiring a structure of tables, which in turn contains columns. RLDBMs are by far, the most used type of database, if for no other reason, that they've simply existed for a lot longer. Typically RLDBMs uses the Structured Query Language \emph{(SQL)}. An example of a RLDBM table can be seen on table \ref{fig:example:rldb} on page \pageref{fig:example:rldb}, consisting of columns ID, Username, and E-Mail, each entry has one value for each column. RLDBMs often adhere to the ACID qualities: Atomic, Consistent, Isolated, and Durable. These ensures that either a query succeeds or it fails. Additionally, most implementations support transactions. Transactions work by effectively grouping several queries. The smart thing about this, is that either the transaction fails, or it succeeds. I.e. either all of the sub-queries succeeds, or if \emph{one} of them fails, all of the changes are rolled back.
+		RDBMS/SQL is the oldest of the bunch. This category covers the first database schemes ever used, dating back to the 70's. This type of database has a very strict structure, compared to the others, requiring a structure of tables, which in turn contains columns. RDBMS are by far, the most used type of database, if for no other reason, that they've simply existed for a lot longer. Typically RDBMS uses the Structured Query Language \emph{(SQL)}. An example of a RDBMS table can be seen on table \ref{fig:example:rldb} on page \pageref{fig:example:rldb}, consisting of columns ID, Username, and E-Mail, each entry has one value for each column. RDBMS often adhere to the ACID qualities: Atomic, Consistent, Isolated, and Durable. These ensures that either a query succeeds or it fails. Additionally, most implementations support transactions. Transactions work by effectively grouping several queries. The smart thing about this, is that either the transaction fails, or it succeeds. I.e. either all of the sub-queries succeeds, or if \emph{one} of them fails, all of the changes are rolled back.
 
 		\begin{table}
 		\centering
@@ -866,13 +934,13 @@
 			3 					& Kylo Ren 					& kren@firstorder.com 	\\
 			\hline
 		\end{tabular}
-		\caption{RLDBM table example}
+		\caption{RDBMS table example}
 		\label{fig:example:rldb}
 		\end{table}
 
-		While generally NoSQL is being used to describe a set of implementations, much like RLDBM is. However, this is not exactly true. There exists no standard for NoSQL databases, and each implementation varies greatly, which unfortunately results in the various implementations API's being vastly different from each other.
+		While generally NoSQL is being used to describe a set of implementations, much like RDBMS is. However, this is not exactly true. There exists no standard for NoSQL databases, and each implementation varies greatly, which unfortunately results in the various implementations API's being vastly different from each other.
 
-		NoSQL databases uses JSON format to represent information in the database. Where as SQL entries are restricted to the columns in the table, NoSQL does not have this constraint. The example from before, is stored as follows, using the JSON syntax. An example of this is found on listing \ref{lst:example:nosql} on page \pageref{lst:example:nosql}. One of the advantages of NoSQL is that since it does not have a strict schema, additional values can easily be added, for instance, it would be perfectly fine if a fourth user was added to the example, containing a field called phone. Where RLDBMs adhere to ACID, NoSQL adhere to BASE: Basic Availability, Soft-state, and Eventual consistency.
+		NoSQL databases uses JSON format to represent information in the database. Where as SQL entries are restricted to the columns in the table, NoSQL does not have this constraint. The example from before, is stored as follows, using the JSON syntax. An example of this is found on listing \ref{lst:example:nosql} on page \pageref{lst:example:nosql}. One of the advantages of NoSQL is that since it does not have a strict schema, additional values can easily be added, for instance, it would be perfectly fine if a fourth user was added to the example, containing a field called phone. Where RDBMS adhere to ACID, NoSQL adhere to BASE: Basic Availability, Soft-state, and Eventual consistency.
 
 		\begin{lstlisting}[style=json2,gobble=8, caption={NoSQL table example},label={lst:example:nosql}]
         [
