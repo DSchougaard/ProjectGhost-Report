@@ -811,10 +811,11 @@
 
 			This structure can be translated very easily to the structure needed for password organization. The root and the internal nodes represent the various categories, and the leafs represent the passwords. As such, it will look like figure \ref{fig:example:passwordtree} on page \pageref{fig:example:passwordtree}.
 
-			Multiple data structures exists to solve this exact problem. The simplest of them all, is the adjacency list. In this approach, each element simply stores a reference to either its parent, it its children \emph{(top-down or bottom-up)} depending on the database technology in question. This allows for the structure to be stored ``flat'', i.e. in a table, or an array, and when required the actual tree can be built from the data. 
+			Multiple data structures exist to solve this exact problem. The simplest of them all, is the adjacency list. In this approach, each element simply stores a reference to either its parent or its children \emph{(top-down or bottom-up)}, depending on the implementation. This allows for the structure to be stored ``flat'', i.e. in a table, or an array, and when required the actual tree can be built from the data. 
 
 			Examples of these notations are found on tables \ref{table:example:tree:buttomup} and \ref{table:example:tree:topdown} on pages \pageref{table:example:tree:buttomup} and \pageref{table:example:tree:topdown}, respectively. The examples are based on the tree structure from figure \ref{fig:example:passwordtree} on page \pageref{fig:example:passwordtree}.
 
+			While this approach might inherently be slower than other algorithms, cf. \cite{heirarchial_database}, it is believed that due to the relatively small datasets -- which is \emph{assumed} to be used -- it will have little effect. As such, the simplicity of the storage scheme a makes it perfect for this use.
 
 			\begin{table}
 				\centering
@@ -847,11 +848,6 @@
 				\label{table:example:tree:topdown}
 			\end{table}
 
-
-
-
-			 While this approach might inherently be slower than other algorithms, cf. \cite{heirarchial_database}, it is believed that due to the relatively small datasets -- which is \emph{assumed} to be used -- it will have little effect. As such, the simplicity of the storage scheme a makes it perfect for this use.
-
 			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=\textwidth]{figures/design/tree_small.png}
@@ -866,16 +862,27 @@
 				\label{fig:example:passwordtree}
 			\end{figure}
 
-			\subsubsection{Algorithm: Generating the Structure}
+			As such, it is determined that the Category model will contain the fields listed on table \ref{fig:model:category} on page \pageref{fig:model:category}.
+			\begin{table}
+				\centering
+				\begin{tabular}{c|c}
+					\textbf{Attribute} 		& \textbf{Type} 		\\
+					ID 						& Unknown 	\\
+					title 					& String 	\\
+					owner 					& User ID 	\\
+					Parent / Children List 	& Parent ID / List of Children IDs 	\\
+				\end{tabular}
+				\caption{Fields of the Category model}
+				\label{fig:model:category}
+			\end{table}
 
+			%\subsubsection{Algorithm: Generating the Structure}
 
-
+			%\subsubsection{Algorithm: Deleting a Category}
 
 
 		\subsection{The Password Model}
-			The Password model is also very basic. First and foremost it will consist of the fields, that generally make up a password entry: A title, a username, a password, an URL, and a note. However, the passwords needs a way to connect with a user. For this purpose, a reference to the User models ID is needed. This reference is known as owner, i.e. the user who owns the password.
-
-
+			Having described the Category model fully, the Password model can now correctly be explained. First and foremost it will consist of the fields that generally make up a password entry: A title, a username, a password, an URL, and a note. However, the passwords needs a way to connect with a user. For this purpose, a reference to the User models ID is needed. This reference is known as owner, i.e. the user who owns the password. Finally, to achieve the structure, as described in the previous section, a password is a child of a category. Hence, the Password model will need a reference to a parent Category's ID.
 
 			As such, the final Password model contains the fields listed on table \ref{fig:model:password} on page \pageref{fig:model:password}.
 
@@ -883,24 +890,93 @@
 				\centering
 				\begin{tabular}{c|c}
 					\textbf{Attribute} 		& \textbf{Type} 		\\
-					ID 						& Unknown 	\\
-					title 					& String 	\\
-					username 				& String 	\\
-					password 				& String 	\\
-					url						& Boolean 	\\
-					note  					& String 	\\
-					owner 					& String 	\\
+					ID 						& Unknown 		\\
+					title 					& String 		\\
+					username 				& String 		\\
+					password 				& String 		\\
+					url						& Boolean 		\\
+					note  					& String 		\\
+					owner 					& User ID 		\\
+					parent 					& Category ID 	\\
 				\end{tabular}
 				\caption{Fields of the Password model}
 				\label{fig:model:password}
 			\end{table}
 
-		\subsection{The Category Model}
 		\subsection{The Shared Password Model}
+			Having decided that the password sharing mechanism will be sharing by cloning, 
+
+			Sharing a password can be achieved easily, by simply storing a reference to a user's password, under the ownership of another user. As such, each shared password entry will contain a reference to the original password. Using this reference, fields such as the username etc., can easily be obtained. However, since the \emph{actual} password is encrypted using each users individual key, this needs to be stored as well. To let the user receiving the shared password organize it as he or she sees fit, a reference to a Category ID is needed. Finally, references to the original owner and password, will make certain operations a lot easier.
+
+			As such, it is determined that the Shared Password model will contain the fields listed on table \ref{fig:model:sharedpassword} on page \pageref{fig:model:sharedpassword}.
+			
+			\begin{table}
+				\centering
+				\begin{tabular}{c|c}
+					\textbf{Attribute} 		& \textbf{Type} 		\\
+					ID 						& Unknown 		\\
+					owner 					& User ID \\
+					originOwner 			& User ID \\
+					parent 					& Category ID \\
+					password 				& String \emph{(Base64 Encoded)} \\
+					originPassword 			& Password ID 		\\
+				\end{tabular}
+				\caption{Fields of the Password model}
+				\label{fig:model:sharedpassword}
+			\end{table}
+
+			An example such an entry could be the following. Two users exists, as seen on table \ref{fig:example:sharedpassword:users} on page \pageref{fig:example:sharedpassword:users}, Alice and Bob \emph{(irrelevant user data has on purpose been left out)}. Alice owns a password with the title ``SamplePassword'', the details of which are shown on table \ref{fig:example:sharedpassword:samplepassword} on page \pageref{fig:example:sharedpassword:samplepassword}. Alice now wishes to share this password with Bob. As such, an entry is created, containing the information found on figure \ref{fig:example:sharedpassword:sampleshare} on page \pageref{fig:example:sharedpassword:sampleshare}.
+
+			\begin{table}
+				\centering
+				\begin{tabular}{r|l}
+					\textbf{ID} 		& \textbf{Username} \\
+					42 					& Alice 			\\
+					1337  				& Bob 				\\
+				\end{tabular}
+				\caption{Sample user data}
+				\label{fig:example:sharedpassword:users}
+			\end{table}
+
+
+			\begin{table}
+				\centering
+				\begin{tabular}{c|c}
+					\textbf{Attribute} 		& \textbf{Type} 											\\
+					ID 						& 127 														\\
+					title 					& SamplePassword 											\\
+					username 				& SampleUser 												\\
+					password 				& QmFzZTY0IEVuY29kZWQgUGFzc3dvcmQ= 							\\
+					url						& www.some.com 												\\
+					note  					& This is a sample password 								\\
+					owner 					& User ID 													\\
+					parent 					& Category ID 												\\
+				\end{tabular}
+				\caption{Sample password owned by Alice}
+				\label{fig:example:sharedpassword:samplepassword}
+			\end{table}
+
+			\begin{table}
+				\centering
+				\begin{tabular}{c|c}
+					\textbf{Attribute} 		& \textbf{Type} 											\\
+					ID 						& 666 														\\
+					owner 					& 1337 														\\
+					originOwner 			& 42 														\\
+					parent 					& null 														\\
+					originPassword			& 127 														\\
+					password				& QmFzZTY0IEVOQ09ERUQgUGFzc3dvcmQ= 							\\
+				\end{tabular}
+				\caption{Sample of a shared password, shared from Alice to Bob.}
+				\label{fig:example:sharedpassword:sampleshare}
+			\end{table}
+
+
+
 		\subsection{The Invite Model}
 		\subsection{The Audit Model}
 
-		\subsection{Combining the Model}
+		\subsection{Combining the Models}
 
 	\section{Audit of Access}
 		Since it is peoples passwords being handles, some sort of audit log is preferable. Simply put, an audit log contains entries of when certain actions took place. For instance, it could be whenever a user authenticates the service, an audit log entry -- or simply entry -- is generated. Later on, the user can review these entries. This way, the user can easily see if an authentication has taken place, somewhere that he or she was not.
