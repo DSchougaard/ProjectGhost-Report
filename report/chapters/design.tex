@@ -784,7 +784,7 @@
 
 			As such, the final User model contains the fields listed on table \ref{fig:model:user} on page \pageref{fig:model:user}.
 
-			\begin{table}
+			\begin{table}[p]
 				\centering
 				\begin{tabular}{r|l}
 					\textbf{Attribute} 		& \textbf{Type} 		\\
@@ -809,13 +809,11 @@
 
 			This structure can be translated very easily to the structure needed for password organization. The root and the internal nodes represent the various categories, and the leafs represent the passwords. As such, it will look like figure \ref{fig:example:passwordtree} on page \pageref{fig:example:passwordtree}.
 
-			Multiple data structures exist to solve this exact problem. The simplest of them all, is the adjacency list. In this approach, each element simply stores a reference to either its parent or its children \emph{(top-down or bottom-up)}, depending on the implementation. This allows for the structure to be stored ``flat'', i.e. in a table, or an array, and when required the actual tree can be built from the data. 
-
-			Examples of these notations are found on tables \ref{table:example:tree:buttomup} and \ref{table:example:tree:topdown} on pages \pageref{table:example:tree:buttomup} and \pageref{table:example:tree:topdown}, respectively. The examples are based on the tree structure from figure \ref{fig:example:passwordtree} on page \pageref{fig:example:passwordtree}.
+			Multiple data structures exist to solve this exact problem. The simplest of them all, is the adjacency list. In this approach, each element simply stores a reference to either its parent or its children \emph{(top-down or bottom-up)}, depending on the implementation. This allows for the structure to be stored ``flat'', i.e. in a table, or an array, and when required the actual tree can be built from the data. Examples of these notations are found on tables \ref{table:example:tree:buttomup} and \ref{table:example:tree:topdown} on pages \pageref{table:example:tree:buttomup} and \pageref{table:example:tree:topdown}, respectively. The examples are based on the tree structure from figure \ref{fig:example:passwordtree} on page \pageref{fig:example:passwordtree}.
 
 			While this approach might inherently be slower than other algorithms, cf. \cite{heirarchial_database}, it is believed that due to the relatively small datasets -- which is \emph{assumed} to be used -- it will have little effect. As such, the simplicity of the storage scheme a makes it perfect for this use.
 
-			\begin{table}
+			\begin{table}[p]
 				\centering
 				\begin{tabular}{c|c|c}
 					\textbf{ID} 	& 	\textbf{Name} 	& \textbf{Parent} 	\\
@@ -830,7 +828,7 @@
 				\caption{Flat tree structure, using bottom-up adjacency}
 				\label{table:example:tree:buttomup}
 			\end{table}
-			\begin{table}
+			\begin{table}[p]
 				\centering
 				\begin{tabular}{c|c|c}
 					\textbf{ID} 	& 	\textbf{Name} 	& \textbf{Children} \\
@@ -853,15 +851,17 @@
 				\label{fig:example:tree}
 			\end{figure}
 		
-			\begin{figure}[h!]
+			\begin{figure}[p]
 				\centering
 				\includegraphics[width=\textwidth]{figures/design/password_tree_wnames_small.png}
 				\caption{Example password structure in a tree.}
 				\label{fig:example:passwordtree}
 			\end{figure}
 
-			As such, it is determined that the Category model will contain the fields listed on table \ref{fig:model:category} on page \pageref{fig:model:category}.
-			\begin{table}
+			As such, it is determined that the Category model will contain the fields listed on table \ref{fig:model:category} on page \pageref{fig:model:category}. On figure \ref{fig:relationship:category-user} on page \pageref{fig:relationship:category-user}, the relationship between the Category model and the User model is depicted, as well as the recursive definition of structure with itself.
+
+
+			\begin{table}[p]
 				\centering
 				\begin{tabular}{c|c}
 					\textbf{Attribute} 		& \textbf{Type} 		\\
@@ -873,6 +873,12 @@
 				\caption{Fields of the Category model}
 				\label{fig:model:category}
 			\end{table}
+			\begin{figure}[p]
+				\centering
+				\includegraphics[scale=0.75]{figures/design/uml/user-category-relation.eps}
+				\caption{The Category models relationship with the User model.}
+				\label{fig:relationship:category-user}
+			\end{figure}
 
 			%\subsubsection{Algorithm: Generating the Structure}
 
@@ -883,7 +889,7 @@
 
 			As such, the final Password model contains the fields listed on table \ref{fig:model:password} on page \pageref{fig:model:password}.
 
-			\begin{table}
+			\begin{table}[p]
 				\centering
 				\begin{tabular}{c|c}
 					\textbf{Attribute} 		& \textbf{Type} 	\\
@@ -903,11 +909,11 @@
 		\subsection{The Shared Password Model}
 			Having decided that the password sharing mechanism will be sharing by cloning, 
 
-			Sharing a password can be achieved easily, by simply storing a reference to a user's password, under the ownership of another user. As such, each shared password entry will contain a reference to the original password. Using this reference, fields such as the username etc., can easily be obtained. However, since the \emph{actual} password is encrypted using each users individual key, this needs to be stored as well. To let the user receiving the shared password organize it as he or she sees fit, a reference to a Category ID is needed. Finally, references to the original owner and password, will make certain operations a lot easier.
+			Sharing a password can be achieved easily, by simply storing a reference to a user's password, under the ownership of another user. As such, each shared password entry will contain a reference to the original password. Using this reference, fields such as the username etc., can easily be obtained. However, since the \emph{actual} password is encrypted using each users individual key, this needs to be stored as well. To let the user receiving the shared password organize it as he or she sees fit, a reference to a Category ID is needed. Finally, references to the original owner and password, will make certain operations a lot easier. These relations are all shown on figure \ref{fig:relationship:sharedpassword} on page \pageref{fig:relationship:sharedpassword}, albeit the internal relations between User, Password, and Category has been omitted for clarity.
 
-			As such, it is determined that the Shared Password model will contain the fields listed on table \ref{fig:model:sharedpassword} on page \pageref{fig:model:sharedpassword}.
-			
-			\begin{table}
+			As such, it is determined that the Shared Password model will contain the fields listed on table \ref{fig:model:sharedpassword} on page \pageref{fig:model:sharedpassword}. 
+
+			\begin{table}[p]
 				\centering
 				\begin{tabular}{c|c}
 					\textbf{Attribute} 		& \textbf{Type} 		\\
@@ -923,8 +929,7 @@
 			\end{table}
 
 			An example such an entry could be the following. Two users exists, as seen on table \ref{fig:example:sharedpassword:users} on page \pageref{fig:example:sharedpassword:users}, Alice and Bob \emph{(irrelevant user data has on purpose been left out)}. Alice owns a password with the title ``SamplePassword'', the details of which are shown on table \ref{fig:example:sharedpassword:samplepassword} on page \pageref{fig:example:sharedpassword:samplepassword}. Alice now wishes to share this password with Bob. As such, an entry is created, containing the information found on figure \ref{fig:example:sharedpassword:sampleshare} on page \pageref{fig:example:sharedpassword:sampleshare}.
-
-			\begin{table}
+			\begin{table}[p]
 				\centering
 				\begin{tabular}{r|l}
 					\textbf{ID} 		& \textbf{Username} \\
@@ -935,8 +940,7 @@
 				\label{fig:example:sharedpassword:users}
 			\end{table}
 
-
-			\begin{table}
+			\begin{table}[p]
 				\centering
 				\begin{tabular}{c|c}
 					\textbf{Attribute} 		& \textbf{Type} 											\\
@@ -953,7 +957,7 @@
 				\label{fig:example:sharedpassword:samplepassword}
 			\end{table}
 
-			\begin{table}
+			\begin{table}[p]
 				\centering
 				\begin{tabular}{c|c}
 					\textbf{Attribute} 		& \textbf{Type} 											\\
@@ -968,11 +972,31 @@
 				\label{fig:example:sharedpassword:sampleshare}
 			\end{table}
 
+			\begin{figure}[p]
+				\centering
+				\includegraphics[scale=0.75]{figures/design/uml/sharedpassword-ER-diag.eps}
+				\caption{Shared Password's connections to the User, Password, and Category models.}
+				\label{fig:relationship:sharedpassword}
+			\end{figure}
 
 
 		\subsection{The Invite Model}
+			While the previous models have been very intertwined, the Invite model stands apart by quite a lot simpler. As has already been determined, the Invite model will need a UUID. Since this will, in the end, be part of an invite URL, this field is simply called the link. Furthermore, an expiration date will need to be stored, as it has been determined that the invite will only be valid, for 24 hours. As such, this \emph{very} simple model determined to contain the fields listed on table \ref{fig:model:invite} on page \pageref{fig:model:invite}. 
 			
-		\subsection{The Audit Model}
+			\begin{table}[p]
+				\centering
+				\begin{tabular}{c|c}
+					\textbf{Attribute} 		& \textbf{Type} 		\\
+					ID 						& Unknown 		\\
+					link  					& UUID \\
+					expires 				& Unix timestamp \\
+				\end{tabular}
+				\caption{Fields of the Password model}
+				\label{fig:model:invite}
+			\end{table}
+
+
+		%\subsection{The Audit Model}
 
 		\subsection{Combining the Models}
 
@@ -995,7 +1019,7 @@
 
 		RDBMS/SQL is the oldest of the bunch. This category covers the first database schemes ever used, dating back to the 70's. This type of database has a very strict structure, compared to the others, requiring a structure of tables, which in turn contains columns. RDBMS are by far, the most used type of database, if for no other reason, that they've simply existed for a lot longer. Typically RDBMS uses the Structured Query Language \emph{(SQL)}. An example of a RDBMS table can be seen on table \ref{fig:example:rldb} on page \pageref{fig:example:rldb}, consisting of columns ID, Username, and E-Mail, each entry has one value for each column. RDBMS often adhere to the ACID qualities: Atomic, Consistent, Isolated, and Durable. These ensures that either a query succeeds or it fails. Additionally, most implementations support transactions. Transactions work by effectively grouping several queries. The smart thing about this, is that either the transaction fails, or it succeeds. I.e. either all of the sub-queries succeeds, or if \emph{one} of them fails, all of the changes are rolled back.
 
-		\begin{table}
+		\begin{table}[h!]
 		\centering
 		\begin{tabular}{|c|c|c|}
 			\hline
