@@ -1,20 +1,20 @@
 \chapter{Designing the System}
-	In the following chapter, the overall design of the system is discussed. First and foremost, the basic architecture is decided, based on the requirements. Then more detailed subjects are covered, such as how authentication will work, how the solution keeps the users' data safe, and generally how it will work under the hood - so to speak.
+	In the following chapter, the overall design of the system is discussed. First and foremost, the basic architecture is decided, based on the requirements described in section \ref{sec:requirements} on page \pageref{sec:requirements}. Then more detailed subjects are covered, such as how authentication will work, how the solution keeps the users' data safe, and generally how it will work under the hood - so to speak.
 
 	\section{Architecture}
 		\label{sec:arch}
 		As per the requirements specified in section \ref{sec:requirements} on page \pageref{sec:requirements} the solution will have to be distributed. As such, there are two primary basic paradigms which can be used: Peer-to-Peer and Client-Server. In the following sections the pros and cons of the two will be discussed, and a conclusion of which is more beneficial for the project will be made.
 
-		\begin{figure}
+		\begin{figure}[p]
 			\centering
-			\includegraphics[width=\textwidth]{figures/design/PeerToPeer.pdf}
+			\includegraphics[width=0.8\textwidth]{figures/design/PeerToPeer.pdf}
 			\caption{Peer-to-Peer structure visualised.}
 			\label{fig:peertopeer}
 		\end{figure}
 
-		\begin{figure}
+		\begin{figure}[p]
 			\centering
-			\includegraphics[width=\textwidth]{figures/design/ClientServer.pdf}
+			\includegraphics[width=0.8\textwidth]{figures/design/ClientServer.pdf}
 			\caption{Client-Server structure visualised.}
 			\label{fig:clientserver}
 		\end{figure}
@@ -44,7 +44,7 @@
 
 			From here on out, the solution will be split into two parts: The front-end \emph{(client)} and back-end \emph{(server)} -- two very common denominators.
 
-	\section{Communicating}
+	\section{Communication}
 		\label{sec:comms}
 		Having determined that the solution will be using the client-server paradigm, the next task is to determine how front-end and the back-end will communicate. There are a number of different available technologies and protocols readily available for use in such a scenario.
 
@@ -295,7 +295,7 @@
 
 
 			\subsubsection{Proxy Re-Encryption}
-				While the exact topic of \emph{password} sharing has not been directly covered in academic literature, topics as secured data sharing has. Since a shared password string is \emph{essentially} data, these techniques and approaches can also apply to this specific case. 
+				While the exact topic of \emph{password} sharing has not been sufficiently extensively covered in academic literature, topics as secured data sharing has. Since a shared password string is \emph{essentially} data, these techniques and approaches can also apply to this specific case. 
 
 				A fairly new cryptographic concept used for data sharing is proxy re-encryption. A fair amount of academic literature exists on this topic, while \emph{actual} implementations are far more scarce. In ``POSTER: A Certificateless Proxy Re-Encryption Scheme for Cloud-based Data Sharing'' \cite{Wu:2011:PCP:2046707.2093514}, Wi, Xu, and Zhang describe their take on this encryption scheme for data sharing, which they call CL-PRE.
 
@@ -312,7 +312,7 @@
 				\begin{figure}[h!]
 					\centering
 					\includegraphics[width=\textwidth]{figures/design/sequence_cl-pre_small.png}
-					\caption{Sequence diagram for sharing a password, using Wi, Xu, and Zhang's CL-PRE encryption scheme.}
+					\caption{Sequence diagram for sharing a password, using Wi, Xu, and Zhang's CL-PRE encryption scheme\cite{Wu:2011:PCP:2046707.2093514}.}
 					\label{fig:sequence:cl-pre}
 				\end{figure}
 
@@ -408,7 +408,7 @@
 						PGP 			& \green{$3$} 					& \green{$2$} 					\\
 						Asymmetric 		& \green{$1$}					& \red{$n$} 					\\
 					\end{tabular}
-					\caption{Comparison of cryptographic steps required for the three encryption schemes.}
+					\caption{Comparison of cryptographic steps required for the three encryption schemes. $n$ represents the number of users a given password is shared to.}
 					\label{table:comp:data}
 				\end{table}
 
@@ -421,7 +421,7 @@
 						PGP 			& \green{Several} 	& \green{No}	& \red{Yes} 	& \green{$3$} & \green{$2$} \\
 						Asymmetric 		& \green{Several} 	& \green{No}	& \green{No} 	& \green{$1$} & \yellow{$n$} \\
 					\end{tabular}
-					\caption{Complete comparison of the three schemes.}
+					\caption{Complete comparison of the three schemes. $n$ represents the number of users a given password is shared to.}
 					\label{table:comp:complete_schemes}
 				\end{table}
 
@@ -709,7 +709,7 @@
 	\section{Attaining Pseudo-Zero-Knowledge}
 		As per the requirements it is known that the passwords must never be stored or handled unencrypted on the server. Previously, as an extension of this, it has been argued that letting the back-end as much as having the \emph{ability} of decrypting the stored passwords is ill advised. Hence, there should be no way of inferring the user's password for storing their private-key \emph{(see \ref{sec:encryption_choice} on page \pageref{sec:encryption_choice})} from \emph{anything} stored in the back-end.
 
-		As the reader might have realized by now, the need for \emph{two} passwords are, unfortunately, needed. One password for authentication purposes, and one for decrypting the private-key. From now on, these two passwords are known as the authentication password and the decryption password.
+		As the reader might have realized by now, \emph{two} passwords are -- unfortunately -- needed. One password for authentication purposes, and one for decrypting the private-key. From now on, these two passwords are known as the authentication password and the decryption password.
  
 		The authentication password is the one which is stored on the server, in its salted and hashed form \emph{(see \ref{sec:password} on page \pageref{sec:password})}. This is sent -- in clear text -- to the server for verification purposes. The decryption password is used -- with a salt -- to derive the symmetric encryption key used for the client to decrypt the private-key \emph{(see \ref{sec:keys} on page \pageref{sec:keys})}. At no point in time will the front- or back-end attempt to compare these two passwords, however, it is \emph{strongly} recommended that they be different. As long as they are different it effectively ensures that the back-end can \emph{not} infer the correct decryption key, and as such can never actually inspect the passwords stored on it. This property is dubbed Pseudo-Zero-Knowledge.
 
@@ -794,9 +794,9 @@
 			Failure 	& \cmark 						& \xmark 					& \xmark 						\\
 			Share 		& \xmark 						& \xmark 					& \cmark 						\\
 			Create 		& \xmark 						& \cmark 					& \xmark 						\\
-			Read 		& \xmark 						& \cmark 					& \xmark 						\\
-			Update 		& \xmark 						& \cmark 					& \xmark 						\\
-			Delete 		& \xmark 						& \cmark 					& \xmark 						\\
+			Read 		& \xmark 						& \cmark 					& \cmark 						\\
+			Update 		& \xmark 						& \cmark 					& \cmark 						\\
+			Delete 		& \xmark 						& \cmark 					& \cmark 						\\
 		\end{tabular}
 			\caption{Which targets the various actions describe}
 			\label{table:actions}
@@ -814,10 +814,8 @@
 			\end{itemize}
 
 	\section{Modelling the System}
-		In the previous sections, 
-
-		First and foremost
-
+		\label{sec:modelling}
+		In the previous sections, all of the various requirements have been thoroughly discussed. In this section, all of these requirements will be condensed into the actual models used, in the system. 
 
 		\subsection{The User Model}
 			The User model is the most basic structure in the project. It represents -- obviously -- each individual user. As such, three very basic attributes need to be present: Username, password, and salt. The username will appear in cleartext, and the password and salt are the results of the hashing algorithm and is most likely in hexadecimal format. While some hashing functions store the generated salt in the resulting password hash, some do not. As such it has been deemed beneficial to have an dedicated variable for this. Next, in section \ref{sec:user:diff} on page \pageref{sec:user:diff} it was determined that user and admin differentiation would be done using a simple boolean and for this purpose a field called isAdmin is added.
@@ -1102,33 +1100,26 @@
 				\label{fig:erd:full}
 			\end{figure}
 
-
-
-
-
-	\section{}
-
-
 	\section{Storing the Data}
-		Up until now the phrase ``database'' has been used as a generic description of persistent storage. In this section, this will be elaborated a bit. Generally speaking, there exist three categories of databases: Relational Database Management Systems \emph{(RDBMS)}, Non-SQL \emph{(NoSQL)}, and finally the newer NewSQL.
+		Up until now the phrase ``database'' has been used as a generic description of persistent storage. In this section, this will be elaborated a bit. Generally speaking, there primarily exist two categories of databases: Relational Database Management Systems \emph{(RDBMSs)} and Non-SQL \emph{(NoSQL)}
 
-		RDBMS/SQL is the oldest of the bunch. This category covers the first database schemes ever used, dating back to the 70's. This type of database has a very strict structure, compared to the others, requiring a structure of tables, which in turn contains columns. RDBMS are by far, the most used type of database, if for no other reason, that they've simply existed for a lot longer. Typically RDBMS uses the Structured Query Language \emph{(SQL)}. An example of a RDBMS table can be seen on table \ref{fig:example:rldb} on page \pageref{fig:example:rldb}, consisting of columns ID, Username, and E-Mail, each entry has one value for each column. RDBMS often adhere to the ACID qualities: Atomic, Consistent, Isolated, and Durable. These ensures that either a query succeeds or it fails. Additionally, most implementations support transactions. Transactions work by effectively grouping several queries. The smart thing about this, is that either the transaction fails, or it succeeds. I.e. either all of the sub-queries succeeds, or if \emph{one} of them fails, all of the changes are rolled back.
+		RDBMS/SQL is the oldest of the bunch. This category covers the first database schemes ever used, dating back to the 70's. This type of database has a very strict structure, compared to the others, requiring a structure of tables, which in turn contains columns. RDBMS are by far, the most used type of database, if for no other reason, that they've simply existed for a lot longer. Typically RDBMSs uses the Structured Query Language \emph{(SQL)}. An example of a RDBMS table can be seen on table \ref{fig:example:rldb} on page \pageref{fig:example:rldb}, consisting of columns ID, Username, and E-Mail, each entry has one value for each column. RDBMS often adhere to the ACID qualities: Atomic, Consistent, Isolated, and Durable. These ensures that either a query succeeds or it fails. Additionally, most implementations support transactions. Transactions work by effectively grouping several queries. The smart thing about this, is that either the transaction fails, or it succeeds. I.e. either all of the sub-queries succeeds, or if \emph{one} of them fails, all of the changes are rolled back.
 
 		\begin{table}[h!]
-		\centering
-		\begin{tabular}{|c|c|c|}
-			\hline
-			\textbf{ID} 		& 	\textbf{Username} 		& \textbf{E-Mail} 		\\
-			\hline
-			1 					& Daniel 					& some@mail.com 		\\
-			\hline
-			2 					& John 						& someother@mail.com 	\\
-			\hline
-			3 					& Kylo Ren 					& kren@firstorder.com 	\\
-			\hline
-		\end{tabular}
-		\caption{RDBMS table example}
-		\label{fig:example:rldb}
+			\centering
+			\begin{tabular}{|c|c|c|}
+				\hline
+				\textbf{ID} 		& 	\textbf{Username} 		& \textbf{E-Mail} 		\\
+				\hline
+				1 					& Daniel 					& some@mail.com 		\\
+				\hline
+				2 					& John 						& someother@mail.com 	\\
+				\hline
+				3 					& Kylo Ren 					& kren@firstorder.com 	\\
+				\hline
+			\end{tabular}
+			\caption{RDBMS table example}
+			\label{fig:example:rldb}
 		\end{table}
 
 		While generally NoSQL is being used to describe a set of implementations, much like RDBMS is. However, this is not exactly true. There exists no standard for NoSQL databases, and each implementation varies greatly, which unfortunately results in the various implementations API's being vastly different from each other.
@@ -1155,11 +1146,23 @@
         ]
 		\end{lstlisting}
 
-		Finally, there is the NewSQL. NewSQL aims itself at being the hybrid between the two previous types of databases. Using the NoSQL storage approach, while still using SQL for querying. Some claim this re-presents the ``best of both worlds''\cite{progress_blog}.
-
 		First and foremost, it is important to realise that \emph{all} of the technologies are capable of storing what is required. Having said that, one of the most credited advantages of NoSQL is their ability to scale horizontally. It can be spread out over multiple hosts, if need be. However, this project \emph{should} never reach that size. It is not intended to reach that size. As such, that advantage can be disregarded.
 
-		Arguments regarding which database system is the best, has become 
+		At this point in time, tables such as \cite{db_rankings} could be used to argue that one type of database generally is faster. However, this really wouldn't matter much, in the context of this project. This is \emph{meant} to be self-hosted. It is \emph{meant} to be used by individuals. As such, it is \emph{highly} unlikely, that this project would ever find itself in a situation, where millions of records are being queried constantly. It would simply not make much sense, to use these arguments.
+
+		But what then. In section \ref{sec:modelling} on page \pageref{sec:modelling}, the contents of the various models were discussed. The way it was designed, hints heavily at a underlying relational scheme. The audit entries, for instance, is a \emph{perfect} example of where a relational database would excel. Furthermore, there is the issue of invites. The process of using an invite would most likely involve something like the following steps:
+		\begin{enumerate}
+			\item Check that the invite exists
+			\item Check that the invite is not expired
+			\item Use the invite to create new user
+			\item Delete invite
+		\end{enumerate}
+		However, as should be \emph{obvious} to everyone, this will be painfully vulnerable to race-conditions. This \emph{exact} scenario, is completely mitigated by the use of RDBMSs transactions: These would make the four steps atomic, in the eyes of the database. While some NoSQL databases adhering to the ACID principles, and supporting transactions, are starting to appear\cite{no_sql_transactions}, it is by far all of them that supports this.
+
+		As such, it is decided that a more ``traditional'' RDBMS will be used for this solution.
+
+		\subsection{Being Database Agnostic}
+			As written in the requirements, cf. section \ref{sec:requirements}, the solution should be database agnostic. In the previous paragraphs, it has been determined that the solution should use a RDBMS.
 
 
 
