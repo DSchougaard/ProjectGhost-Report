@@ -769,6 +769,50 @@
 				\item Only admin can add a user – or invite a user – to the solution
 			\end{itemize}
 
+	\section{Auditing of Access}
+		\label{sec:audit}
+		Since it is peoples passwords being handled, some sort of audit log is preferable. Simply put, an audit log contains entries of when certain actions took place. For instance, it could be whenever a user authenticates the service, an audit log entry -- or simply entry -- is generated. Later on, the user can review these entries. This way, the user can easily see if an authentication has taken place, somewhere that he or she was not.
+
+		When creating an audit log, it is very tempting to simply create an entry for \emph{everything}. However, while this will contain the data the user would need, it will be \emph{too} much data. Not only for the user to review, but also for the back-end to store. As such, first and foremost, it is necessary to determine exactly which events are necessary to log.
+
+		Obviously, there is the matter of authentication. Both successful and failed authentication attempts will have to be logged. With this information, a user can quickly determine if access has been made from a device which he or she has not used. Furthermore, access to passwords should be logged. This access can call into any of four categories of actions: Create, read, update, and delete. These actions also apply to shared passwords. While the create actions could be used to denote a newly shared password, for the sake of usability a Share action is used instead. The remaining actions, read, update, and delete, also applies to shared passwords. As such, it is concluded that there will be \emph{seven} actions:
+		\begin{enumerate}
+			\item Success
+			\item Failure
+			\item Share
+			\item Create
+			\item Read
+			\item Update
+			\item Delete
+		\end{enumerate}
+
+		\begin{table}
+		\begin{tabular}{r | c | c | c }
+						& \textbf{Authentication} 		& \textbf{Passwords} 		& \textbf{Shared Passwords} 	\\
+			\hline
+			Success 	& \cmark 						& \xmark 					& \xmark 						\\
+			Failure 	& \cmark 						& \xmark 					& \xmark 						\\
+			Share 		& \xmark 						& \xmark 					& \cmark 						\\
+			Create 		& \xmark 						& \cmark 					& \xmark 						\\
+			Read 		& \xmark 						& \cmark 					& \xmark 						\\
+			Update 		& \xmark 						& \cmark 					& \xmark 						\\
+			Delete 		& \xmark 						& \cmark 					& \xmark 						\\
+		\end{tabular}
+			\caption{Which targets the various actions describe}
+			\label{table:actions}
+		\end{table}
+
+		Each of these actions apply to either authentication \emph{(1 \& 2)} or passwords \emph{(3-7)} and shared passwords \emph{(2 \& 4-7)}. This relation is also shown on figure \ref{table:actions} on page \pageref{table:actions}.
+		
+		However, this information is hardly enough, to properly audit the entries. As such, information such as the timestamp for the event and the hostname of the machine, will greatly aid in the process of auditing. 
+
+
+		\subsection{Comparison With Requirements}
+			Having decided on what data should be logged for audit, it is concluded that the solution now fulfil the following requirement:
+			\begin{itemize}
+				\item Extensive auditing
+			\end{itemize}
+
 	\section{Modelling the System}
 		In the previous sections, 
 
@@ -846,14 +890,14 @@
 
 			\begin{figure}[h!]
 				\centering
-				\includegraphics[width=\textwidth]{figures/design/tree_small.png}
+				\includegraphics[width=\textwidth]{figures/design/uml/generic-tree.eps}
 				\caption{Example of a tree.}
 				\label{fig:example:tree}
 			\end{figure}
 		
 			\begin{figure}[p]
 				\centering
-				\includegraphics[width=\textwidth]{figures/design/password_tree_wnames_small.png}
+				\includegraphics[width=\textwidth]{figures/design/uml/password-tree.eps}
 				\caption{Example password structure in a tree.}
 				\label{fig:example:passwordtree}
 			\end{figure}
@@ -885,7 +929,7 @@
 			%\subsubsection{Algorithm: Deleting a Category}
 
 		\subsection{The Password Model}
-			Having described the Category model fully, the Password model can now correctly be explained. First and foremost it will consist of the fields that generally make up a password entry: A title, a username, a password, an URL, and a note. However, the passwords needs a way to connect with a user. For this purpose, a reference to the User models ID is needed. This reference is known as owner, i.e. the user who owns the password. Finally, to achieve the structure, as described in the previous section, a password is a child of a category. Hence, the Password model will need a reference to a parent Category's ID.
+			Having described the Category model fully, the Password model can now correctly be explained. First and foremost it will consist of the fields that generally make up a password entry: A title, a username, a password, an URL, and a note. However, the passwords needs a way to connect with a user. For this purpose, a reference to the User models ID is needed. This reference is known as owner, i.e. the user who owns the password. Finally, to achieve the structure, as described in the previous section, a password is a child of a category. Hence, the Password model will need a reference to a parent Category's ID. These references are also depicted on figure \ref{fig:relationship:password} on page \pageref{fig:relationship:password}.
 
 			As such, the final Password model contains the fields listed on table \ref{fig:model:password} on page \pageref{fig:model:password}.
 
@@ -905,6 +949,13 @@
 				\caption{Fields of the Password model}
 				\label{fig:model:password}
 			\end{table}
+			
+			\begin{figure}[p]
+				\centering
+				\includegraphics[scale=0.75]{figures/design/uml/user-password-category-erd.eps}
+				\caption{A Password's connections to the User and Category models.}
+				\label{fig:relationship:password}
+			\end{figure}
 
 		\subsection{The Shared Password Model}
 			Having decided that the password sharing mechanism will be sharing by cloning, 
@@ -979,7 +1030,6 @@
 				\label{fig:relationship:sharedpassword}
 			\end{figure}
 
-
 		\subsection{The Invite Model}
 			While the previous models have been very intertwined, the Invite model stands apart by quite a lot simpler. As has already been determined, the Invite model will need a UUID. Since this will, in the end, be part of an invite URL, this field is simply called the link. Furthermore, an expiration date will need to be stored, as it has been determined that the invite will only be valid, for 24 hours. As such, this \emph{very} simple model determined to contain the fields listed on table \ref{fig:model:invite} on page \pageref{fig:model:invite}. 
 			
@@ -995,17 +1045,62 @@
 				\label{fig:model:invite}
 			\end{table}
 
+		\subsection{The Audit Model}
+			Finally, there is the audit model. As described in section \ref{sec:audit} on page \pageref{sec:audit}, each entry should contain one of six actions. While this could easily be achieved using an enum, not all database technologies support this data structure. As such, an integer mapping is used. In practice, this means that each action is translated to an integer, before being stored. When retrieved, the same integer is used to generate the actual name of the action. This mapping is shown on figure \ref{table:audit:actionmapping} on page \pageref{table:audit:actionmapping}.
 
-		%\subsection{The Audit Model}
+			What is a challenge when modelling these audit entries, is the reference to one of three things: Authentication attempts, passwords and shared passwords. Because it is a reference to multiple fields \emph{(the entry's target)}, a traditional database foreign key reference is simply not possible. As such, the reference will need to be stored in an integer \emph{(unfortunately loosing any restrictions from the relations, in the process)}. However, it is still needed to differentiate between an ID for a Password and for a Shared Password. As such, the targets type will need to be stored as well. Finally, as was decided previously, a hostname and a timestamp will need to be stored as well.
+
+			\begin{table}[h!]
+				\centering
+				\begin{tabular}{r | l}
+					\textbf{Action} 	& \textbf{Integer} 	\\
+					\hline
+					Create 				& 0 				\\
+					Read 				& 1 				\\
+					Update 				& 2 				\\
+					Delete 				& 3 				\\
+					Share 				& 4 				\\
+					Success 			& 5 				\\
+					Failure 			& 6 				\\					
+				\end{tabular}
+				\caption{Integer mapping of audit actions.}
+				\label{table:audit:actionmapping}
+			\end{table}
+
+			\begin{table}[p]
+				\centering
+				\begin{tabular}{r|l}
+					\textbf{Attribute} 		& \textbf{Type} 		\\
+					ID 						& Unknown 	\\
+					userId 					& User ID 	\\
+					targetType 				& String 	\\
+					targetId				& Integer 	\\
+					action					& Integer 	\\
+					time  					& Datetime 	\\
+					host  					& String 	\\
+				\end{tabular}
+				\caption{Fields of the Audit model}
+				\label{fig:model:audit}
+			\end{table}
+
+			As such, it is determined that the Audit model will contain the fields listed on table \ref{fig:model:audit} on page \pageref{fig:model:audit}. On figure \ref{fig:relationship:audit-user} on page \pageref{fig:relationship:audit-user}, the relationship between the Audit model and the Password and Shared Password models are depicted, with adjusted syntax to meet the slightly unique approach required for this model to work.
+			
+			\begin{figure}[p]
+				\centering
+				\includegraphics[scale=0.75]{figures/design/uml/audit-user-password-shared-password-erd.eps}
+				\caption{Audit models relationship with the User, Password, and Shared Password models.}
+				\label{fig:relationship:audit-user}
+			\end{figure}
 
 		\subsection{Combining the Models}
+			In the previous sections, the various models have been described and their relationships have been covered using Entity Relationship diagrams. Finally, all of these diagrams are combined into a single one, representing the entire system. This is found on figure \ref{fig:erd:full} on page \pageref{fig:erd:full}.
 
-	\section{Audit of Access}
-		Since it is peoples passwords being handles, some sort of audit log is preferable. Simply put, an audit log contains entries of when certain actions took place. For instance, it could be whenever a user authenticates the service, an audit log entry -- or simply entry -- is generated. Later on, the user can review these entries. This way, the user can easily see if an authentication has taken place, somewhere that he or she was not.
-
-		When creating an audit log, it is very tempting to simply create an entry for \emph{everything}. However, while this will contain the data the user would need, it will be \emph{too} much data. Not only for the user to review, but also for the back-end to store. As such, it is needed to determine which actions needs to be audited. 
-
-		An action is defined as being one of four types: Create, read, update, and delete. These are the basic actions, which will be able to be performed. From what has previously been covered, in various sections, there is 
+			\begin{figure}[p]
+				\centering
+				\includegraphics[width=\textwidth]{figures/design/uml/erd-full.eps}
+				\caption{Entity Relationship Diagram for the System, using Chen's notation.}
+				\label{fig:erd:full}
+			\end{figure}
 
 
 
