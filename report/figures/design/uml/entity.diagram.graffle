@@ -26,7 +26,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2016-05-26 00:33:02 +0000</string>
+	<string>2016-05-26 01:32:23 +0000</string>
 	<key>Modifier</key>
 	<string>Daniel Schougaard</string>
 	<key>NotesVisible</key>
@@ -729,7 +729,7 @@ user}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{189.5, 153.5}, {17, 24}}</string>
+					<string>{{189.5, 158.13304}, {17, 24}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -789,7 +789,7 @@ user}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{270.5, 154.5}, {17, 24}}</string>
+					<string>{{270.5, 158.93161}, {17, 24}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -867,7 +867,7 @@ user}</string>
 					<real>-1</real>
 					<key>Points</key>
 					<array>
-						<string>{206.49998, 136.48689}</string>
+						<string>{206.49998, 148.67647}</string>
 						<string>{198, 188.5}</string>
 					</array>
 					<key>Style</key>
@@ -911,7 +911,7 @@ user}</string>
 					<key>Points</key>
 					<array>
 						<string>{279, 188.5}</string>
-						<string>{270.5, 136.48689}</string>
+						<string>{270.5, 148.67647}</string>
 					</array>
 					<key>Style</key>
 					<dict>
@@ -935,7 +935,7 @@ user}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{206.5, 115.31042}, {64, 42.35294}}</string>
+					<string>{{206.5, 127.5}, {64, 42.35294}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
@@ -3343,11 +3343,11 @@ privateKeySalt}</string>
 	<key>WindowInfo</key>
 	<dict>
 		<key>CurrentSheet</key>
-		<integer>1</integer>
+		<integer>0</integer>
 		<key>ExpandedCanvases</key>
 		<array/>
 		<key>Frame</key>
-		<string>{{11, -12}, {1252, 873}}</string>
+		<string>{{70, -98}, {1252, 873}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>
@@ -3361,7 +3361,7 @@ privateKeySalt}</string>
 		<key>SidebarWidth</key>
 		<integer>120</integer>
 		<key>VisibleRegion</key>
-		<string>{{0, 0}, {558.5, 359.5}}</string>
+		<string>{{0, 68.5}, {558.5, 359.5}}</string>
 		<key>Zoom</key>
 		<real>2</real>
 		<key>ZoomValues</key>
