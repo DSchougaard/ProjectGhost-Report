@@ -127,10 +127,8 @@
 				</SOAP:Envelope>
 			\end{verbatim}
 
-
 		\subsection{Sockets}
 			Underlying all of the previously described technologies are sockets. Sockets are the basic method computers communicate with eachother. Hence, of course it can be used for this purpose. However, there is a \emph{reason} the previous technologies exist: They take care of some of the heavy lifting. Defining a standard for communication, redundancy, standard errors, etc. are but some of the advantages of using either of the previously described technologies. As such, using sockets directly is dismissed without further arguments. 
-
 
 		\subsection{Making A Choice}
 			Making the final choice of how the solution will communicate is important. It sets limitation on future work, and could possibly influence design choices not yet even thought of. 
@@ -142,70 +140,13 @@
 			Hence, it is decided that a RESTful approach will be used. 
 
 		\subsection{Comparison With The Requirements}
-			In the previous two sections, section \ref{sec:comms} and \ref{sec:arch} respectively, a basic architecture and communication model has been chosen. Based on this, it seems only logical to compare our solution at this step, with the requirements previously stated. As such, it is quite clear that the design at this point, supports a distributed password database, in the sense that it is stored on a server, which is accessible by all of the user's devices. As such, the table on figure \ref{tab:checklist_arch-comms} on page \pageref{tab:checklist_arch-comms} acts as a checklist for the requirements. Throughout this section, it will be updated as more details regarding the design are covered. For a full description of the various requirements, please see section \ref{sec:requirements} on page \pageref{sec:requirements}.
+			\label{requirement:fulfilled:distrib_password}
+			In the previous two sections, section \ref{sec:comms} and \ref{sec:arch} respectively, a basic architecture and communication model has been chosen. Based on this, it seems only logical to compare our solution at this step, with the requirements previously stated. As such, it is quite clear that since the passwords are stored on a server, which is accessible by all of the user's devices, it is concluded that the solution now fulfil the functional requirement \#\ref{requirement:distrib_password}:
 
-
-			\begin{table}
-				\center
-				\begin{tabular}{r l c}
-													& \rot{\textbf{Fulfilled}} 	& \rot{Section(s)} \\
-					\textbf{Functional} 			&						&					\\
-					\hline
-					\freq{item:distrib_password} 	& \green{\cmark} 		& \green{ \ref{sec:arch} \& \ref{sec:comms} }			\\
-					\hline
-					\freq{item:multi_user} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:admin_user} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:organization} 		& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:sharing} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:add} 			 	& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:platform} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:database} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:passwords_local} 	& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:new} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:retrieve} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:delete} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:audit} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:auth} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:change} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:two-factor} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:restart} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\textbf{Non-Functional} 		&  			 			& 					\\
-					\hline
-					\nfreq{item:user_storage} 		& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:open-source} 		& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:entries} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:encryption} 		& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:comms} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:tls1.2} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:delay} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-				\end{tabular}
-
-				\caption{Checklist for the requirements fulfilled so far. For a full description of the various requirements, please see section \ref{sec:requirements} on page \pageref{sec:requirements}.}
-				\label{tab:checklist_arch-comms}
-			\end{table}
+			\vspace{-3ex}\begin{enumerate}
+				\setlength\itemsep{0.1em}
+				\item Distributed password database
+			\end{enumerate}
 
 	\section{Securing the Communication}
 		Having established the method of communication, it needs to be established that \emph{all} traffic between the client and the server \emph{shall} be encrypted using HTTPS. However, ``use SSL/TLS'' is not the magic solution that it was once thought it was. Over the past few years, more and more attacks have surfaced primarily exploiting attack vectors in what is generally thought to be ``legacy'' options.
@@ -232,11 +173,12 @@
 
 
 		\subsection{Comparison With the Requirements}
-			\label{req:met:tls1.2}
-			While the previous section doesn't add anything new design wise -- strictly speaking -- it applies an implementation \emph{restriction}. As such it is deemed that the following requirement is met:
-			\begin{itemize}
-				\item Secure communications, using only TLS 1.2 or newer
-			\end{itemize}
+			\label{requirement:fulfilled:comms}
+			While the previous section doesn't add anything new design wise -- strictly speaking -- it applies an implementation \emph{restriction}. As such it is deemed that the solution now fulfil non-functional requirement \#\ref{requirement:comms}:
+			\vspace{-3ex}\begin{enumerate}
+				\setlength\itemsep{0.1em}
+				\item Secure communications, using only TLS 1.2 or newer 
+			\end{enumerate}
 
 	\section{Accessing the Back-End}
 		Since it has already been determined that the basic architecture of the solution is client-server, it is necessary to determine exactly \emph{which} kind of client there will be needed. 
@@ -470,74 +412,31 @@
 				Since Argon2 is such a new algorithm, ``solid'' implementations might very well be difficult to find. But this project will adhere to OWASP's guidelines, as far as possible. As such, it is preferable if the project derives the symmetric encryption key using the Argon2 algorithm. As a final note, avoid multiple users having the same encryption key, a salt will need to be added as well. 
 
 		\subsection{Comparison With Requirements}
-			Having made choices regarding data encryption and protection, in the previous sections, it is now suitable to update the checklist found on figure \ref{tab:checklist_arch-comms} on page \pageref{tab:checklist_arch-comms}. Using the asymmetric approach and protecting the users' keys with a password derived symmetric key, it is clear that the following requirements are now fulfilled
-			\begin{itemize}
-				\item Passwords and private information should never be stored or handled un-encrypted anywhere, other than the local device
+			\label{requirement:fulfilled:sharing}
+			\label{requirement:fulfilled:passwords_local}
+			\label{requirement:fulfilled:encryption}
+			Having decided that the solution will revolve around asymmetric encryption, using RSA keys of length 4096 which in return is secured by AES-256 encryption, it can be concluded that the solution fulfils the non-functional requirement \#\ref{requirement:encryption}:
+
+			\vspace{-3ex}\begin{enumerate}
+				\setlength\itemsep{0.1em}
+				\setcounter{enumi}{4-1}
+				\item Use encryption for storage should be viable for at least 5 years
+			\end{enumerate}
+
+			Furthermore, due to how the asymetric encryption is handled, not only can the users share passwords, but it can also be enforced, that a password is never even \emph{able} to be decrypted in the back-end. As such, it is concluded that the solution now fulfils the functional requirements \#\ref{requirement:sharing} and \#\ref{requirement:passwords_local}:
+			\vspace{-3ex}\begin{enumerate}
+				\setlength\itemsep{0.1em}
+				\setcounter{enumi}{5-1}
 				\item Password sharing
-			\end{itemize}
-			As such, the checklist is updated which is reflected on figure \ref{tab:checklist_encryption} on page \pageref{tab:checklist_encryption}.
+				\setcounter{enumi}{9-1}
+				\item Passwords and private information should never be stored or handled unencrypted anywhere, other than the local device
+			\end{enumerate}
 
-			\begin{table}
-				\center
-				\begin{tabular}{r l c}
-													& \rot{\textbf{Fulfilled}} 	& \rot{Section(s)} \\
-					\textbf{Functional} 			&						&					\\
-					\hline
-					\freq{item:distrib_password} 	& \green{\cmark} 		& \green{ \ref{sec:arch} \& \ref{sec:comms} }			\\
-					\hline
-					\freq{item:multi_user} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:admin_user} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:organization} 		& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:sharing} 			& \green{\cmark}		& \green{ \ref{sec:encryption_choice} \& \ref{sec:keys} }			\\
-					\hline
-					\freq{item:add} 			 	& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:platform} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:database} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:passwords_local} 	& \green{\cmark}		& \green{ \ref{sec:encryption_choice} \& \ref{sec:keys} }			\\
-					\hline
-					\freq{item:new} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:retrieve} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:delete} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:audit} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:auth} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:change} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:two-factor} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:restart} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\textbf{Non-Functional} 		&  			 			& 					\\
-					\hline
-					\nfreq{item:user_storage} 		& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:open-source} 		& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:entries} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:encryption} 		& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:comms} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:tls1.2} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:delay} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-				\end{tabular}
 
-				\caption{Checklist for the requirements fulfilled so far. For a full description of the various requirements, please see section \ref{sec:requirements} on page \pageref{sec:requirements}.}
-				\label{tab:checklist_encryption}
-			\end{table}
+			%As such, the checklist is updated which is reflected on figure \ref{tab:checklist_encryption} on page \pageref{tab:checklist_encryption}.
+
+				%Having made choices regarding data encryption and protection, in the previous sections, it is now suitable to update the checklist found on figure \ref{tab:checklist_arch-comms} on page \pageref{tab:checklist_arch-comms}. Using the asymmetric approach and protecting the users' keys with a password derived symmetric key, it is clear that the following requirements are now fulfilled
+
 
 	\section{Authentication}
 		As with any program handling users' data, there need to be some sort of authentication method in place. Describing the authentication used for this project, will be split up into two categories: First it will be determined exactly how the API will be secured. Once this has been determined, it will be decided how to actually \emph{perform} this authentication.
@@ -644,6 +543,9 @@
 			Previously in this section, the various options for securing the API and authenticating to the back-end has been covered. As such, it is time to update the checklist in reference to the requirements.
 
 			Having chosen JWT tokens 
+
+			\todo{finish}
+
 			\begin{table}
 				\center
 				\begin{tabular}{r l c}
@@ -1085,8 +987,8 @@
 			
 			\begin{figure}[p]
 				\centering
-				\includegraphics[scale=0.75]{figures/design/uml/audit-user-password-shared-password-erd.eps}
-				\caption{Audit models relationship with the User, Password, and Shared Password models.}
+				\includegraphics[width=\textwidth]{figures/design/uml/audit-user-password-shared-password-erd.eps}
+				\caption{The Audit model's relationship with the User, Password, and Shared Password models.}
 				\label{fig:relationship:audit-user}
 			\end{figure}
 
@@ -1171,3 +1073,60 @@
 	\section{Logging?}
 
 	\section{Final Comparison with the Requirements}
+		\begin{table}
+			\begin{tabular}{r l c}
+												& \rot{\textbf{Fulfilled}} 	& \rot{Section} \\
+				\textbf{Functional} 			&						&					\\
+				\hline
+				\freq{item:distrib_password} 	& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:distrib_password} }			\\
+				\hline
+				\freq{item:multi_user} 			& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:comms} }			\\
+				\hline
+				\freq{item:admin_user} 			& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\freq{item:organization} 		& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\freq{item:sharing} 			& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:sharing} }			\\
+				\hline
+				\freq{item:add} 			 	& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\freq{item:platform} 			& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\freq{item:database} 			& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\freq{item:passwords_local} 	& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:passwords_local} }			\\
+				\hline
+				\freq{item:new} 				& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\freq{item:retrieve} 			& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\freq{item:delete} 				& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\freq{item:audit} 				& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\freq{item:auth} 				& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\freq{item:change} 				& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\freq{item:two-factor} 			& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\freq{item:restart} 			& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\textbf{Non-Functional} 		&  			 			& 					\\
+				\hline
+				\nfreq{item:user_storage} 		& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\nfreq{item:open-source} 		& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\nfreq{item:entries} 			& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\nfreq{item:encryption} 		& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:encryption} }			\\
+				\hline
+				\nfreq{item:comms} 				& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\nfreq{item:tls1.2} 			& \red{\xmark} 			& \red{ }			\\
+				\hline
+				\nfreq{item:delay} 				& \red{\xmark} 			& \red{ }			\\
+				\hline
+			\end{tabular}
+		\end{table}
