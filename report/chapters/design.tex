@@ -67,7 +67,34 @@
 				getUser(<ID>)
 			\end{verbatim}
 
-			For simplicity purposes, Remote Method Invocation is considered equivalent to RPC. Likewise implementations of RPC such as XML-RPC, Corba, and so forth, are considered under the same umbrella.
+			For the sake of simplicity various implementations of RPC such as XML-RPC, Corba, and so forth, are considered under the same umbrella.
+		
+		\subsection{Remote Method Invocation}
+			Developed by Sun Microsystems and integrated into the Java API\cite{Downing:1998:JRR:522413}, the Remote Method Invocation \emph{(RMI)} is by many seen as RPC in the object oriented world. While there exists \emph{some} libraries for other languages, Java is the only language to actually natively support RMI. As such, the example will be in Java syntax.
+
+			The basic idea is very much similar to RPC. In RMI an object is transferred to the client, from the server. This can then be invoked from the client, as if it was a local method. 
+
+			\begin{lstlisting}
+				public class UserService extends UnicastRemoteObjects {
+					public UserService() throws RemoteException {}
+
+					public User find(int id){ ... some implementation of method finding user from ID ... }
+
+					public static void main(String args[]){
+						UserService service = new UserService();
+						Naming.rebind("UserService", service);
+					}
+				}
+			\end{lstlisting}
+
+			\begin{lstlisting}
+				UserService users = (UserService) Naming.lookup('//localhost/UserService');
+				User user = (User)users.find(<ID>);
+			\end{lstlisting}
+
+
+			However, there is a slight \emph{(huge)} drawback: Implementation languages. While RPC implementations such as JSON-RPC makes RPC able to be easily used across multiple languages, this is simply not the case with RMI. Java is -- more or less -- the only language with proper support for this. As such, this solution would be \emph{very} restrictive in regards to actual implementation.
+
 
 		\subsection{Representational State Transfer}
 			Representational State Transfer, or REST for short, was introduced by Fielding and Taylor \cite{Fielding:2000:PDM:337180.337228} in 2000. REST is an architecture style for designing networked application. It is a stateless, client-server communication \emph{style}, which in most cases uses the Hypertext Transfer Protocol \emph{(HTTP)} protocol and the accompanying HTTP ``verbs''. Traditionally REST uses JSON as body encoding, however it is also possible to use XML.
