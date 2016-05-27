@@ -97,7 +97,7 @@
 				firstline=3,
 				lastline=13]{snippets/rmi/Client.java}
 
-			However, there is a slight \emph{(huge)} drawback: Implementation languages. While RPC implementations such as JSON-RPC makes RPC able to be easily used across multiple languages, this is simply not the case with RMI. Java is -- more or less -- the only language with proper support for this. As such, this solution would be \emph{very} restrictive in regards to actual implementation.
+			However, there is a slight drawback: Implementation languages. While RPC implementations such as JSON-RPC makes RPC able to be easily used across multiple languages, this is simply not the case with RMI. Java is -- more or less -- the only language with proper support for this. As such, this solution would be \emph{very} restrictive in regards to actual implementation.
 
 		\subsection{Representational State Transfer}
 			Representational State Transfer, or REST for short, was introduced by Fielding and Taylor \cite{Fielding:2000:PDM:337180.337228} in 2000. REST is an architecture style for designing networked application. It is a stateless, client-server communication \emph{style}, which in most cases uses the Hypertext Transfer Protocol \emph{(HTTP)} protocol and the accompanying HTTP ``verbs''. Traditionally REST uses JSON as body encoding, however it is also possible to use XML.
@@ -173,11 +173,19 @@
 
 		\subsection{Comparison With The Requirements}
 			\label{requirement:fulfilled:distrib_password}
+			\label{requirement:fulfilled:user_storage}
+
 			In the previous two sections, section \ref{sec:comms} and \ref{sec:arch} respectively, a basic architecture and communication model has been chosen. Based on this, it seems only logical to compare our solution at this step, with the requirements previously stated. As such, it is quite clear that since the passwords are stored on a server, which is accessible by all of the user's devices, it is concluded that the solution now fulfil the functional requirement \#\ref{requirement:distrib_password}:
 
 			\vspace{-3ex}\begin{enumerate}
 				\setlength\itemsep{0.1em}
 				\item Distributed password database
+			\end{enumerate}
+
+			Additionally, since the solution will be run on a server \emph{owned} by a user, it can be concluded that the solution fulfil the non-functional requirement \#\ref{requirement:user_storage}:
+			\vspace{-3ex}\begin{enumerate}
+				\setlength\itemsep{0.1em}
+				\item Only use user-controlled storage
 			\end{enumerate}
 
 	\section{Securing the Communication}
@@ -206,9 +214,12 @@
 
 		\subsection{Comparison With the Requirements}
 			\label{requirement:fulfilled:comms}
-			While the previous section doesn't add anything new design wise -- strictly speaking -- it applies an implementation \emph{restriction}. As such it is deemed that the solution now fulfil non-functional requirement \#\ref{requirement:comms}:
+			\label{requirement:fulfilled:tls1.2}
+			While the previous section doesn't add anything new design wise -- strictly speaking -- it applies an implementation \emph{restriction}. As such it is deemed that the solution now fulfil non-functional requirements \#\ref{requirement:comms} and \#\ref{requirement:tls1.2}:
 			\vspace{-3ex}\begin{enumerate}
 				\setlength\itemsep{0.1em}
+				\setcounter{enumi}{5-1}
+				\item Use encryption for communication should be viable for at least 5 years
 				\item Secure communications, using only TLS 1.2 or newer 
 			\end{enumerate}
 
@@ -365,7 +376,7 @@
 					\label{table:comp:data}
 				\end{table}
 
-				Finally, there is the matter of data processing, which is also an important aspect to take into account, cf. \ref{table:comp:data}. Creating a password with CL-PRE involves the following steps: First a symmetric DEK needs to be created, then the password is encrypted with said DEK, and finally the DEK is encrypted using the user's public-key. This totals to $3$ ``cryptographic steps''. PGP is essentially the same. First a new symmetric key is created, then the password is encrypted using that key, and finally the key is encrypted using the user's public-key. Hence, PGP also uses $3$ cryptographic steps. Using asymmetric encryption, however, only a single step is needed: Encrypt the password with the user's public-key.
+				Finally, there is the matter of data processing, which is also an important aspect to take into account, cf. \ref{table:comp:data-process}. Creating a password with CL-PRE involves the following steps: First a symmetric DEK needs to be created, then the password is encrypted with said DEK, and finally the DEK is encrypted using the user's public-key. This totals to $3$ ``cryptographic steps''. PGP is essentially the same. First a new symmetric key is created, then the password is encrypted using that key, and finally the key is encrypted using the user's public-key. Hence, PGP also uses $3$ cryptographic steps. Using asymmetric encryption, however, only a single step is needed: Encrypt the password with the user's public-key.
 
 				For creating a password, the asymmetric approach is clearly the favourite. Not only in the steps involved, but also just from its simplicity. However, this is not \emph{quite} the same when sharing a password. CL-PRE actually only needs a single step for updating a shared a password: Creating the re-encryption key. PGP on the other hand needs two operations: Decrypting the symmetric key, and re-encrypting it with the recipients public-key. Finally, there is the asymmetric approach. This approach needs $n$ operations, per update, where $n$ is the number of people the password is shared to. This \emph{huge} performance loss is due to the fact that it uses sharing by cloning. This is best illustrated with an example: If a password is shared with three people, it means that it exists four times in the back-end: Once encrypted with the owners public-key, and once with each of the people it is shared to. When the password is updated, it needs to be re-encrypted using \emph{each} of these peoples public-keys as well.
 
@@ -383,7 +394,7 @@
 						Asymmetric 		& \green{$1$}					& \red{$n$} 					\\
 					\end{tabular}
 					\caption{Comparison of cryptographic steps required for the three encryption schemes. $n$ represents the number of users a given password is shared to.}
-					\label{table:comp:data}
+					\label{table:comp:data-process}
 				\end{table}
 
 				\begin{table}
@@ -698,7 +709,7 @@
 
 		\subsection{Comparison With Requirements}
 			\label{requirement:fulfilled:audit}
-			Having decided on what data should be logged for audit, it is concluded that the solution now fulfil the functional requirement \#\ref{requiremen:audit}:
+			Having decided on what data should be logged for audit, it is concluded that the solution now fulfil the functional requirement \#\ref{requirement:audit}:
 			\vspace{-3ex}\begin{enumerate}
 				\setlength\itemsep{0.1em}
 				\setcounter{enumi}{13-1}
@@ -820,7 +831,7 @@
 			%\subsubsection{Algorithm: Deleting a Category}
 
 		\subsection{The Password Model}
-			\label{sec:model:model}
+			\label{sec:model:password}
 			Having described the Category model fully, the Password model can now correctly be explained. First and foremost it will consist of the fields that generally make up a password entry: A title, a username, a password, an URL, and a note. However, the passwords needs a way to connect with a user. For this purpose, a reference to the User models ID is needed. This reference is known as owner, i.e. the user who owns the password. Finally, to achieve the structure, as described in the previous section, a password is a child of a category. Hence, the Password model will need a reference to a parent Category's ID. These references are also depicted on figure \ref{fig:relationship:password} on page \pageref{fig:relationship:password}.
 
 			As such, the final Password model contains the fields listed on table \ref{fig:model:password} on page \pageref{fig:model:password}.
@@ -1010,7 +1021,7 @@
 				\item Password organisation, multiple levels
 			\end{enumerate}
 
-			Additionally, section \ref{sec:model:password} on page \pageref{fig:model:password} described the model of each password entry. As such, it is concluded that the solution fulfil functional requirements \#\ref{requirement:new}, \#\ref{requirement:retrieve}, and \#\ref{requirement:delete}:
+			Additionally, section \ref{sec:model:password} on page \pageref{sec:model:password} described the model of each password entry. As such, it is concluded that the solution fulfil functional requirements \#\ref{requirement:new}, \#\ref{requirement:retrieve}, and \#\ref{requirement:delete}:
 			\vspace{-3ex}\begin{enumerate}
 				\setlength\itemsep{0.1em}
 				\setcounter{enumi}{10-1}
@@ -1080,16 +1091,31 @@
 
 		As such, it is decided that a more ``traditional'' RDBMS will be used for this solution.
 
-		\subsection{Being Database Agnostic}
-			As written in the requirements, cf. section \ref{sec:requirements}, the solution should be database agnostic. In the previous paragraphs, it has been determined that the solution should use a RDBMS.
-
 	\section{Ensuring Agnosticism}
+		%\label{requirement:fulfilled:platform}
+		%\label{requirement:fulfilled:database}
+
+
+
+				As written in the requirements, cf. section \ref{sec:requirements}, the solution should be database agnostic. In the previous paragraphs, it has been determined that the solution should use a RDBMS.
+
 		\todo{Explain platform agnositicms}
 		\todo{explain need cross platform solution}
 		\todo{explain need for database abstraction layer}
+	
+
+
 	\section{Licensing the Solution}
-		Use MIT YO!
-		\todo{Explain MIT license}
+		\label{requirement:fulfilled:open-source}
+		Finally, there is the issue of a software license. Since this project from day one, has been intended to be open-source, it only makes sense that the license reflects this. While many different licenses for this exact purpose exists, the most commonly used is the MIT license. This license essentially states that anyone can do whatever they want with the code, as long as they include the original copyright and license.
+
+		The license used for this project, is found in appendix \ref{appendix:license}. As such, it is concluded that the solution fulfil the non-functional requirement \#\ref{requirement:open-source}:
+		\vspace{-3ex}\begin{enumerate}
+			\setlength\itemsep{0.1em}
+			\setcounter{enumi}{2-1}
+			\item Open Source License \emph{(MIT for instance)}
+		\end{enumerate}
+
 
 	\section{Final Comparison with the Requirements}
 		\begin{table}[h!]
@@ -1109,9 +1135,9 @@
 				\hline
 				\freq{item:add} 			 	& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:add} }			\\
 				\hline
-				\freq{item:platform} 			& \red{\xmark} 			& \red{ }			\\
+				\freq{item:platform} 			& \red{\xmark} 			& \red{ \ref{requirement:fulfilled:platform} }			\\
 				\hline
-				\freq{item:database} 			& \red{\xmark} 			& \red{ }			\\
+				\freq{item:database} 			& \red{\xmark} 			& \red{ \ref{requirement:fulfilled:database} }			\\
 				\hline
 				\freq{item:passwords_local} 	& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:passwords_local} }			\\
 				\hline
@@ -1129,23 +1155,23 @@
 				\hline
 				\freq{item:two-factor} 			& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:two-factor} }			\\
 				\hline
-				\freq{item:restart} 			& \red{\xmark} 			& \red{ }			\\
+				\freq{item:restart} 			& \red{\xmark} 			& \red{ \ref{requirement:fulfilled:restart} }			\\
 				\hline
 				\textbf{Non-Functional} 		&  			 			& 					\\
 				\hline
-				\nfreq{item:user_storage} 		& \red{\xmark} 			& \red{ }			\\
+				\nfreq{item:user_storage} 		& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:user_storage} }			\\
 				\hline
-				\nfreq{item:open-source} 		& \red{\xmark} 			& \red{ }			\\
+				\nfreq{item:open-source} 		& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:open-source} }			\\
 				\hline
-				\nfreq{item:entries} 			& \red{\xmark} 			& \red{ }			\\
+				\nfreq{item:entries} 			& \red{\xmark} 			& \red{ \ref{requirement:fulfilled:entries} }			\\
 				\hline
 				\nfreq{item:encryption} 		& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:encryption} }			\\
 				\hline
 				\nfreq{item:comms} 				& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:comms} }	\\
 				\hline
-				\nfreq{item:tls1.2} 			& \red{\xmark} 			& \red{ }			\\
+				\nfreq{item:tls1.2} 			& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:tls1.2} }			\\
 				\hline
-				\nfreq{item:delay} 				& \red{\xmark} 			& \red{ }			\\
+				\nfreq{item:delay} 				& \red{\xmark} 			& \red{ \ref{requirement:fulfilled:delay} }			\\
 				\hline
 			\end{tabular}
 		\end{table}
