@@ -437,7 +437,6 @@
 
 				%Having made choices regarding data encryption and protection, in the previous sections, it is now suitable to update the checklist found on figure \ref{tab:checklist_arch-comms} on page \pageref{tab:checklist_arch-comms}. Using the asymmetric approach and protecting the users' keys with a password derived symmetric key, it is clear that the following requirements are now fulfilled
 
-
 	\section{Authentication}
 		As with any program handling users' data, there need to be some sort of authentication method in place. Describing the authentication used for this project, will be split up into two categories: First it will be determined exactly how the API will be secured. Once this has been determined, it will be decided how to actually \emph{perform} this authentication.
 
@@ -504,8 +503,6 @@
 				}\\\cite{owasp_kdf}
 			\end{quote}
 
-
-
 		\subsection{Multi-Factor Authentication}
 			\label{sec:mfa}
 			In the past years there has become more and more focus on security. As a result of this, more and more people are using multi-factor authentication to ensure that access to their personal data is as ``safe'' as possible. 
@@ -540,74 +537,25 @@
 				Taking the pros and cons into consideration, it is chosen that the TOTP algorithm will be supported in this solution. It is believed that the only inherent draw-back in the algorithm, is mitigated for the most part, by modern systems being fairly good at making sure their internal time is correct.
 
 		\subsection{Comparison With The Requirements}
-			Previously in this section, the various options for securing the API and authenticating to the back-end has been covered. As such, it is time to update the checklist in reference to the requirements.
+			\label{requirement:fulfilled:auth}
+			\label{requirement:fulfilled:change}
+			\label{requirement:fulfilled:two-factor}
+			In the previous sections, the various options for securing the API was covered, and it was chosen to use JWT tokens. Additionally, the process of obtaining the token was discussed. Since HTTPS is enforced, a simple API endpoint with the username and password as payload will work quite nicely. It was also decided, that the passwords will be hashed using the Argon2 algorithm, if a decent implementation is available. Otherwise, another key derivation function will be used, in accordance with OWASP's recommendations. As such, it is concluded that the solution fulfil the functional requirements \#\ref{requirement:auth} and \#\ref{requirement:change}:
 
-			Having chosen JWT tokens 
+			\vspace{-3ex}\begin{enumerate}
+				\setlength\itemsep{0.1em}
+				\setcounter{enumi}{14-1}
+				\item Allow user authentication based on a single master password, per user
+				\item Allow the user to change his or her master password
+			\end{enumerate}
 
-			\todo{finish}
+			Additionally, it was decided that the solution will support \emph{optional} TOTP two-factor authentication. As such, it is concluded that the solution also fulfils the functional requirement \#\ref{requirement:two-factor}:
+			\vspace{-3ex}\begin{enumerate}
+				\setlength\itemsep{0.1em}
+				\setcounter{enumi}{16-1}
+				\item Support two-factor authentication
+			\end{enumerate}
 
-			\begin{table}
-				\center
-				\begin{tabular}{r l c}
-													& \rot{\textbf{Fulfilled}} 	& \rot{Section(s)} \\
-					\textbf{Functional} 			&						&					\\
-					\hline
-					\freq{item:distrib_password} 	& \green{\cmark} 		& \green{ \ref{sec:arch} \& \ref{sec:comms} }			\\
-					\hline
-					\freq{item:multi_user} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:admin_user} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:organization} 		& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:sharing} 			& \green{\cmark}		& \green{ \ref{sec:encryption_choice} \& \ref{sec:keys} }			\\
-					\hline
-					\freq{item:add} 			 	& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:platform} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:database} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:passwords_local} 	& \green{\cmark}		& \green{ \ref{sec:encryption_choice} \& \ref{sec:keys} }			\\
-					\hline
-					\freq{item:new} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:retrieve} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:delete} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:audit} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:auth} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:change} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:two-factor} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\freq{item:restart} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\textbf{Non-Functional} 		&  			 			& 					\\
-					\hline
-					\nfreq{item:user_storage} 		& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:open-source} 		& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:entries} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:encryption} 		& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:comms} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:tls1.2} 			& \red{\xmark} 			& \red{ }			\\
-					\hline
-					\nfreq{item:delay} 				& \red{\xmark} 			& \red{ }			\\
-					\hline
-				\end{tabular}
-
-				\caption{Checklist for the requirements fulfilled so far. For a full description of the various requirements, please see section \ref{sec:requirements} on page \pageref{sec:requirements}.}
-				\label{tab:checklist_encryption}
-			\end{table}
-	
 	\section{Attaining Pseudo-Zero-Knowledge}
 		As per the requirements it is known that the passwords must never be stored or handled unencrypted on the server. Previously, as an extension of this, it has been argued that letting the back-end as much as having the \emph{ability} of decrypting the stored passwords is ill advised. Hence, there should be no way of inferring the user's password for storing their private-key \emph{(see \ref{sec:encryption_choice} on page \pageref{sec:encryption_choice})} from \emph{anything} stored in the back-end.
 
@@ -665,11 +613,19 @@
 
 
 		\subsection{Comparing with the Requirements}
-			In the previous sections it has been established how the system will differentiate between admins and users, and now invites will work. As such, it is concluded that the solution fulfil the following requirements:
-			\begin{itemize}
+			\label{requirement:fulfilled:multi_user}
+			\label{requirement:fulfilled:admin_user}
+			\label{requirement:fulfilled:add}
+			In the previous sections it has been established how the system will differentiate between admins and users, and now invites will work. As such, it is concluded that the solution fulfil the functional requirements \#\ref{requirement:multi_user}, \#\ref{requirement:admin_user}, and \#\ref{requirement:add}:
+
+			\vspace{-3ex}\begin{enumerate}
+				\setlength\itemsep{0.1em}
+				\setcounter{enumi}{2-1}
+				\item Multi-user support
 				\item Support differentiating between admin users and regular users
-				\item Only admin can add a user – or invite a user – to the solution
-			\end{itemize}
+				\setcounter{enumi}{6-1}
+				\item Only admin can add a user -- or invite a user -- to the solution
+			\end{enumerate}
 
 	\section{Auditing of Access}
 		\label{sec:audit}
@@ -689,17 +645,17 @@
 		\end{enumerate}
 
 		\begin{table}
-		\begin{tabular}{r | c | c | c }
-						& \textbf{Authentication} 		& \textbf{Passwords} 		& \textbf{Shared Passwords} 	\\
-			\hline
-			Success 	& \cmark 						& \xmark 					& \xmark 						\\
-			Failure 	& \cmark 						& \xmark 					& \xmark 						\\
-			Share 		& \xmark 						& \xmark 					& \cmark 						\\
-			Create 		& \xmark 						& \cmark 					& \xmark 						\\
-			Read 		& \xmark 						& \cmark 					& \cmark 						\\
-			Update 		& \xmark 						& \cmark 					& \cmark 						\\
-			Delete 		& \xmark 						& \cmark 					& \cmark 						\\
-		\end{tabular}
+			\begin{tabular}{r | c | c | c }
+							& \textbf{Authentication} 		& \textbf{Passwords} 		& \textbf{Shared Passwords} 	\\
+				\hline
+				Success 	& \cmark 						& \xmark 					& \xmark 						\\
+				Failure 	& \cmark 						& \xmark 					& \xmark 						\\
+				Share 		& \xmark 						& \xmark 					& \cmark 						\\
+				Create 		& \xmark 						& \cmark 					& \xmark 						\\
+				Read 		& \xmark 						& \cmark 					& \cmark 						\\
+				Update 		& \xmark 						& \cmark 					& \cmark 						\\
+				Delete 		& \xmark 						& \cmark 					& \cmark 						\\
+			\end{tabular}
 			\caption{Which targets the various actions describe}
 			\label{table:actions}
 		\end{table}
@@ -708,12 +664,14 @@
 		
 		However, this information is hardly enough, to properly audit the entries. As such, information such as the timestamp for the event and the hostname of the machine, will greatly aid in the process of auditing. 
 
-
 		\subsection{Comparison With Requirements}
-			Having decided on what data should be logged for audit, it is concluded that the solution now fulfil the following requirement:
-			\begin{itemize}
+			\label{requirement:fulfilled:audit}
+			Having decided on what data should be logged for audit, it is concluded that the solution now fulfil the functional requirement \#\ref{requiremen:audit}:
+			\vspace{-3ex}\begin{enumerate}
+				\setlength\itemsep{0.1em}
+				\setcounter{enumi}{13-1}
 				\item Extensive auditing
-			\end{itemize}
+			\end{enumerate}
 
 	\section{Modelling the System}
 		\label{sec:modelling}
@@ -747,6 +705,7 @@
 			\end{table}
 
 		\subsection{The Category Model}
+			\label{sec:model:category}
 			Before delving into the core model, the Password model \emph{(see the following section)} it is required to cover an auxiliary model: The Category. Since it has already been determined that it is required for the solution to structure passwords in multiple levels, a data structure for this is required.
 
 			First and foremost, it is important to realise that the classical ``folder'' structure, is nothing more than what is commonly known as a tree. Trees consists of internal nodes and leafs. Nodes have children. These children can be other nodes, or a leaf. A leaf is a final child -- it is last element in the branch. An example of such a tree is seen on figure \ref{fig:example:tree} on page \pageref{fig:example:tree}.
@@ -829,6 +788,7 @@
 			%\subsubsection{Algorithm: Deleting a Category}
 
 		\subsection{The Password Model}
+			\label{sec:model:model}
 			Having described the Category model fully, the Password model can now correctly be explained. First and foremost it will consist of the fields that generally make up a password entry: A title, a username, a password, an URL, and a note. However, the passwords needs a way to connect with a user. For this purpose, a reference to the User models ID is needed. This reference is known as owner, i.e. the user who owns the password. Finally, to achieve the structure, as described in the previous section, a password is a child of a category. Hence, the Password model will need a reference to a parent Category's ID. These references are also depicted on figure \ref{fig:relationship:password} on page \pageref{fig:relationship:password}.
 
 			As such, the final Password model contains the fields listed on table \ref{fig:model:password} on page \pageref{fig:model:password}.
@@ -1002,6 +962,30 @@
 				\label{fig:erd:full}
 			\end{figure}
 
+		\subsection{Comparison With Requirements}
+			\label{requirement:fulfilled:organization}
+			\label{requirement:fulfilled:new}
+			\label{requirement:fulfilled:retrieve}
+			\label{requirement:fulfilled:delete}
+
+
+			Having modelled the core compon
+
+			Section \ref{sec:model:category} on page \pageref{sec:model:category} introduced the concept of the Category model. This model allows for near infinite structuring of the password storage. As such, it is concluded that the solution fulfil functional requirement \#\ref{requirement:organization}:
+			\vspace{-3ex}\begin{enumerate}
+				\setlength\itemsep{0.1em}
+				\setcounter{enumi}{4-1}
+				\item Password organisation, multiple levels
+			\end{enumerate}
+
+			Additionally, section \ref{sec:model:password} on page \pageref{fig:model:password} described the model of each password entry. As such, it is concluded that the solution fulfil functional requirements \#\ref{requirement:new}, \#\ref{requirement:retrieve}, and \#\ref{requirement:delete}:
+			\vspace{-3ex}\begin{enumerate}
+				\setlength\itemsep{0.1em}
+				\setcounter{enumi}{10-1}
+				\item Support adding of new passwords
+				\item Support retrieving stored passwords
+				\item Support deleting stored passwords
+			\end{enumerate}
 	\section{Storing the Data}
 		Up until now the phrase ``database'' has been used as a generic description of persistent storage. In this section, this will be elaborated a bit. Generally speaking, there primarily exist two categories of databases: Relational Database Management Systems \emph{(RDBMSs)} and Non-SQL \emph{(NoSQL)}
 
@@ -1066,29 +1050,31 @@
 		\subsection{Being Database Agnostic}
 			As written in the requirements, cf. section \ref{sec:requirements}, the solution should be database agnostic. In the previous paragraphs, it has been determined that the solution should use a RDBMS.
 
-
-
-
-
-	\section{Logging?}
+	\section{Ensuring Agnosticism}
+		\todo{Explain platform agnositicms}
+		\todo{explain need cross platform solution}
+		\todo{explain need for database abstraction layer}
+	\section{Licensing the Solution}
+		Use MIT YO!
+		\todo{Explain MIT license}
 
 	\section{Final Comparison with the Requirements}
-		\begin{table}
+		\begin{table}[h!]
 			\begin{tabular}{r l c}
 												& \rot{\textbf{Fulfilled}} 	& \rot{Section} \\
 				\textbf{Functional} 			&						&					\\
 				\hline
 				\freq{item:distrib_password} 	& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:distrib_password} }			\\
 				\hline
-				\freq{item:multi_user} 			& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:comms} }			\\
+				\freq{item:multi_user} 			& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:multi_user} }			\\
 				\hline
-				\freq{item:admin_user} 			& \red{\xmark} 			& \red{ }			\\
+				\freq{item:admin_user} 			& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:admin_user} }			\\
 				\hline
-				\freq{item:organization} 		& \red{\xmark} 			& \red{ }			\\
+				\freq{item:organization} 		& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:organization} }			\\
 				\hline
 				\freq{item:sharing} 			& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:sharing} }			\\
 				\hline
-				\freq{item:add} 			 	& \red{\xmark} 			& \red{ }			\\
+				\freq{item:add} 			 	& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:add} }			\\
 				\hline
 				\freq{item:platform} 			& \red{\xmark} 			& \red{ }			\\
 				\hline
@@ -1096,19 +1082,19 @@
 				\hline
 				\freq{item:passwords_local} 	& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:passwords_local} }			\\
 				\hline
-				\freq{item:new} 				& \red{\xmark} 			& \red{ }			\\
+				\freq{item:new} 				& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:new} }			\\
 				\hline
-				\freq{item:retrieve} 			& \red{\xmark} 			& \red{ }			\\
+				\freq{item:retrieve} 			& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:retrieve} }			\\
 				\hline
-				\freq{item:delete} 				& \red{\xmark} 			& \red{ }			\\
+				\freq{item:delete} 				& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:delete} }			\\
 				\hline
-				\freq{item:audit} 				& \red{\xmark} 			& \red{ }			\\
+				\freq{item:audit} 				& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:audit} }			\\
 				\hline
-				\freq{item:auth} 				& \red{\xmark} 			& \red{ }			\\
+				\freq{item:auth} 				& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:auth} }			\\
 				\hline
-				\freq{item:change} 				& \red{\xmark} 			& \red{ }			\\
+				\freq{item:change} 				& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:change} }			\\
 				\hline
-				\freq{item:two-factor} 			& \red{\xmark} 			& \red{ }			\\
+				\freq{item:two-factor} 			& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:two-factor} }			\\
 				\hline
 				\freq{item:restart} 			& \red{\xmark} 			& \red{ }			\\
 				\hline
@@ -1122,7 +1108,7 @@
 				\hline
 				\nfreq{item:encryption} 		& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:encryption} }			\\
 				\hline
-				\nfreq{item:comms} 				& \red{\xmark} 			& \red{ }			\\
+				\nfreq{item:comms} 				& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:comms} }	\\
 				\hline
 				\nfreq{item:tls1.2} 			& \red{\xmark} 			& \red{ }			\\
 				\hline

@@ -11,7 +11,7 @@ endif
 
 all: 
 	latexmk -pdf $(FILENAME).tex
-	texcount $(FILENAME).tex -inc -total
+	texcount $(FILENAME).tex -inc -total -letters
 clean:
 	cp $(FILENAME).tex _$(FILENAME).tex
 	rm $(FILENAME).*
