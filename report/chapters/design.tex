@@ -1031,6 +1031,7 @@
 			\end{enumerate}
 	
 	\section{Storing the Data}
+		\label{sec:database:type}
 		Up until now the phrase ``database'' has been used as a generic description of persistent storage. In this section, this will be elaborated a bit. Generally speaking, there primarily exist two categories of databases: Relational Database Management Systems \emph{(RDBMSs)} and Non-SQL \emph{(NoSQL)}
 
 		RDBMS/SQL is the oldest of the bunch. This category covers the first database schemes ever used, dating back to the 70's. This type of database has a very strict structure, compared to the others, requiring a structure of tables, which in turn contains columns. RDBMS are by far, the most used type of database, if for no other reason, that they've simply existed for a lot longer. Typically RDBMSs uses the Structured Query Language \emph{(SQL)}. An example of a RDBMS table can be seen on table \ref{fig:example:rldb} on page \pageref{fig:example:rldb}, consisting of columns ID, Username, and E-Mail, each entry has one value for each column. RDBMS often adhere to the ACID qualities: Atomic, Consistent, Isolated, and Durable. These ensures that either a query succeeds or it fails. Additionally, most implementations support transactions. Transactions work by effectively grouping several queries. The smart thing about this, is that either the transaction fails, or it succeeds. I.e. either all of the sub-queries succeeds, or if \emph{one} of them fails, all of the changes are rolled back.
@@ -1092,18 +1093,42 @@
 		As such, it is decided that a more ``traditional'' RDBMS will be used for this solution.
 
 	\section{Ensuring Agnosticism}
-		%\label{requirement:fulfilled:platform}
-		%\label{requirement:fulfilled:database}
+		When creating a solution like this, it is important to make it as versatile as possible. As such, limiting it to run on a single platform only restricts deployment. As such, having an application that can run cross-platform is beneficial.
 
+		\subsection{Platform Agnosticism}
+			\label{sec:restrict:platform}
+			As such, having a back-end being able to be run on the three major operating systems, would definitely be the best approach. These three operating systems are as follows:
+			\begin{itemize}
+				\item Windows
+				\item OS X
+				\item Linux
+			\end{itemize}
 
+			There exists numerous tools to develop such an API. Tools like Python and Ruby are just some some examples of languages, which makes cross-platform development a breeze.
 
-				As written in the requirements, cf. section \ref{sec:requirements}, the solution should be database agnostic. In the previous paragraphs, it has been determined that the solution should use a RDBMS.
+			As such, a \emph{restriction} on the implementation is imposed: A language intended to work across multiple platforms is needed and should be used.
 
-		\todo{Explain platform agnositicms}
-		\todo{explain need cross platform solution}
-		\todo{explain need for database abstraction layer}
-	
+		\subsection{Database Agnosticism}
+			\label{sec:restrict:database}
+			While section \ref{sec:database:type} on page \pageref{sec:database:type} described why a RDBMS is better suited for this solution, it made no effort in selecting \emph{one} implementation \emph{(i.e. MySQL, MSSql etc.)}. This was very deliberately, partly because it is a question of implementation, and partly because restricting to \emph{one} implementation of database can be avoided.
 
+			Using what is called a Database Abstraction Layer \emph{(DAL)} an application can work with the same type of databases, while not limiting itself to a \emph{single} solution. A DAL can ensure that the application can work with \emph{both} a separate MySQL database or a self-contained SQLite database, depending on configuration. This ensures that the user can customize the setup to work exactly how he or she wishes. 
+
+			For instance, for a user running the solution on a single Raspberry Pi \emph{(see section \ref{sec:privatecloud_cost} on page \pageref{sec:privatecloud_cost})} a SQLite database would be be beneficial, due to the lower resource requirement. On the other hand, the user having an entire dedicated server at home -- already running a MySQL instance -- would probably prefer to combine it with his or her existing system.
+
+			As such, using a DAL effectively ensures agnosticism when it comes to databases. Hence, another restriction on the implementation is imposed: The solution should use a DAL, ensuring compatibility with several database technologies.	
+
+		\subsection{Comparison With the Requirements}
+			\label{requirement:fulfilled:database}
+			\label{requirement:fulfilled:platform}
+
+			Having decided to introduce the restrictions described in sections \ref{sec:restrict:platform} and \ref{sec:restrict:database}, it is concluded that the solution now fulfil the functional requirements \#\ref{requirement:platform} and \#\ref{requirement:database}:
+			\vspace{-3ex}\begin{enumerate}
+				\setlength\itemsep{0.1em}
+				\setcounter{enumi}{7-1}
+				\item Platform agnostic
+				\item Database agnostic
+			\end{enumerate}
 
 	\section{Licensing the Solution}
 		\label{requirement:fulfilled:open-source}
@@ -1118,6 +1143,26 @@
 
 
 	\section{Final Comparison with the Requirements}
+		In this chapter, a design for a solution has been proposed. It has been designed in a way, which makes it superior to not only the commercially available solutions, as found in section \ref{sec:solutions:commercial} on \pageref{sec:solutions:commercial}, but also the proposed academic solutions, found in section \ref{sec:solutions:academic} on page \pageref{sec:solutions:academic}. On figure \ref{table:requirements:final} on page \pageref{table:requirements:final}, a check list is found. This table references the requirements as specified in section \ref{sec:requirements} on page \pageref{sec:requirements}.
+
+		As it is seen, all but two requirements are met. Functional requirement \#\ref{requirement:restart}:
+		\vspace{-3ex}\begin{enumerate}
+			\setlength\itemsep{0.1em}
+			\setcounter{enumi}{17-1}
+			\item Automatic start after a hardware reboot
+		\end{enumerate}
+		And non-functional requirement \#\ref{requirement:delay}:
+		\vspace{-3ex}\begin{enumerate}
+			\setlength\itemsep{0.1em}
+			\setcounter{enumi}{7-1}
+			\item A user should never wait more than maximum $500ms$ after any action in the user interface, before the changes take effect 
+		\end{enumerate}
+
+		First and foremost, non-functional requirement \#\ref{requirement:delay} is \emph{purely} a question of implementation. This is a requirement that is impossible to design ones way out of. As such, it merely transforms into a implementation \emph{restriction}, much in the likes of platform and database agnosticism \emph{(see sections \ref{sec:restrict:platform} and \ref{sec:restrict:database} on pages \pageref{sec:restrict:platform} and \pageref{sec:restrict:database}, respectively)}.
+
+		This leaves but one requirement lacking: Functional requirement \#\ref{requirement:restart}. This is painfully easily achieved. Each of the major operating systems have their own service, intended for this \emph{specific} purpose. Linux has Upstart \emph{(legacy systems)} and Systemd \emph{(newer systems)}\cite{autostart:linux}, OS X has launchd\cite{autostart:osx}, and Windows supports creating a service from an executable file using the SC command\cite{autostart:windows}. Creating a script for each of these services is again, just a matter of implementation. Deployment of these scripts can be easily done using a simple shell or bash script.
+
+
 		\begin{table}[h!]
 			\begin{tabular}{r l c}
 												& \rot{\textbf{Fulfilled}} 	& \rot{Section} \\
@@ -1135,9 +1180,9 @@
 				\hline
 				\freq{item:add} 			 	& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:add} }			\\
 				\hline
-				\freq{item:platform} 			& \red{\xmark} 			& \red{ \ref{requirement:fulfilled:platform} }			\\
+				\freq{item:platform} 			& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:platform} }			\\
 				\hline
-				\freq{item:database} 			& \red{\xmark} 			& \red{ \ref{requirement:fulfilled:database} }			\\
+				\freq{item:database} 			& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:database} }			\\
 				\hline
 				\freq{item:passwords_local} 	& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:passwords_local} }			\\
 				\hline
@@ -1174,4 +1219,6 @@
 				\nfreq{item:delay} 				& \red{\xmark} 			& \red{ \ref{requirement:fulfilled:delay} }			\\
 				\hline
 			\end{tabular}
+			\caption{Requirements from section \ref{sec:requirements} on page \pageref{sec:requirements}, and where in this chapter they are concluded to be fulfilled.}
+			\label{table:requirements:final}
 		\end{table}
