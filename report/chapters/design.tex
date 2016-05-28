@@ -411,6 +411,7 @@
 				\end{table}
 
 		\subsection{Asymmetric Encryption Algorithm}
+			\label{sec:encryption_choice:rsa_size}
 			Having decided on using the asymmetric approach, an algorithm for this needs to be decided. The two contenders for this algorithm is the RSA and ElGamal algorithm. Unfortunately, there does not seem to exist any \emph{sound} papers regarding their comparative strength and efficiency, and as such the choice must be based on something else.
 
 			As such, it is chosen to go with RSA for the reason that its use is simply more widespread. Additionally, a keysize of $4096$ is chosen, as per the recommendations of European Union Agency for Network and Information Security \emph{(ENISA)}\cite[p.37]{enisa}.
@@ -860,6 +861,35 @@
 				\label{fig:relationship:password}
 			\end{figure}
 
+			\subsubsection{One Hundred Thousand Entries}
+				\label{sec:model:password:size}
+				As the requirements state, the solution will have to store at least 100.000 entries. Based on the attributes defined on table \ref{fig:model:password}, the feasibility of this is investigated. 
+
+				It is assumed that an ID is stored as an integer, and is four bytes in size. Additionally, the traditional length of text fields are used \emph{(255 characters)} which is stored as 256 bytes. Finally, there is the matter of the password. From sections \ref{sec:encryption_choice} and \ref{sec:encryption_choice:rsa_size} on pages \pageref{sec:encryption_choice} and \pageref{sec:encryption_choice:rsa_size}, respectively, it is known that this is encrypted using a 4096 bit RSA key. As it is known, the output of the RSA algorithm is always the same length as the key. Hence, the output is 4096 bits -- or 512 bytes -- long. Finally, since the output is binary, it needs to be base64 encoded, for proper transmission and storage. Due to the inner workings of the base64 encoding, the size of the encoded text is $4\lceil*{n/3}$ of the original text, where $n$ is the number of bytes of the input. As such, the base64 encoded version of the encrypted password, has a size of $684$ bytes. Using the values found on table \ref{tab:model:password:size}, it is concluded that the total size for each entry is $1465$ bytes.
+
+				Using the requirements minimum number of entries \emph{($100.000$)}, this results in a total size of $146.5$ megabytes, for the passwords alone. While this might sound as much, in today's world where flash storage reaches $64$ gigabyte at an affordable price, and mechanical storage is measured in terabytes, this is hardly causes an issue.
+
+				\begin{table}
+					\centering
+					\begin{tabular}{l | r | r}
+						\textbf{Name}  			& \textbf{Type} 		& \textbf{Size \emph{(in bytes)}} 		\\
+						\hline
+						ID 						& Integer 			& 4						\\
+						title 					& String 			& 256					\\
+						username 				& String 			& 256					\\
+						password 				& String 			& 684					\\
+						url						& Boolean 			& 1						\\
+						note  					& String 			& 256					\\
+						owner 					& User ID 			& 4						\\
+						parent 					& Category ID 		& 4						\\
+						\hline\hline
+						\textbf{Total} 			& - 				& 1465
+					\end{tabular}
+					\caption{Variable size of the attributes for the Password model.}
+					\label{tab:model:password:size}
+				\end{table}
+
+
 		\subsection{The Shared Password Model}
 			Having decided that the password sharing mechanism will be sharing by cloning, 
 
@@ -1010,9 +1040,8 @@
 			\label{requirement:fulfilled:new}
 			\label{requirement:fulfilled:retrieve}
 			\label{requirement:fulfilled:delete}
+			\label{requirement:fulfilled:entries}
 
-
-			Having modelled the core compon
 
 			Section \ref{sec:model:category} on page \pageref{sec:model:category} introduced the concept of the Category model. This model allows for near infinite structuring of the password storage. As such, it is concluded that the solution fulfil functional requirement \#\ref{requirement:organization}:
 			\vspace{-3ex}\begin{enumerate}
@@ -1029,7 +1058,14 @@
 				\item Support retrieving stored passwords
 				\item Support deleting stored passwords
 			\end{enumerate}
-	
+
+			Finally, section \ref{sec:model:password:size} on page \pageref{sec:model:password:size} estimated the size of the database in regards to password entries, based on the approximated size of the password model. The conclusion was, that per $100.000$ entries in the database, it would take $145.6$ megabyte worth of storage, which in the modern world is no issue. As such, it is also concluded that the solution fulfil non-functional requirement \#\ref{requirement:entries}:
+			\vspace{-3ex}\begin{enumerate}
+				\setlength\itemsep{0.1em}
+				\setcounter{enumi}{3-1}
+				\item Support for \emph{at least} 100.000 password entries
+			\end{enumerate}
+
 	\section{Storing the Data}
 		\label{sec:database:type}
 		Up until now the phrase ``database'' has been used as a generic description of persistent storage. In this section, this will be elaborated a bit. Generally speaking, there primarily exist two categories of databases: Relational Database Management Systems \emph{(RDBMSs)} and Non-SQL \emph{(NoSQL)}
@@ -1162,6 +1198,8 @@
 
 		This leaves but one requirement lacking: Functional requirement \#\ref{requirement:restart}. This is painfully easily achieved. Each of the major operating systems have their own service, intended for this \emph{specific} purpose. Linux has Upstart \emph{(legacy systems)} and Systemd \emph{(newer systems)}\cite{autostart:linux}, OS X has launchd\cite{autostart:osx}, and Windows supports creating a service from an executable file using the SC command\cite{autostart:windows}. Creating a script for each of these services is again, just a matter of implementation. Deployment of these scripts can be easily done using a simple shell or bash script.
 
+		As such, it is finally concluded that the design is complete. As such, the implementation of the prototype will follow the descriptions and restrictions, found in this chapter.
+
 
 		\begin{table}[h!]
 			\begin{tabular}{r l c}
@@ -1208,7 +1246,7 @@
 				\hline
 				\nfreq{item:open-source} 		& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:open-source} }			\\
 				\hline
-				\nfreq{item:entries} 			& \red{\xmark} 			& \red{ \ref{requirement:fulfilled:entries} }			\\
+				\nfreq{item:entries} 			& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:entries} }			\\
 				\hline
 				\nfreq{item:encryption} 		& \green{\cmark} 			& \green{ \ref{requirement:fulfilled:encryption} }			\\
 				\hline
