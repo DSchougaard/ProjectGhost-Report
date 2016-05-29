@@ -26,7 +26,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2016-05-29 12:46:51 +0000</string>
+	<string>2016-05-29 12:56:05 +0000</string>
 	<key>Modifier</key>
 	<string>Daniel Schougaard</string>
 	<key>NotesVisible</key>
@@ -1430,8 +1430,8 @@
 							<integer>1710</integer>
 							<key>Points</key>
 							<array>
-								<string>{348, 45.799988}</string>
-								<string>{348, 493.50015}</string>
+								<string>{348, 32.577759}</string>
+								<string>{348, 323.5}</string>
 							</array>
 							<key>Style</key>
 							<dict>
@@ -1457,7 +1457,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{294, 7.4999943}, {108, 37.799999}}</string>
+							<string>{{294, 7.4999962}, {108, 24.577766}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
@@ -1497,8 +1497,8 @@
 							<integer>33</integer>
 							<key>Points</key>
 							<array>
-								<string>{69.550903, 45.799988}</string>
-								<string>{69.550903, 493.5}</string>
+								<string>{69.550903, 32.577759}</string>
+								<string>{69.550903, 323.49988}</string>
 							</array>
 							<key>Style</key>
 							<dict>
@@ -1524,7 +1524,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{15.550903, 7.4999943}, {108, 37.799999}}</string>
+							<string>{{15.550903, 7.4999809}, {108, 24.577766}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
@@ -4199,11 +4199,11 @@ with Alice's private key}</string>
 	<key>WindowInfo</key>
 	<dict>
 		<key>CurrentSheet</key>
-		<integer>3</integer>
+		<integer>1</integer>
 		<key>ExpandedCanvases</key>
 		<array/>
 		<key>Frame</key>
-		<string>{{1467, -100}, {1607, 977}}</string>
+		<string>{{1680, 4}, {1440, 873}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>
@@ -4217,7 +4217,7 @@ with Alice's private key}</string>
 		<key>SidebarWidth</key>
 		<integer>120</integer>
 		<key>VisibleRegion</key>
-		<string>{{-88, 107}, {736, 411.5}}</string>
+		<string>{{-47, 227.5}, {652.5, 359.5}}</string>
 		<key>Zoom</key>
 		<real>2</real>
 		<key>ZoomValues</key>
