@@ -1,11 +1,119 @@
-\chapter{Implementing the System}
+\chapter{Implementing the System: The Back-End}
+	In chapter \ref{chap:design} the design of the solution was described. This description ranged from overall specifications, to more detailed model designs. In the following two chapters the implementation of a \emph{prototype}, following the design specifications from chapter \ref{chap:design}, is described.
+
+	To achieve the best possibly experience for the reader, the description is split into two parts: The back-end and the front-end. In \emph{this} chapter, the implemenation of the prototype back-end is described.
+
+
+	\section{The Language of the Back-End}
+		\subsection{Python}
+			One of the more popular languages for self-hosted software is Python. Combined with frameworks such as Django or Flask, it acts as a very powerful way to develop a web API.
+
+
+
+
+		\subsection{Ruby}
+		\subsection{Node.js}
+		\subsection{C\#}
+		\subsection{PHP}
+		\subsection{C++}
+
+	\section{To Framework or Not To Framework}
+		\subsection{Express}
+		\subsection{Hapi}
+		\subsection{Restify}
+		\subsection{Koa}
+
+
+	\section{Database Abstraction Layer}
+
+	\section{API Endpoints}
+		Before defining the endpoints, the resources \emph{(see section \ref{sec:design:rest} on page \pageref{sec:design:rest})} of the application need to be determined. Looking at the models defined in section \ref{sec:modelling} on page \pageref{sec:modelling}, these offer a great starting point for resources.
+
+		First and foremost there is the collection of Users. This collections represents the user base as a whole. \verb=POST=ing to this collection, would by extension mean the creation of a new user. \verb=GET=ing the user collection, mean retrieving all user entries, with their username and other attributes in the ``public domain''. \verb=PUT= and \verb=DELETE= is slightly different. They're used for updating and deleting a \emph{single} user, in the entire collection. As such, the endpoint needs to have a user ID postfixed. Adhering to the standard, \emph{all} API endpoints will have \verb=/api= prefixed. These API endpoints are listed on table \ref{tab:api:users} on page \pageref{tab:api:users}.
+
+		Secondly, there is the collection of passwords. However, there is a slight caveat when it comes to this collection. Since each password is \emph{owned} by a user, it can generally be thought that there exists \emph{multiple} collection -- one for each user. As such, the password collection is gated behind the user resource and the ID specifying exactly which user owns said password. The same approach to designing these endpoints are used, as with the user resource and the result of this is found on table \ref{tab:api:passwords} on page \pageref{tab:api:passwords}.
+
+		The same argument made regarding the passwords collection, can be said about categories. Each user has their own private password collection, which is -- similar to passwords -- gated behind the owning user's ID. This can be seen on table \ref{tab:api:categories} on page \pageref{tab:api:categories}.
+		
+
+		\newcolumntype{L}[1]{>{\hsize=#1\hsize\raggedright\arraybackslash}X}%
+		\newcolumntype{R}[1]{>{\hsize=#1\hsize\raggedleft\arraybackslash}X}%
+		\newcolumntype{C}[2]{>{\hsize=#1\hsize\columncolor{#2}\centering\arraybackslash}X}%
+
+		\begin{table}
+			\begin{tabular}{r | l | l}
+				Method 		& Endpoint 					& Usage 			\\
+				\hline
+				GET 		& \verb=/api/users=			& Get user list 	\\
+				POST 		& \verb=/api/users=			& Create user 		\\
+				PUT 		& \verb=/api/users/\{id\}= 	& Update user 		\\
+				DELETE 		& \verb=/api/users/\{id\}= 	& Delete user 		\\
+			\end{tabular}
+			\caption{API endpoints for the Users resource.}
+			\label{tab:api:users}
+		\end{table}
+		
+		\begin{table}
+			\definecolor{tablerow1}{RGB}{230,230,230}
+			\definecolor{tablerow2}{RGB}{255,255,255}
+			\rowcolors{2}{tablerow1}{tablerow2}
+			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+				\hline
+				\textbf{Method} 	& \textbf{Endpoint} 							& \textbf{Usage} 			\\
+				\hline
+				GET 				& \verb=/api/users/{id}/passwords 			  = & Get list of passwords owned by user 	\\
+				POST 				& \verb=/api/users/{id}/passwords 			  = & Create password owned by user 		\\
+				PUT 				& \verb=/api/users/{id}/passwords/{id} 		  = & Update password owned by user 		\\
+				DELETE 				& \verb=/api/users/{id}/passwords/{id} 		  = & Delete password owned by user 		\\
+			\end{tabularx}
+			\caption{API endpoints for the Passwords resource.}
+			\label{tab:api:passwords}
+		\end{table}
+		
+		\begin{table}
+			\definecolor{tablerow1}{RGB}{230,230,230}
+			\definecolor{tablerow2}{RGB}{255,255,255}
+			\rowcolors{2}{tablerow1}{tablerow2}
+			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+				\hline
+				\textbf{Method} 	& \textbf{Endpoint} 									& \textbf{Usage} 			\\
+				\hline
+				GET 				& \verb=/api/users/{id}/categories 			  		= & Get list of categories owned by user 	\\
+				POST 				& \verb=/api/users/{id}/categories 			  		= & Create category owned by user 		\\
+				PUT 				& \verb=/api/users/{id}/categories/{id} 		  	= & Update category owned by user 		\\
+				DELETE 				& \verb=/api/users/{id}/categories/{id} 		  	= & Delete category owned by user 		\\
+			\end{tabularx}
+			\caption{API endpoints for the Categories resource.}
+			\label{tab:api:categories}
+		\end{table}
+
+
+
+
+	\section{Workaround To Be Self-Contained}
+		%RESTIFY workaround with serve static
 	
-	\subsection{Deciding on a Language of the Backend}
-	\subsection{To Framework or Not To Framework}
-	\subseciton{Database Abstraction Layer}
+	\section{Resolving Objects}
+		restify middelware automaticly get objects from storage
+
+	\section{Authentication}
+
+	\section{Authorization}
 
 
-	\subsection{Front-end Framework}
+
+	\section{Dependencies}
+
+
+\chapter{Implementing the System: The Front-End}
+	\section{Developing for the Browser}
+		\subsection{Flash}
+		\subsection{Java}
+		\subsection{Javascript}
+		\subsection{Silverlight}
+
+
+	\section{Using a Framework}
 		\begin{itemize}
 			\item Angular 1.5
 			\item Angular 2.0
@@ -13,3 +121,5 @@
 			\item Ember
 			\item Polymer
 		\end{itemize}
+
+	\section{Performing Encryption}

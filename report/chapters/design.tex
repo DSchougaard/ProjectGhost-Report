@@ -1,4 +1,5 @@
 \chapter{Designing the System}
+	\label{chap:design}
 	In the following chapter, the overall design of the system is discussed. First and foremost, the basic architecture is decided, based on the requirements described in section \ref{sec:requirements} on page \pageref{sec:requirements}. Then more detailed subjects are covered, such as how authentication will work, how the solution keeps the users' data safe, and generally how it will work under the hood - so to speak.
 
 	\section{Architecture}
@@ -100,6 +101,7 @@
 			However, there is a slight drawback: Implementation languages. While RPC implementations such as JSON-RPC makes RPC able to be easily used across multiple languages, this is simply not the case with RMI. Java is -- more or less -- the only language with proper support for this. As such, this solution would be \emph{very} restrictive in regards to actual implementation.
 
 		\subsection{Representational State Transfer}
+			\label{sec:design:rest}
 			Representational State Transfer, or REST for short, was introduced by Fielding and Taylor \cite{Fielding:2000:PDM:337180.337228} in 2000. REST is an architecture style for designing networked application. It is a stateless, client-server communication \emph{style}, which in most cases uses the Hypertext Transfer Protocol \emph{(HTTP)} protocol and the accompanying HTTP ``verbs''. Traditionally REST uses JSON as body encoding, however it is also possible to use XML.
 
 			The core notion of REST is that resources are bundled in collections, on which the HTTP verbs are used. The API then exposes these collections as Uniform Resource Identifiers \emph{(URIs)} in what is commonly known as endpoints. Using the various HTTP verbs on these endpoints results in actions being invoked on said collections.
