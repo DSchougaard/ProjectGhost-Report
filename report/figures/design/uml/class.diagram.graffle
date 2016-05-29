@@ -912,7 +912,7 @@ privateKeySalt}</string>
 			</dict>
 		</array>
 		<key>Frame</key>
-		<string>{{181, 4}, {885, 873}}</string>
+		<string>{{182, 4}, {885, 873}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>

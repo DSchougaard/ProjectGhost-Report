@@ -26,7 +26,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2016-05-28 19:39:11 +0000</string>
+	<string>2016-05-29 11:53:18 +0000</string>
 	<key>Modifier</key>
 	<string>Daniel Schougaard</string>
 	<key>NotesVisible</key>
@@ -5903,7 +5903,7 @@ with DEK}</string>
 			<key>RowSpacing</key>
 			<real>36</real>
 			<key>SheetTitle</key>
-			<string>Canvas 5</string>
+			<string>Sequence Diagram CL-PRE</string>
 			<key>UniqueID</key>
 			<integer>5</integer>
 			<key>VPages</key>
@@ -6591,7 +6591,7 @@ with DEK}</string>
 		<key>ExpandedCanvases</key>
 		<array/>
 		<key>Frame</key>
-		<string>{{-45, -1}, {1252, 873}}</string>
+		<string>{{1513, 4}, {1252, 873}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>
@@ -6631,7 +6631,7 @@ with DEK}</string>
 				<real>1</real>
 			</array>
 			<array>
-				<string>Canvas 5</string>
+				<string>Sequence Diagram CL-PRE</string>
 				<real>1</real>
 				<real>4</real>
 			</array>
