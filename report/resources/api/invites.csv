@@ -1,0 +1,4 @@
+method,endpoint,description
+GET,/api/invites,Get status of an invite
+POST,/api/invites,Create new invite
+POST,/api/invites/\{id\}/accept,Accept invite and create user

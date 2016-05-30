@@ -29,13 +29,27 @@
 	\section{API Endpoints}
 		Before defining the endpoints, the resources \emph{(see section \ref{sec:design:rest} on page \pageref{sec:design:rest})} of the application need to be determined. Looking at the models defined in section \ref{sec:modelling} on page \pageref{sec:modelling}, these offer a great starting point for resources.
 
-		First and foremost there is the collection of Users. This collections represents the user base as a whole. \verb=POST=ing to this collection, would by extension mean the creation of a new user. \verb=GET=ing the user collection, mean retrieving all user entries, with their username and other attributes in the ``public domain''. \verb=PUT= and \verb=DELETE= is slightly different. They're used for updating and deleting a \emph{single} user, in the entire collection. As such, the endpoint needs to have a user ID postfixed. Adhering to the standard, \emph{all} API endpoints will have \verb=/api= prefixed. These API endpoints are listed on table \ref{tab:api:users} on page \pageref{tab:api:users}.
 
-		Secondly, there is the collection of passwords. However, there is a slight caveat when it comes to this collection. Since each password is \emph{owned} by a user, it can generally be thought that there exists \emph{multiple} collection -- one for each user. As such, the password collection is gated behind the user resource and the ID specifying exactly which user owns said password. The same approach to designing these endpoints are used, as with the user resource and the result of this is found on table \ref{tab:api:passwords} on page \pageref{tab:api:passwords}.
+		\subsection{The Users Resource}
+			First and foremost there is the collection of Users. This collections represents the user base as a whole. \verb=POST=ing to this collection, would by extension mean the creation of a new user. \verb=GET=ing the user collection, mean retrieving all user entries, with their username and other attributes in the ``public domain''. \verb=PUT= and \verb=DELETE= is slightly different. They're used for updating and deleting a \emph{single} user, in the entire collection. As such, the endpoint needs to have a user ID postfixed. Adhering to the standard, \emph{all} API endpoints will have \verb=/api= prefixed. These API endpoints are listed on table \ref{tab:api:users} on page \pageref{tab:api:users}.
 
-		The same argument made regarding the passwords collection, can be said about categories. Each user has their own private password collection, which is -- similar to passwords -- gated behind the owning user's ID. This can be seen on table \ref{tab:api:categories} on page \pageref{tab:api:categories}.
+		\subsection{The Passwords Resource}
+			Then there is the collection of passwords. However, there is a slight caveat when it comes to this collection. Since each password is \emph{owned} by a user, it can generally be thought that there exists \emph{multiple} collection -- one for each user. As such, the password collection is gated behind the user resource and the ID specifying exactly which user owns said password. The same approach to designing these endpoints are used, as with the user resource and the result of this is found on table \ref{tab:api:passwords} on page \pageref{tab:api:passwords}.
+
+		\subsection{The Categories Resource}
+			The same argument made in regards to the passwords collection, can be said about categories. Each user has their own private password collection, which is -- similar to passwords -- gated behind the owning user's ID. This can be seen on table \ref{tab:api:categories} on page \pageref{tab:api:categories}.
+
+		\subsection{The Invites Resource}
+			When an admin creates a new invites, it can be said he \verb=POST=s it to the invites resource. \verb=GET=ing an ID, returns the status of an ID stored in the database. Then, there is finally the act of using an invite. Since a user is created, it only makes sense that the \verb=POST= method is needed. However, since the regular endpoint is already being posted to, an additional endpoint is needed. As such, appending the endpoint with \verb=/accept= will achieve this. This can be seen on table \ref{tab:api:invites} on page \pageref{tab:api:invites}.
+
+		\subsection{The Audit Resource}
+			The Audit resource is actually very simple. It only consists of a single endpoint; Getting the audit log. Since this resource is owned by individual users, this is -- much like passwords and categories -- gated behind the user collection and a specific ID. This can be seen on table \ref{tab:api:audit} on page \pageref{tab:api:audit}.
+
+		\subsection{The Auth Resource}
+			The Auth resource is a little bit more interesting. Of course, there is the generic \verb=POST=, containing the user's username and password, for authentication purposes. The details of this is covered in section \ref{sec:design:authentication} on page \pageref{sec:design:authentication}. However, this is not all. Since the solution supports TOTP two-factor-authentication, as described in section \ref{sec:mfa} on page \pageref{sec:mfa}, endpoints for enabling this is needed as well. In section \ref{sec:design:breaking-rest} on page \pageref{sec:design:breaking-rest} it was argued that at one point it was \emph{necessary} to break the REST principles. As such, two endpoints are needed: One for generating a new secret and caching it, and one for actually verifying said secret. 
+
+
 		
-
 		\newcolumntype{L}[1]{>{\hsize=#1\hsize\raggedright\arraybackslash}X}%
 		\newcolumntype{R}[1]{>{\hsize=#1\hsize\raggedleft\arraybackslash}X}%
 		\newcolumntype{C}[2]{>{\hsize=#1\hsize\columncolor{#2}\centering\arraybackslash}X}%
@@ -54,6 +68,7 @@
 			\caption{API endpoints for the Users resource.}
 			\label{tab:api:users}
 		\end{table}
+
 
 		\begin{table}
 			\definecolor{tablerow1}{RGB}{230,230,230}
@@ -83,6 +98,51 @@
 
 			\caption{API endpoints for the Categories resource.}
 			\label{tab:api:categories}
+		\end{table}
+		
+		\begin{table}
+			\definecolor{tablerow1}{RGB}{230,230,230}
+			\definecolor{tablerow2}{RGB}{255,255,255}
+			\rowcolors{2}{tablerow1}{tablerow2}
+			
+			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
+				\csvreader[head to column names]{resources/api/invites.csv}{}% use head of csv as column names
+				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
+			\end{tabularx}
+
+			\caption{API endpoints for the Invites resource.}
+			\label{tab:api:invites}
+		\end{table}
+
+		\begin{table}
+			\definecolor{tablerow1}{RGB}{230,230,230}
+			\definecolor{tablerow2}{RGB}{255,255,255}
+			\rowcolors{2}{tablerow1}{tablerow2}
+			
+			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
+				\csvreader[head to column names]{resources/api/audit.csv}{}% use head of csv as column names
+				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
+			\end{tabularx}
+
+			\caption{API endpoint for the Audit resource.}
+			\label{tab:api:audit}
+		\end{table}
+
+		\begin{table}[p]
+			\definecolor{tablerow1}{RGB}{230,230,230}
+			\definecolor{tablerow2}{RGB}{255,255,255}
+			\rowcolors{2}{tablerow1}{tablerow2}
+			
+			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
+				\csvreader[head to column names]{resources/api/auth.csv}{}% use head of csv as column names
+				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
+			\end{tabularx}
+
+			\caption{API endpoints for the Auth resource.}
+			\label{tab:api:auth}
 		\end{table}
 
 

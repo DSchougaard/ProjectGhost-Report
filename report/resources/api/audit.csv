@@ -1,0 +1,2 @@
+method,endpoint,description
+GET,api/users/\{id\}/audit,Get the audit log for a user

@@ -484,6 +484,7 @@
 				%Having made choices regarding data encryption and protection, in the previous sections, it is now suitable to update the checklist found on figure \ref{tab:checklist_arch-comms} on page \pageref{tab:checklist_arch-comms}. Using the asymmetric approach and protecting the users' keys with a password derived symmetric key, it is clear that the following requirements are now fulfilled
 
 	\section{Authentication}
+		\label{sec:design:authentication}
 		As with any program handling users' data, there need to be some sort of authentication method in place. Describing the authentication used for this project, will be split up into two categories: First it will be determined exactly how the API will be secured. Once this has been determined, it will be decided how to actually \emph{perform} this authentication.
 
 		\subsection{Securing the API}
@@ -642,6 +643,7 @@
 			Upon first login, the user will then have to be prompted to change not only the password, but also the username, for security purposes.
 
 		\subsection{Breaking the REST Principles On Purpose}
+			\label{sec:design:breaking-rest}
 			While one of the pillars of REST APIs is that it should be stateless, sometimes this is just not feasible. One example of this, is when enabling two-factor-authentication for users. The back-end \emph{should} verify that the user has gotten the correct secret \emph{(see \ref{sec:mfa} on page \pageref{sec:mfa})}, before actually storing the secret in the database and enabling two-factor authentication. 
 
 			If this verification is not done, the solution will be susceptible to the following scenario, resulting in a user being locked out:

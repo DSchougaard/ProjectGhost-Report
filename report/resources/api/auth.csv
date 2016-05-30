@@ -1,0 +1,4 @@
+method,endpoint,description
+POST,/api/auth/login,Authenticate to the server
+POST,/api/auth/totp/generate,Generate new TOTP secret which is then cached
+POST,/api/auth/totp/verify,Verifies TOTP secret stored in cache
