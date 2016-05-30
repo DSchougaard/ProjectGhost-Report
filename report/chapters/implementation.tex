@@ -25,6 +25,11 @@
 
 
 	\section{Database Abstraction Layer}
+		While Object-Relational Mapping \emph{(ORM)} strictly speaking isn't the same as a DAL, for this section the two are considered equivalent.
+
+
+		As decided in section \ref{sec:restrict:database} on page \pageref{sec:restrict:database}, a database abstraction layer is necessary. The Knex.js is exactly such a DAL, for Node.js. Supporting MySQL, SQLite, Postgres, MariaDB, and Oracle, it achieves a remarkable coverage of various database technologies. Using the the Bluebird promise library, it integrates \emph{extremely} well, with Node.js.
+
 
 	\section{API Endpoints}
 		Before defining the endpoints, the resources \emph{(see section \ref{sec:design:rest} on page \pageref{sec:design:rest})} of the application need to be determined. Looking at the models defined in section \ref{sec:modelling} on page \pageref{sec:modelling}, these offer a great starting point for resources.
@@ -144,7 +149,6 @@
 			\caption{API endpoints for the Auth resource.}
 			\label{tab:api:auth}
 		\end{table}
-
 
 	\section{Workaround To Be Self-Contained}
 		%RESTIFY workaround with serve static
