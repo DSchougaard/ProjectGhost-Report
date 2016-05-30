@@ -25,11 +25,11 @@
 
 
 	\section{Database Abstraction Layer}
-		While Object-Relational Mapping \emph{(ORM)} strictly speaking isn't the same as a DAL, for this section the two are considered equivalent.
+		As decided in section \ref{sec:restrict:database} on page \pageref{sec:restrict:database}, a database abstraction layer is necessary. While Object-Relational Mapping \emph{(ORM)} strictly speaking isn't the same as a DAL, for this section the two are considered equivalent.
 
+		The two most widely used solutions for this, is Sequelize, Bookshelf, and Knex \emph{(Bookshelf is built ontop of Knex)}. Sequelize and Bookshelf are both ORMs, whereas Knex is a DAL. In regards to platform support, they are fairly similar. Sequelize supports PostgreSQL, MySQL, SQLite and MSSQL. Bookshelf/Knex supports MySQL, SQLite, Postgres, MariaDB, and Oracle.
 
-		As decided in section \ref{sec:restrict:database} on page \pageref{sec:restrict:database}, a database abstraction layer is necessary. The Knex.js is exactly such a DAL, for Node.js. Supporting MySQL, SQLite, Postgres, MariaDB, and Oracle, it achieves a remarkable coverage of various database technologies. Using the the Bluebird promise library, it integrates \emph{extremely} well, with Node.js.
-
+		While working with ORMs generally takes database interactions to a higher abstraction level, it is thought that this also removes certain insight into how some queries work. Additionally, Knex's chainable methods, makes for query building in the style of Javascript promises. As such, it is concluded the Knex is the superior choice as a DAL for the implementation.
 
 	\section{API Endpoints}
 		Before defining the endpoints, the resources \emph{(see section \ref{sec:design:rest} on page \pageref{sec:design:rest})} of the application need to be determined. Looking at the models defined in section \ref{sec:modelling} on page \pageref{sec:modelling}, these offer a great starting point for resources.
