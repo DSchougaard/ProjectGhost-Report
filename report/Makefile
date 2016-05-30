@@ -10,6 +10,7 @@ endif
 	#texcount $(FILENAME).tex -inc -letter -total
 
 all: 
+	awk 'FNR>1' resources/api/headers.top resources/api/*.csv > resources/api.csv
 	latexmk -pdf $(FILENAME).tex
 	texcount $(FILENAME).tex -inc -total -letters
 clean:

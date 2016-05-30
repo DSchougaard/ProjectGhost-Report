@@ -1,0 +1,5 @@
+method,endpoint,description
+GET,/api/users/\{id\}/categories,Get list of categories owned by user
+POST,/api/users/\{id\}/categories,Create category owned by user
+PUT,/api/users/\{id\}/categories/\{id\},Update category owned by user
+DELETE,/api/users/\{id\}/categories/\{id\},Delete category owned by user

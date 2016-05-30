@@ -39,33 +39,33 @@
 		\newcolumntype{L}[1]{>{\hsize=#1\hsize\raggedright\arraybackslash}X}%
 		\newcolumntype{R}[1]{>{\hsize=#1\hsize\raggedleft\arraybackslash}X}%
 		\newcolumntype{C}[2]{>{\hsize=#1\hsize\columncolor{#2}\centering\arraybackslash}X}%
-
-		\begin{table}
-			\begin{tabular}{r | l | l}
-				Method 		& Endpoint 					& Usage 			\\
-				\hline
-				GET 		& \verb=/api/users=			& Get user list 	\\
-				POST 		& \verb=/api/users=			& Create user 		\\
-				PUT 		& \verb=/api/users/\{id\}= 	& Update user 		\\
-				DELETE 		& \verb=/api/users/\{id\}= 	& Delete user 		\\
-			\end{tabular}
-			\caption{API endpoints for the Users resource.}
-			\label{tab:api:users}
-		\end{table}
 		
 		\begin{table}
 			\definecolor{tablerow1}{RGB}{230,230,230}
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
+			
 			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
-				\hline
-				\textbf{Method} 	& \textbf{Endpoint} 							& \textbf{Usage} 			\\
-				\hline
-				GET 				& \verb=/api/users/{id}/passwords 			  = & Get list of passwords owned by user 	\\
-				POST 				& \verb=/api/users/{id}/passwords 			  = & Create password owned by user 		\\
-				PUT 				& \verb=/api/users/{id}/passwords/{id} 		  = & Update password owned by user 		\\
-				DELETE 				& \verb=/api/users/{id}/passwords/{id} 		  = & Delete password owned by user 		\\
+				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
+				\csvreader[head to column names]{resources/api/users.csv}{}% use head of csv as column names
+				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
 			\end{tabularx}
+
+			\caption{API endpoints for the Users resource.}
+			\label{tab:api:users}
+		\end{table}
+
+		\begin{table}
+			\definecolor{tablerow1}{RGB}{230,230,230}
+			\definecolor{tablerow2}{RGB}{255,255,255}
+			\rowcolors{2}{tablerow1}{tablerow2}
+			
+			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
+				\csvreader[head to column names]{resources/api/passwords.csv}{}% use head of csv as column names
+				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
+			\end{tabularx}
+
 			\caption{API endpoints for the Passwords resource.}
 			\label{tab:api:passwords}
 		\end{table}
@@ -74,20 +74,16 @@
 			\definecolor{tablerow1}{RGB}{230,230,230}
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
+			
 			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
-				\hline
-				\textbf{Method} 	& \textbf{Endpoint} 									& \textbf{Usage} 			\\
-				\hline
-				GET 				& \verb=/api/users/{id}/categories 			  		= & Get list of categories owned by user 	\\
-				POST 				& \verb=/api/users/{id}/categories 			  		= & Create category owned by user 		\\
-				PUT 				& \verb=/api/users/{id}/categories/{id} 		  	= & Update category owned by user 		\\
-				DELETE 				& \verb=/api/users/{id}/categories/{id} 		  	= & Delete category owned by user 		\\
+				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
+				\csvreader[head to column names]{resources/api/categories.csv}{}% use head of csv as column names
+				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
 			\end{tabularx}
+
 			\caption{API endpoints for the Categories resource.}
 			\label{tab:api:categories}
 		\end{table}
-
-
 
 
 	\section{Workaround To Be Self-Contained}
