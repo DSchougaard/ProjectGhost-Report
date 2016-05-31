@@ -236,6 +236,40 @@
 			If the above snippets are evaluated to \verb=true=, the code keeps executing. If it is evaluated to false, the back-end returns http code \verb=403=, Forbidden denoting that the user does \emph{not} have sufficient privileges to access that specific data.
 
 		\subsection{Advanced Authentication}
+			However, this only works on select resources. As the user will easily see, the invite endpoints will not work using the simple method. As such, the groundwork for a more advanced and fine grained authorization framework is made.
+
+			First and foremost, the basic target is defined. In this case, it will be \verb=invite=. Next, the actions on this target is defined. For invites, there really only is one: \verb=create=. For other objects, these actions might be \verb=update=, \verb=delete=, etc. Then, for each target, each method's permissions can be defined. In the invites case, the following snippet shows the authorization process:
+
+			\begin{lstlisting}[gobble=16,language=JavaScript]
+                function invite(permObject, req, res, next){
+                    // Supported Methods
+                    var methods = ['create'];
+                    
+                    // Check to see if method is supported in authorization suite
+                    if( _.indexOf(methods, permObject.method) === -1 ){
+                        return deny(next);
+                    }
+                    
+                    if( permObject.method === methods[0] ){
+                        // Allow creation of invite, if the user is an admin
+                        if( req.resolved.user.isAdmin ){
+                            return next();
+                        }
+
+                        return next(new restify.errors.ForbiddenError('Insufficient privileges'));
+                    }
+                }			
+			\end{lstlisting}
+			The \verb=deny(..)= method is just a wrapper to elegantly throw the same error, across multiple authorization targets. The content of this method is as simple as:
+			\begin{lstlisting}[gobble=16,language=JavaScript]
+                function deny(next){
+                    return next(new restify.errors.ForbiddenError('Insufficient privileges'));
+                }
+			\end{lstlisting}
+
+		\subsection{Simple or Advanced}
+			There is not a seconds doubt that the advanced approach is more fine grained. Where the simple approach only supports differentiating between targets, the advanced approach also supports differentiating between actions. As such, while the simple method does its job perfectly as is, should the need for more detailed authorization options arise, they will need to be implemented the advanced approach.
+
 
 	\section{Dependencies}
 
