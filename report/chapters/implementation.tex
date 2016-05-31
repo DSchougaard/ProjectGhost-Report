@@ -190,7 +190,43 @@
 		\end{table}
 		%RESTIFY workaround with serve static
 
+	
+	\section{Middlewares}
+		To ease implementation and to reduce code duplication, certain features will be implemented using what is commonly known as middlewares. Middlewares are simply a term for methods, being execute \emph{before} the actual controller of an endpoint. An example of an endpoint is:
+		\begin{lstlisting}[gobble=12,language=JavaScript]
+            server.get('/api/ping', function(req, res, next){
+                res.send(200, 'OK');
+                return next();
+            });		
+		\end{lstlisting}
+
+		Whenever \emph{any} client performs a HTTP call to the endpoint \verb=/api/ping=, using the \verb=GET= method, the server simply returns http code \verb=200=, and continues its operation. However, a new middleware will now be created. This middleware will effectively \emph{log} whenever a ping request is made. The code for the logger is found on listing \ref{lst:example:pinglog} on page \pageref{lst:example:pinglog}. Listing \ref{lst:example:ping_wlog} on page \pageref{lst:example:ping_wlog} now contains the updated ping endpoint. As is seen on line 2, the variable \verb=pinglog= is injected into the controller. As such, the code on listing \ref{lst:example:pinglog} is executed \emph{before} the code from listing \ref{lst:example:ping_wlog}, \emph{every} single time.
+
+		\begin{lstlisting}[gobble=12,language=JavaScript,caption={PingLog Middleware},label={lst:example:pinglog}]
+            module.exposts = function(req, res, next){
+                console.log('Ping reqeuest received');
+                return next();
+            }
+		\end{lstlisting}
+
+		\begin{lstlisting}[gobble=12,language=JavaScript,caption={Ping endpoint with the pinglog middleware},numbers=left,label={lst:example:ping_wlog}]
+            var pinglog = require('pinglog.js');
+            server.get('/api/ping', pinglog, function(req, res, next){
+                res.send(200, 'OK');
+                return next();
+            });		
+		\end{lstlisting}
+
+		This design approach is used for several features in the codebase, most noticibly:
+		\begin{itemize}
+			\item Authentication \emph{(see section \ref{sec:impl:authentication} on page \pageref{sec:impl:authentication})}
+			\item Authorization \emph{(see section \ref{sec:impl:authorization} on page \pageref{sec:impl:authorization})}
+			\item Object Resolving \emph{(see section \ref{sec:impl:resolve} on page \pageref{sec:impl:resolve})}
+		\end{itemize}
+
+
 	\section{Authentication}
+		\label{sec:impl:authentication}
 		In section \ref{sec:api:auth} on page \pageref{sec:api:auth} the endpoints involved in authentication was described. In this section, the process is described a little further. 
 
 		As with any authentication, the user starts by sending his or her username and password \emph{(see section \ref{sec:design:authentication} on page \pageref{sec:design:authentication})}. If two factor authentication is not enabled, the standard verification approach is made. If the password matches, http code \verb=200= is returned, signifying successful authentication. Should it not match, http code \verb=401= is returned, signifying unsuccessful authentication. All in all, very basic.
@@ -208,7 +244,18 @@
 			\label{fig:sequence:auth}
 		\end{figure}
 
+		\subsection{Powering the Two-Factor Authentication}
+			To aid in the development, a third party tool is chosen for aiding the two-factor authentication. The Speakeasy project\cite{speakeasy_lib} is not only well documented and extremely easy to use, it is also pretty much the only two-factor authentication tool for Node.js, that has any credibility at all. As such, the choice fell on this suite.
+
+			Speakeasy not only makes appropriate TOTP secret generation easy, but also makes verifying a token extremely easy. The snippet for verification is found on listing \ref{lst:example:speakeasy:verification} on page \pageref{lst:example:speakeasy:verification} \emph{(example taken from their GitHub repository)}. \verb=base32secret= is the secret that the TOTP client and the back-end has in common, and \verb=userToken= is the TOTP token.
+
+
+			\begin{lstlisting}[gobble=16,language=JavaScript,caption={Verifying a TOTP token using Speakeasy},label={lst:example:speakeasy:verification}]
+                var verified = speakeasy.totp.verify({ secret: base32secret, encoding: 'base32', token: userToken });
+			\end{lstlisting}
+
 	\section{Authorization}
+		\label{sec:impl:authorization}
 		For authorization purposes two strategies will be used: Simple and advanced. For all purposes where the simple is a possibility, it will be used. In section \ref{sec:design:authorization} on page \pageref{sec:design:authorization} it was described which users has access to which entities. The following two sections will adhere to this design.
 
 		\subsection{Basic Authorization}
@@ -270,6 +317,29 @@
 		\subsection{Simple or Advanced}
 			There is not a seconds doubt that the advanced approach is more fine grained. Where the simple approach only supports differentiating between targets, the advanced approach also supports differentiating between actions. As such, while the simple method does its job perfectly as is, should the need for more detailed authorization options arise, they will need to be implemented the advanced approach.
 
+	\section{Resolving Objects}
+		\label{sec:impl:resolve}
+		Since multiple routes exists for the same type of objects \emph{(get, post, put and delete)}, it would be beneficial to have a single place, where objects are read from the database. As such, a common object resolving middleware is made. It requires a number of standards, however. First and foremost, all object ids found in the URL is to be postfixed with a constant, \verb=Id=. This is done to easily manipulate the variable name string, to identify the corresponding object. Secondly, \emph{all} resolvable objects \emph{must} use the same method definition to lookup an object from the database, using their ID: The \verb=find(..)= method.
+
+		Using these two constraints, a resolver can fairly easily be built. It simply strips the tailing two characters from the variable name, and based on the rest it looks up a user, a password, a category, an invite, or a shared password. The core of the resolver is found on listing \ref{lst:example:resolver} on page \pageref{lst:example:resolver}. The \verb=objectTypes= array is used for creating the final variable names, which the controllers will then refer to these objects as.
+
+		\begin{lstlisting}[gobble=12,language=JavaScript,caption={Object resolver middleware},label={lst:example:resolver}]
+            _.mapObject(req.params, function(val, key){
+            
+                // If the name is not present in classNames array, we're
+                // dealing with a body parameter and should skip.
+                if( key.slice(-2) === 'Id' && classNames[key.slice(0, -2)] !== undefined ){
+                    
+                    // Creating empty JSON object for the resolved objects to be placed in
+                    if( req.resolved.params === undefined ) 
+                        req.resolved.params = {};
+                    
+                    objectTypes.push(key.slice(0, -2));
+                    objects.push( (classNames[key.slice(0, -2)]).find(val) );
+                }
+            
+            });
+		\end{lstlisting}
 
 	\section{Dependencies}
 
