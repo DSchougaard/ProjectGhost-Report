@@ -14,6 +14,13 @@ GET,api/users/\{id\}/passwords,Get list of passwords owned by user
 POST,/api/users/\{id\}/passwords,Create password owned by user
 PUT,/api/users/\{id\}/passwords/\{id\},Update password owned by user
 DELETE,/api/users/\{id\}/passwords/\{id\},Delete password owned by user
+GET,/api/users/:userId/passwords/shares', Get list of passwords shared to the user
+POST,/api/users/:userId/passwords/:passwordId/shares', Share password to another user
+GET,/api/users/:userId/passwords/:passwordId/shares', Get list of users the password is shared with
+GET,/api/users/:userId/passwords/shared/:shareId', Get a single shared password
+PUT,/api/users/:userId/passwords/shares/:shareId',	Update a shared password
+GET,/api/users/:userId/passwords/shared', Get passwords the user has shared
+DELETE,/api/users/:userId/passwords/shares/:shareId',Deletes shared password
 GET,/api/users,Get user list
 POST,/api/users,Create user 
 PUT,/api/users/\{id\},Update user 
