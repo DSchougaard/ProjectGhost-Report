@@ -174,6 +174,7 @@
 
 		As such, a workaround is needed. After having stated the API routes, six new routes are defined as is seen on table \ref{tab:api:workaround} on page \pageref{tab:api:workaround}. This ensures that any API hits are given the proper error code, while ensuring that the application for the front-end is being delivered in all cases.
 		\begin{table}
+			\centering
 			\begin{tabular}{r | l}
 				\textbf{Method} & \textbf{Endpoint} \\
 				\hline
@@ -192,8 +193,13 @@
 	\section{Authentication}
 		In section \ref{sec:api:auth} on page \pageref{sec:api:auth} the endpoints involved in authentication was described. In this section, the process is described a little further. 
 
-		First and foremost the user
+		As with any authentication, the user starts by sending his or her username and password \emph{(see section \ref{sec:design:authentication} on page \pageref{sec:design:authentication})}. If two factor authentication is not enabled, the standard verification approach is made. If the password matches, http code \verb=200= is returned, signifying successful authentication. Should it not match, http code \verb=401= is returned, signifying unsuccessful authentication. All in all, very basic.
 
+		Should two factor authentication be enabled, however, a more complex event happens. Since the front-end won't know if two factor authentication is enabled or not, this needs to be conveyed to the front-end. As such, should the user have two-factor authentication enabled, but the token is missing from the body, http error code \verb=403= is returned. \verb=403= is defined as follows, by RFC2616\cite{httpcodes}:
+		\begin{citequote}[sec.10.4.4]{httpcodes}
+			   The server understood the request, but is refusing to fulfill it...
+		\end{citequote}
+		When the front-end receives the \verb=403= from the authentication endpoint, it \emph{knows} to promt to the user for a two-factor-token. Once this token is obtained, the request is sent again -- with the new token. Once received, the back-end verifies the password, similar to before, and verifies that the token is correct. If all fields are vitrified the back-end responds with \verb=200= to signify successful authentication. Should both fields not be verified, the response is \verb=401= to signify unsuccessful authentication. Figure \ref{fig:sequence:auth} on page \pageref{fig:sequence:auth} depicts this series of event, in a sequence diagram.
 
 		\begin{figure}[p]
 			\centering
@@ -203,6 +209,33 @@
 		\end{figure}
 
 	\section{Authorization}
+		For authorization purposes two strategies will be used: Simple and advanced. For all purposes where the simple is a possibility, it will be used. In section \ref{sec:design:authorization} on page \pageref{sec:design:authorization} it was described which users has access to which entities. The following two sections will adhere to this design.
+
+		\subsection{Basic Authorization}
+			Using the API described in section \ref{sec:api} on page \pageref{sec:api}, it is clearly seen that models' IDs are found in the URL. As such, using the owner field, of these models, it can easily be determined if the authenticated user has access to any given resource.
+
+			As per the design, \emph{both} the user and admins will have full access to all user methods. This is simply handled with a comparison:
+			\begin{lstlisting}[gobble=16,language=JavaScript]
+                if( req.resolved.user.id === user.id || req.resolved.user.isAdmin ){
+			\end{lstlisting}
+
+			Since it is only the user self, that has access to his or her passwords, this is also handled extremely easy by doing:
+			\begin{lstlisting}[gobble=16,language=JavaScript]
+                if( password.owner === user.id && user.id === req.resolved.user.id ){
+			\end{lstlisting}
+			The exact same is done for categories:
+			\begin{lstlisting}[gobble=16,language=JavaScript]
+                if( category.owner === user.id && user.id === req.resolved.user.id ){
+			\end{lstlisting}
+
+			Shared passwords however, are a little bit more difficult. As has already been stated, both the user \emph{sharing} the password and the user receiving the shared password needs access to this resource. As such, the logic is a little different:
+			\begin{lstlisting}[gobble=16,language=JavaScript]
+                if( (share.owner === user.id && user.id === req.resolved.user) || (share.origin_owner === user.id && user.id === req.resolved.user)){
+			\end{lstlisting}
+		
+			If the above snippets are evaluated to \verb=true=, the code keeps executing. If it is evaluated to false, the back-end returns http code \verb=403=, Forbidden denoting that the user does \emph{not} have sufficient privileges to access that specific data.
+
+		\subsection{Advanced Authentication}
 
 	\section{Dependencies}
 

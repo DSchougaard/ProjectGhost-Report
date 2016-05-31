@@ -1070,6 +1070,10 @@
 				\item Support for \emph{at least} 100.000 password entries
 			\end{enumerate}
 
+	\section{Authorization}
+		\label{sec:design:authorization}
+		\todo{Describe authorization}
+
 	\section{Storing the Data}
 		\label{sec:database:type}
 		Up until now the phrase ``database'' has been used as a generic description of persistent storage. In this section, this will be elaborated a bit. Generally speaking, there primarily exist two categories of databases: Relational Database Management Systems \emph{(RDBMSs)} and Non-SQL \emph{(NoSQL)}
@@ -1131,6 +1135,9 @@
 		However, as should be \emph{obvious} to everyone, this will be painfully vulnerable to race-conditions. This \emph{exact} scenario, is completely mitigated by the use of RDBMSs transactions: These would make the four steps atomic, in the eyes of the database. While some NoSQL databases adhering to the ACID principles, and supporting transactions, are starting to appear\cite{no_sql_transactions}, it is by far all of them that supports this.
 
 		As such, it is decided that a more ``traditional'' RDBMS will be used for this solution.
+
+		\subsection{Storage Schema}
+			\todo{Create EER}
 
 	\section{Ensuring Agnosticism}
 		When creating a solution like this, it is important to make it as versatile as possible. As such, limiting it to run on a single platform only restricts deployment. As such, having an application that can run cross-platform is beneficial.
