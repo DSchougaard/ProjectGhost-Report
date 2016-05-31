@@ -32,6 +32,7 @@
 		While working with ORMs generally takes database interactions to a higher abstraction level, it is thought that this also removes certain insight into how some queries work. Additionally, Knex's chainable methods, makes for query building in the style of Javascript promises. As such, it is concluded the Knex is the superior choice as a DAL for the implementation.
 
 	\section{API Endpoints}
+		\label{sec:api}
 		Before defining the endpoints, the resources \emph{(see section \ref{sec:design:rest} on page \pageref{sec:design:rest})} of the application need to be determined. Looking at the models defined in section \ref{sec:modelling} on page \pageref{sec:modelling}, these offer a great starting point for resources.
 
 
@@ -53,6 +54,7 @@
 			The Audit resource is actually very simple. It only consists of a single endpoint; Getting the audit log. Since this resource is owned by individual users, this is -- much like passwords and categories -- gated behind the user collection and a specific ID. This can be seen on table \ref{tab:api:audit} on page \pageref{tab:api:audit}.
 
 		\subsection{The Auth Resource}
+			\label{sec:api:auth}
 			The Auth resource is a little bit more interesting. Of course, there is the generic \verb=POST=, containing the user's username and password, for authentication purposes. The details of this is covered in section \ref{sec:design:authentication} on page \pageref{sec:design:authentication}. However, this is not all. Since the solution supports TOTP two-factor-authentication, as described in section \ref{sec:mfa} on page \pageref{sec:mfa}, endpoints for enabling this is needed as well. In section \ref{sec:design:breaking-rest} on page \pageref{sec:design:breaking-rest} it was argued that at one point it was \emph{necessary} to break the REST principles. As such, two endpoints are needed: One for generating a new secret and caching it, and one for actually verifying said secret. 
 
 
@@ -188,6 +190,17 @@
 		%RESTIFY workaround with serve static
 
 	\section{Authentication}
+		In section \ref{sec:api:auth} on page \pageref{sec:api:auth} the endpoints involved in authentication was described. In this section, the process is described a little further. 
+
+		First and foremost the user
+
+
+		\begin{figure}[p]
+			\centering
+			\includegraphics[width=0.8\textwidth]{figures/implementation/uml/sequence/authentication.eps}
+			\caption{Sequence diagram showing the process of how the front-end authenticates to the back-end.}
+			\label{fig:sequence:auth}
+		\end{figure}
 
 	\section{Authorization}
 
