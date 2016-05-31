@@ -168,16 +168,28 @@
 		\end{table}
 
 	\section{Workaround To Be Self-Contained}
+		Unfortunatly, Restify's documentation is sometimes lackluster. They have what they call the serveStatic method. From their decription, its intended use is to deliver a default file, if a match is not found. This is exactly what is needed for the front-end's router \emph{(more on this in section \ref{sec:impl:ui-router} on page \pageref{sec:impl:ui-router})}. However, after much fiddling, it was found simply not to work.
+
+		As such, a workaround is needed. After having stated the API routes, six new routes are defined as is seen on table \ref{tab:api:workaround} on page \pageref{tab:api:workaround}. This ensures that any API hits are given the proper error code, while ensuring that the application for the front-end is being delivered in all cases.
+		\begin{table}
+			\begin{tabular}{r | l}
+				\textbf{Method} & \textbf{Endpoint} \\
+				\hline
+				\verb=GET=		& \verb=/api/.*= \\
+				\verb=HEAD=		& \verb=/api/.*= \\	
+				\verb=POST=		& \verb=/api/.*= \\	
+				\verb=PUT=		& \verb=/api/.*= \\
+				\verb=DEL=		& \verb=/api/.*= \\
+				\verb=PATCH=	& \verb=/api/.*= \\	
+			\end{tabular}
+			\caption{Workaround error routes, to make the API adhere to standards and the front-end's router to work \emph{(see section \ref{sec:impl:ui-router} on page \pageref{sec:impl:ui-router})}}
+			\label{tab:api:workaround}
+		\end{table}
 		%RESTIFY workaround with serve static
-	
-	\section{Resolving Objects}
-		restify middelware automaticly get objects from storage
 
 	\section{Authentication}
 
 	\section{Authorization}
-
-
 
 	\section{Dependencies}
 
@@ -199,4 +211,15 @@
 			\item Polymer
 		\end{itemize}
 
+
+	\section{UI-Router}
+		\label{sec:impl:ui-router}
+
 	\section{Performing Encryption}
+
+	\section{Generating Passwords}
+
+
+	
+	\section{Resolving Objects}
+		restify middelware automaticly get objects from storage
