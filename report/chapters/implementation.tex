@@ -41,6 +41,8 @@
 		\subsection{The Passwords Resource}
 			Then there is the collection of passwords. However, there is a slight caveat when it comes to this collection. Since each password is \emph{owned} by a user, it can generally be thought that there exists \emph{multiple} collection -- one for each user. As such, the password collection is gated behind the user resource and the ID specifying exactly which user owns said password. The same approach to designing these endpoints are used, as with the user resource and the result of this is found on table \ref{tab:api:passwords} on page \pageref{tab:api:passwords}.
 
+			For simplicity's sake, access to shared passwords are gated behind the passwords resource. As such, a collection called shares -- which belongs to a specific password -- denotes the collection of users this specific password has been shared to. Additionally, two collections are added as well: \verb=shared= and \verb=shares=. These two are  \emph{very} similar in name, which unfortunately might result in some confusion. The \verb=shares= resource denotes passwords shared \emph{to} the user and the \verb=shared= resource denotes passwords that the user has shared to \emph{others}. These endpoints are found on table \ref{tab:api:sharedpasswords} on page \pageref{tab:api:sharedpasswords}.
+
 		\subsection{The Categories Resource}
 			The same argument made in regards to the passwords collection, can be said about categories. Each user has their own private password collection, which is -- similar to passwords -- gated behind the owning user's ID. This can be seen on table \ref{tab:api:categories} on page \pageref{tab:api:categories}.
 
@@ -89,7 +91,22 @@
 			\caption{API endpoints for the Passwords resource.}
 			\label{tab:api:passwords}
 		\end{table}
-		
+
+		\begin{table}
+			\definecolor{tablerow1}{RGB}{230,230,230}
+			\definecolor{tablerow2}{RGB}{255,255,255}
+			\rowcolors{2}{tablerow1}{tablerow2}
+			
+			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
+				\csvreader[head to column names]{resources/api/sharedPasswords.csv}{}% use head of csv as column names
+				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
+			\end{tabularx}
+
+			\caption{API endpoints for accessing Shared Passwords.}
+			\label{tab:api:sharedpasswords}
+		\end{table}		
+
 		\begin{table}
 			\definecolor{tablerow1}{RGB}{230,230,230}
 			\definecolor{tablerow2}{RGB}{255,255,255}
@@ -151,16 +168,28 @@
 		\end{table}
 
 	\section{Workaround To Be Self-Contained}
+		Unfortunatly, Restify's documentation is sometimes lackluster. They have what they call the serveStatic method. From their decription, its intended use is to deliver a default file, if a match is not found. This is exactly what is needed for the front-end's router \emph{(more on this in section \ref{sec:impl:ui-router} on page \pageref{sec:impl:ui-router})}. However, after much fiddling, it was found simply not to work.
+
+		As such, a workaround is needed. After having stated the API routes, six new routes are defined as is seen on table \ref{tab:api:workaround} on page \pageref{tab:api:workaround}. This ensures that any API hits are given the proper error code, while ensuring that the application for the front-end is being delivered in all cases.
+		\begin{table}
+			\begin{tabular}{r | l}
+				\textbf{Method} & \textbf{Endpoint} \\
+				\hline
+				\verb=GET=		& \verb=/api/.*= \\
+				\verb=HEAD=		& \verb=/api/.*= \\	
+				\verb=POST=		& \verb=/api/.*= \\	
+				\verb=PUT=		& \verb=/api/.*= \\
+				\verb=DEL=		& \verb=/api/.*= \\
+				\verb=PATCH=	& \verb=/api/.*= \\	
+			\end{tabular}
+			\caption{Workaround error routes, to make the API adhere to standards and the front-end's router to work \emph{(see section \ref{sec:impl:ui-router} on page \pageref{sec:impl:ui-router})}}
+			\label{tab:api:workaround}
+		\end{table}
 		%RESTIFY workaround with serve static
-	
-	\section{Resolving Objects}
-		restify middelware automaticly get objects from storage
 
 	\section{Authentication}
 
 	\section{Authorization}
-
-
 
 	\section{Dependencies}
 
@@ -182,4 +211,15 @@
 			\item Polymer
 		\end{itemize}
 
+
+	\section{UI-Router}
+		\label{sec:impl:ui-router}
+
 	\section{Performing Encryption}
+
+	\section{Generating Passwords}
+
+
+	
+	\section{Resolving Objects}
+		restify middelware automaticly get objects from storage
