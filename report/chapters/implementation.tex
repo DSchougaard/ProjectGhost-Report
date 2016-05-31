@@ -5,17 +5,33 @@
 
 
 	\section{The Language of the Back-End}
+		When developing a REST back-end, there exists numerous tools for the job. Amongst others, are
+		\begin{itemize}
+			\item Python
+			\item Node.js
+			\item PHP
+		\end{itemize}
+		While this list is \emph{by far} complete, it more or less states the most popular options for REST APIs and web applications, these days.
+
 		\subsection{Python}
-			One of the more popular languages for self-hosted software is Python. Combined with frameworks such as Django or Flask, it acts as a very powerful way to develop a web API.
+			One of the more popular languages for self-hosted software is Python. Python requires what is called Web Server Gateway Interface \emph{(WSGI)} server, to be able to run a webservice. Common implementations of such a server, is Django and Flask. Part of the popularity of Python is most likely the ease of which it is read. The Raspberry Pi foundation \emph{specifically} states, that:
+			\begin{citequote}{rpi_python}
+				Python is a wonderful and powerful programming language that's easy to use (easy to read and write).
+			\end{citequote}
 
+			 Amongst others, PayPal uses Python for their services.
 
-
-
-		\subsection{Ruby}
 		\subsection{Node.js}
-		\subsection{C\#}
+			In the later years, node.js has become more and more widespread. This is partly due to how it \emph{very} effectively handles multiple requests. While ``traditional'' sequential languages -- like python -- would spawn a thread per request, Node.js uses asynchronous code and is centered around non-blocking I/O. As such, while node strictly speaking only ever uses one thread, it can handle \emph{massive} amounts of traffic quite easily. However, this does change the programming style of Node.js programs, as it uses callback methods and JavaScript promises to a large extent. Additionally, Node.js is built ontop of Google's V8 engine, and supports C++ plugins, should it be necessary.
+
+			One of the development advantages to nodejs, is that it uses Javascript. Most web applications these days use JavaScript, and being able to code the back-end in the same language, might very well make it easier for a developer to quickly move between front-end and back-end.
+
 		\subsection{PHP}
-		\subsection{C++}
+			PHP is without a doubt the most widespread language used for server-side scripting, when it comes to websites. However, this language can also be used to actually develop a REST api. While previously PHP would have to be executed on top of an Apache server or nginx server, in newer versions PHP support a native web-server. While this, strictly speaking, is only intended for development purposes, there is nothing stopping you from running a small-scale service using this server.
+
+		\subsection{Making A Choice}
+			Taking the various options into consideration, it is concluded that the back-end will be developed using Node.js. This choice is greatly influenced by the fact that it would share development language with the front-end, thus making venturing into new territory slightly less daunting.
+
 
 	\section{To Framework or Not To Framework}
 		\subsection{Express}
@@ -68,7 +84,7 @@
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
 			
-			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+			\begin{tabularx}{\textwidth}{ R{0.15} | L{0.65} | L{0.2} }
 				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
 				\csvreader[head to column names]{resources/api/users.csv}{}% use head of csv as column names
 				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
@@ -84,7 +100,7 @@
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
 			
-			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+			\begin{tabularx}{\textwidth}{ R{0.15} | L{0.65} | L{0.2} }
 				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
 				\csvreader[head to column names]{resources/api/passwords.csv}{}% use head of csv as column names
 				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
@@ -99,7 +115,7 @@
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
 			
-			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+			\begin{tabularx}{\textwidth}{ R{0.15} | L{0.65} | L{0.2} }
 				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
 				\csvreader[head to column names]{resources/api/sharedPasswords.csv}{}% use head of csv as column names
 				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
@@ -114,7 +130,7 @@
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
 			
-			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+			\begin{tabularx}{\textwidth}{ R{0.15} | L{0.65} | L{0.2} }
 				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
 				\csvreader[head to column names]{resources/api/categories.csv}{}% use head of csv as column names
 				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
@@ -129,7 +145,7 @@
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
 			
-			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+			\begin{tabularx}{\textwidth}{ R{0.15} | L{0.65} | L{0.2} }
 				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
 				\csvreader[head to column names]{resources/api/invites.csv}{}% use head of csv as column names
 				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
@@ -144,7 +160,7 @@
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
 			
-			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+			\begin{tabularx}{\textwidth}{ R{0.15} | L{0.65} | L{0.2} }
 				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
 				\csvreader[head to column names]{resources/api/audit.csv}{}% use head of csv as column names
 				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
@@ -159,7 +175,7 @@
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
 			
-			\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+			\begin{tabularx}{\textwidth}{ R{0.15} | L{0.65} | L{0.2} }
 				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
 				\csvreader[head to column names]{resources/api/auth.csv}{}% use head of csv as column names
 				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
@@ -190,7 +206,6 @@
 		\end{table}
 		%RESTIFY workaround with serve static
 
-	
 	\section{Middlewares}
 		To ease implementation and to reduce code duplication, certain features will be implemented using what is commonly known as middlewares. Middlewares are simply a term for methods, being execute \emph{before} the actual controller of an endpoint. An example of an endpoint is:
 		\begin{lstlisting}[gobble=12,language=JavaScript]
@@ -223,7 +238,6 @@
 			\item Authorization \emph{(see section \ref{sec:impl:authorization} on page \pageref{sec:impl:authorization})}
 			\item Object Resolving \emph{(see section \ref{sec:impl:resolve} on page \pageref{sec:impl:resolve})}
 		\end{itemize}
-
 
 	\section{Authentication}
 		\label{sec:impl:authentication}
@@ -368,8 +382,3 @@
 	\section{Performing Encryption}
 
 	\section{Generating Passwords}
-
-
-	
-	\section{Resolving Objects}
-		restify middelware automaticly get objects from storage

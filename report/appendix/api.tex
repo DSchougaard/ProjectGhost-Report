@@ -4,7 +4,7 @@
 	\definecolor{tablerow2}{RGB}{255,255,255}
 	\rowcolors{2}{tablerow1}{tablerow2}
 	
-	\begin{tabularx}{\textwidth}{ R{0.2} | L{0.6} | L{0.2} }
+			\begin{tabularx}{\textwidth}{ R{0.15} | L{0.65} | L{0.2} }
 		\bfseries Method & \bfseries Endpoint & \bfseries Description
 		\csvreader[head to column names]{resources/api.csv}{}% use head of csv as column names
 		{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
