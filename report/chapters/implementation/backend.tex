@@ -33,6 +33,18 @@
 		\subsection{Making A Choice}
 			Taking the various options into consideration, it is concluded that the back-end will be developed using Node.js. This choice is greatly influenced by the fact that it would share development language with the front-end, thus making venturing into new territory slightly less daunting.
 
+	\section{To Framework or Not To Framework}
+		Having decided to go with Node.js for the back-end, the next big question arises: To framework or not to framework? Node.js has its own built-in webserver, and it is perfectly viable to simply use this. However, using frameworks will inevitably make it \emph{easier} to code. As such, it is decided that a framework will be used, to aid the development of the back-end.
+
+		When it comes to these frameworks, there is no doubt that Express is the ``biggest'' one: It is simply the most widespread and popular of the frameworks available. However, alternatives such as Restify, Hapi, and Koa also exist. While these four by no means constitute the entire list of frameworks, they are the four largest.
+
+
+
+		\subsection{Express}
+		\subsection{Hapi}
+		\subsection{Restify}
+		\subsection{Koa}
+
 	\section{Node.js Coding Style}
 		When developing using node.js there are two different schools of thought: Callbacks and promises. Since node.js asynchronous, traditional synchronous methods should not be used. For reference purposes, the \emph{wrong} way to do it, is shown on figure \ref{lst:node:wrong}. This causes major performance issues, as the execution of the program would halt, while the action taking a long time is performed.
 
@@ -100,20 +112,26 @@
             })
 		\end{lstlisting}
 
-	\section{To Framework or Not To Framework}
-		Having decided to go with Node.js for the back-end, the next big question arises: To framework or not to framework? Node.js has its own built-in webserver, and it is perfectly viable to simply use this. However, using frameworks will inevitably make it \emph{easier} to code. As such, it is decided that a framework will be used, to aid the development of the back-end.
-
-		When it comes to these frameworks, there is no doubt that Express is the ``biggest'' one: It is simply the most widespread and popular of the frameworks available. However, alternatives such as Restify, Hapi, and Koa also exist. While these four by no means constitute the entire list of frameworks, they are the four largest.
-
-
-
-		\subsection{Express}
-		\subsection{Hapi}
-		\subsection{Restify}
-		\subsection{Koa}
-
 	\section{Structuring the Codebase}
+		When it comes to a codebase's readability and maintainability, a good structure is almost the most important thing. As such, a proper categorisation is the first thing needed. Fundamentally, there will be four different types of code files, in the project: Models, routes, tests, and middleware.
 
+		Models represent on-disk data structures, as will be stored in the database. These were covered in section \ref{sec:moddeling} on page \pageref{sec:moddeling}. Since node.js natively supports ECMAScript 6 objects, these models will be represented as objects in memory. The models also contains the relevant methods for manipulating the entries. An example of this could be looking up a user, from an ID.
+
+		Routes represent API endpoints. These are described in full detail, in section \ref{sec:impl:api} on page \pageref{sec:impl:api}. These routes will be separated into files representing their primary resource.
+
+		Tests should hopefully be obvious. These are the unittests for the back-end. Further details regarding testing framework and methodology is found in section \ref{sec:impl:tests} on page \pageref{sec:impl:tests}.
+
+		Middleware would be the last category. What exactly these are, is explained in further details in section \ref{sec:impl:middleware} on page \pageref{sec:impl:middleware}.
+
+		As such, the basic structure of the back-ends codebase will be as follows:
+		\dirtree{%
+		.1 project.
+		.2 app.js
+		.2 middlewares.
+		.2 models.
+		.2 routes.
+		.2 tests.
+		}
 	\section{Database Abstraction Layer}
 		As decided in section \ref{sec:restrict:database} on page \pageref{sec:restrict:database}, a database abstraction layer is necessary. While Object-Relational Mapping \emph{(ORM)} strictly speaking isn't the same as a DAL, for this section the two are considered equivalent.
 
@@ -124,7 +142,6 @@
 	\section{API Endpoints}
 		\label{sec:api}
 		Before defining the endpoints, the resources \emph{(see section \ref{sec:design:rest} on page \pageref{sec:design:rest})} of the application need to be determined. Looking at the models defined in section \ref{sec:modelling} on page \pageref{sec:modelling}, these offer a great starting point for resources.
-
 
 		\subsection{The Users Resource}
 			First and foremost there is the collection of Users. This collections represents the user base as a whole. \verb=POST=ing to this collection, would by extension mean the creation of a new user. \verb=GET=ing the user collection, mean retrieving all user entries, with their username and other attributes in the ``public domain''. \verb=PUT= and \verb=DELETE= is slightly different. They're used for updating and deleting a \emph{single} user, in the entire collection. As such, the endpoint needs to have a user ID postfixed. Adhering to the standard, \emph{all} API endpoints will have \verb=/api= prefixed. These API endpoints are listed on table \ref{tab:api:users} on page \pageref{tab:api:users}.
@@ -281,7 +298,8 @@
 		%RESTIFY workaround with serve static
 
 	\section{Middlewares}
-		To ease implementation and to reduce code duplication, certain features will be implemented using what is commonly known as middlewares. Middlewares are simply a term for methods, being execute \emph{before} the actual controller of an endpoint. An example of an endpoint is:
+		\label{sec:impl:middleware}
+		To ease implementation and to reduce code duplication, certain features will be implemented using what is commonly known as middlewares. Middlewares are simply a term for methods, being executed \emph{before} the actual controller of an endpoint. An example of an endpoint is:
 		\begin{lstlisting}[gobble=12,language=JavaScript]
             server.get('/api/ping', function(req, res, next){
                 res.send(200, 'OK');
