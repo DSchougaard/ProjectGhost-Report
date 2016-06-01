@@ -8,18 +8,36 @@
 
 
 	\section{Using a Framework}
+		While it would be possible to develop projects using nothing but ``pure'' JavaScript, it seems hardly worth it, re-inventing the wheel. After all, a solid framework will greatly aid in the development of the project. Of the more popular front-end frameworks, the following can be mentioned:
 		\begin{itemize}
-			\item Angular 1.5
-			\item Angular 2.0
+			\item Angular 1.5/2.0
 			\item ReactJS
 			\item Ember
-			\item Polymer
+			\item Backbone
 		\end{itemize}
+		Choosing the ``right'' framework, is a very subjective thing: There are pros and cons with each of the choices. However, Angular is without a doubt the \emph{largest} project. As such, there are more third party packages available, which will speed up development. Consequently, there are also significantly more resources available in regards to achieving certain goals in regards to functionality. As such, it is chosen that Angular will be the framework for this project.
+
+
+		\subsection{A Framework for the Framework}
+			All is not said and done, however. Angular comes in two variants: Angular 1.5, which is tried and tested, and Angular 2.0 which is still in beta. Angular 2.0 focuses a lot more on web-components, than Angular 1.5, and as such, it will most likely generate more re-usable code. 
+
+			But this is not everything. Most modern web applications uses a framework for the graphical interface as well. Projects as Bootstrap has revolutionized the way these applications are developed. Recently, contenders for the place as the go-to graphical framework, has popped up. Most noticeably Angular Material, by Google. Angular Material supports Angular \emph{natively}. There are UI bindings available for \emph{all} components. Bootstrap, on the other hand, requires third party bindings. 
+
+			Finally, there is the concept of responsive web design. One of the biggest arguments for developing a web UI \emph{(see section \ref{sec:design:frontend}, on page \pageref{sec:design:frontend})}, was that it would give a similar experience across multiple platforms. After a brief examination of the two frameworks, it is found that Angular Material does this significantly easier, using their flexboxes. This ensures that the websites components are re-arranged according to the screen size of the device browsing the web application.
+
+			\emph{However}, Angular Material \emph{only} supports Angular 1.5. As such, it is determined that the project will use Angular 1.5 with the Angular Material UI framework.
+
+
+	\section{Structuring the Codebase}
+
 
 
 	\section{UI-Router}
 		\label{sec:impl:ui-router}
 
-	\section{Performing Encryption}
+	\section{Encryption \& Hashing}
+
+		\subsection{Deviating From the Requirements}
+			Argon2 not available.
 
 	\section{Generating Passwords}
