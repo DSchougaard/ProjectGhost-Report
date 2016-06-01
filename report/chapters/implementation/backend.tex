@@ -297,6 +297,9 @@
 		\end{table}
 		%RESTIFY workaround with serve static
 
+	\section{Validating Input}
+		\todo{Write about use of schemagic}
+
 	\section{Middlewares}
 		\label{sec:impl:middleware}
 		To ease implementation and to reduce code duplication, certain features will be implemented using what is commonly known as middlewares. Middlewares are simply a term for methods, being executed \emph{before} the actual controller of an endpoint. An example of an endpoint is:
@@ -447,4 +450,61 @@
             });
 		\end{lstlisting}
 
-	\section{Dependencies}
+	\section{Handling Errors}
+		Using the Bluebird.js promise library, error handling in the back-end is simplified a lot. Whereas native promises generally only support catching \emph{all} errors, Bluebird supports individual catching. Then, individual errors can be extended from the default error, creating very easy separation of error type. On listing \ref{lst:example:errorhandle:password:create} on page \pageref{lst:example:errorhandle:password:create} an example snippet is shown. It shows the error catching when creating a new password. This process can throw one of three errors: \verb=UserDoesNotExistError=, \verb=ValidationError=, and \verb=SqlError=. 
+
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={Example of error handling, when creating new password},label={lst:example:errorhandle:password:create}]
+            Password.create(password)
+            .then(function(password){
+                res.send(201, {message: 'OK', id: password.id});
+                return next();
+            })
+            .catch(UserDoesNotExistError, function(err){
+                res.send(404, {error: 'User does not exist'});
+                return next();
+            })
+            .catch(ValidationError, function(err){
+                res.send(400, {error:'validation', ...});
+                return next();
+            })
+            .catch(SqlError, function(err){
+                res.send(500, 'Internal database error');
+                return next();
+            });
+		\end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
