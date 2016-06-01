@@ -34,7 +34,71 @@
 			Taking the various options into consideration, it is concluded that the back-end will be developed using Node.js. This choice is greatly influenced by the fact that it would share development language with the front-end, thus making venturing into new territory slightly less daunting.
 
 	\section{Node.js Coding Style}
-		Promise vs Callback
+		When developing using node.js there are two different schools of thought: Callbacks and promises. Since node.js asynchronous, traditional synchronous methods should not be used. For reference purposes, the \emph{wrong} way to do it, is shown on figure \ref{lst:node:wrong}. This causes major performance issues, as the execution of the program would halt, while the action taking a long time is performed.
+
+		On listing \ref{lst:node:callback} on page \pageref{lst:node:callback}, the same output is shown using callbacks. When the data that takes a long time to produce, or fetch, is ready, the callback is called, with the result. As such, while the I/O is happening the node thread can continue working.
+
+		Finally, there is listing \ref{lst:node:promise} on page \pageref{lst:node:callback}. This example uses promises, to achieve the same thing. By many, promises are thought to be the successor of callbacks. Some of the internals of the promise based method have been omitted, such as the proper use of deferreds, as this is beyond the point of this section.
+
+		Conceptually promises are by \emph{far} the harder of the two to understand. Using them properly, without creating unnecessary overhead takes some getting used to. \emph{However} they do produce code which is \emph{much} easier to read. This is in partial due to what is commonly called ``promise chaining''. Essentially, this takes the output from one promise, and pipes it to the input for another function. 
+
+		The above is best described using an example. In this scenario, there are three methods: \verb=fetch=, \verb=compute=, and \verb=send=, which are to be executed in that order. \verb=fetch= fetches the data from a remote source, \verb=compute= does some computations on said data, and finally \verb=send= sends the result of said computations somewhere else. On listing \ref{lst:node:callbackhell} on page \pageref{lst:node:callbackhell} this sequence of events are shown, using callbacks. As seen, the cascade of callbacks make this code \emph{horrible} to read. Professionals often use the derogatory term ``callback hell'', to describe this phenomenon. On listing \ref{lst:node:promisegoodness} on page \pageref{lst:node:promisegoodness} this \emph{exact} same sequence of events is shown, only using promises. As it is seen, this code is \emph{much} easier to read and understand. As such, using promises for this solution is by far preferable and is the style that will be used, whenever possible.
+
+
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={Using callbacks, in Node.js},label={lst:node:callback}]
+            function longTime(callback){
+                // Something that takes a loooong time
+                var res = ...
+                callback(res);
+            }
+            
+            longTime(function(r){
+                console.log(r);
+            });
+		\end{lstlisting}
+
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={Using promises, in Node.js},label={lst:node:promise}]
+            function longTime(){
+                var deferred = Promise.defer();
+                // Something that takes a loooong time
+                var res = ...
+                return deferred;
+            }
+            
+            longTime()
+            .then(function(r){
+                console.log(r);
+            })
+		\end{lstlisting}
+
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={The wrong way to do it, in Node.js},label={lst:node:wrong}]
+            function longTime(){
+                // Something that takes a loooong time
+                var res = ...
+                return res;
+            }
+            console.log(longTime());
+		\end{lstlisting}
+		
+
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={Chaining data between callbacks in node.js},label={lst:node:callbackhell}]
+            get(function(data){
+                compute(data, function(newData){
+                    send(newData, function(){
+                        console.log("Done!");
+                    })
+                })
+            })
+		\end{lstlisting}
+		
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={Chaining data between promises in node.js},label={lst:node:promisegoodness}]
+            get()
+            .then(compute)
+            .then(send)
+            .then(function(){
+                console.log("Done!");
+            })
+		\end{lstlisting}
 
 	\section{To Framework or Not To Framework}
 		Having decided to go with Node.js for the back-end, the next big question arises: To framework or not to framework? Node.js has its own built-in webserver, and it is perfectly viable to simply use this. However, using frameworks will inevitably make it \emph{easier} to code. As such, it is decided that a framework will be used, to aid the development of the back-end.
