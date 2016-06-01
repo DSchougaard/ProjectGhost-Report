@@ -984,6 +984,7 @@
 			\end{table}
 
 		\subsection{The Audit Model}
+			\label{sec:moddeling:audit}
 			Finally, there is the audit model. As described in section \ref{sec:audit} on page \pageref{sec:audit}, each entry should contain one of six actions. While this could easily be achieved using an enum, not all database technologies support this data structure. As such, an integer mapping is used. In practice, this means that each action is translated to an integer, before being stored. When retrieved, the same integer is used to generate the actual name of the action. This mapping is shown on figure \ref{table:audit:actionmapping} on page \pageref{table:audit:actionmapping}.
 
 			What is a challenge when modelling these audit entries, is the reference to one of three things: Authentication attempts, passwords and shared passwords. Because it is a reference to multiple fields \emph{(the entry's target)}, a traditional database foreign key reference is simply not possible. As such, the reference will need to be stored in an integer \emph{(unfortunately loosing any restrictions from the relations, in the process)}. However, it is still needed to differentiate between an ID for a Password and for a Shared Password. As such, the targets type will need to be stored as well. Finally, as was decided previously, a hostname and a timestamp will need to be stored as well.
@@ -1138,7 +1139,14 @@
 		As such, it is decided that a more ``traditional'' RDBMS will be used for this solution.
 
 		\subsection{Storage Schema}
-			\todo{Create EER}
+			Having decied to use an DAL ontop of a RDBMS, it is now suitable to actually model the way the data will be stored. Using section \ref{sec:modelling} on page \pageref{sec:modelling} as a reference, it is quite easy to generate an Enhanced Entity-Relationship diagram. This diagram is found on figure \ref{fig:eer} on page \pageref{fig:eer}. Unfortunately, the audit table is not as easy to model, as already described in section \ref{sec:moddeling:audit} on page \pageref{sec:moddeling:audit}. This is due to how it refereces multiple types of targets. As such, this is left as a plain integer.
+
+			\begin{figure}[p]
+				\centering
+				\includegraphics[width=0.8\textwidth]{figures/design/png/database2.png}
+				\caption{Enhanced Entity-Relationship diagram depicting database storage scheme.}
+				\label{fig:eer}
+			\end{figure}
 
 	\section{Ensuring Agnosticism}
 		When creating a solution like this, it is important to make it as versatile as possible. As such, limiting it to run on a single platform only restricts deployment. As such, having an application that can run cross-platform is beneficial.
