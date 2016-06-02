@@ -27,8 +27,6 @@
 
 			\emph{However}, Angular Material \emph{only} supports Angular 1.5. As such, it is determined that the project will use Angular 1.5 with the Angular Material UI framework.
 
-
-
 	\section{Being Responsive}
 		When it comes to developing websites and web applications, one of the most important aspect is responsiveness. In short, it is defined as a website that behaves accordingly to the available screen area. This is without a doubt one of Angular Material's strengths. The best example of this responsiveness, is the main interface's menu, on the right side. This is seen on figures \ref{fig:impl:responsive:locked} to \ref{fig:impl:responsive:expanded} on page \pageref{fig:impl:responsive:locked}. Figure \ref{fig:impl:responsive:locked} shows the side menu being locked open, since the screen is large enough to allow this. Figure \ref{fig:impl:responsive:collapsed} shows the side menu in its collapsed form. Clicking the standard Material Design expand icon, in the upper left corner will expand the menu, the result of which is seen on figure \ref{fig:impl:responsive:expanded}.
 
@@ -53,9 +51,6 @@
 			\end{subfigure}
 
 		\end{figure}
-
-
-
 
 	\section{Structuring the Codebase}
 		In section \ref{sec:impl:backend:codebase} on page \pageref{sec:impl:backend:codebase} the importance of a properly structured codebase, was argued for. 
@@ -83,11 +78,6 @@
 		.3 password.controller.js.
 		}
 
-	\section{Making A Tree}
-
-	\section{UI-Router}
-		\label{sec:impl:ui-router}
-
 	\section{Encryption \& Hashing}
 		While in theory one could go about implementing the algorithms needed for the implementations oneself, the fact is that this would both be \emph{way} too resource demanding, and it would also introduce security risks, in forms of implementational errors. As such, it is chosen to go with an encryption library, which will handle the encryption.
 
@@ -95,8 +85,6 @@
 
 		\subsection{Deviating From the Designs}
 			Unfortunately, the implementation must \emph{deviate} from the designs. Seeing as Argon2 only exists as a C++ implementation, it is simply not able to be executed in the browser. As such, it is \emph{unfortunately} necessary to choose another key derivation function, in accordance with section \ref{sec:kdf}, on page \pageref{sec:kdf}. Seeing as Forge actually contains an implementation of PBKDF2, this is chosen as the tool for deriving the encryption key. This choice is highly based upon interoperability, as the output from one algorithm will be guaranteed to work with the other.
-
-
 
 	\section{Generating Passwords}
 		One, until now, overlooked part, is password \emph{generation}. Since the solution aims at giving users the ability to use complex and ``strong'' passwords, it only makes sense that the solution can actually \emph{generate} these passwords.
@@ -145,3 +133,48 @@
                 return password;
             }	
 		\end{lstlisting}
+
+	\section{Making A Tree}
+		While Angular Material generally is a \emph{very} good graphical framework -- especially taking its relative young age into consideration -- it lacks some things, which is required for the implementation. Specifically, it lacks a tree-like menu, for showing the password categories \emph{(see \ref{sec:model:category} on page \pageref{sec:model:category})}. This is, to a great extent, because the Material Design specification never includes this as an actual component. 
+
+		However, since this \emph{is} required for the project, a custom web component is implemented. At the base of this component, the default Angular Material buttons are used, for a consistent UI. However, certain things are disabled. For instance, the Material Design specifications dictate that buttons' text are to be in upper case. This is not preferable for creating the structures, and as such it is disabled.
+
+		Based in the data from the category models \emph{(see section \ref{sec:model:category})}, a JSON tree can easily be made. An example of this structure is found on listing \ref{lst:frontend:tree:data} on page \pageref{lst:frontend:tree:data}. This data structure will then result in the tree found on figure \ref{lst:frontend:tree:result} on page \pageref{lst:frontend:tree:result}.
+
+		Having said all this, it is never actually explained \emph{how} the structure works. The outer most component is the \verb=tree-menu=. This controls everything. First it loops over each element in the current level. Using the example from listing \ref{lst:frontend:tree:data}, this means the categories with titles ``Title001'' and ``Title002''. For each of these elements, it creates a new \verb=tree-node=. Each of these \verb=tree-node=s then loops over their children, and so forth. Each of these \verb=tree-nodes= are represented as a button, from a graphical point of view.
+
+		In the end, through this recursion, a tree consisting of tree-nodes will be created. They will look as depicted on figure \ref{lst:frontend:tree:result}. Whenever one of the nodes are clicked, it is propagated up through the tree, using references to each node's parents. When this propagation reaches the parent \verb=tree-menu= object, the method specified using its \verb=on-select= directive, is invoked. That way, the controller can determine what happens, when the user clicks each category entry.
+
+
+		\begin{lstlisting}[style=json2,gobble=12, caption={The front-end's category tree data structure},label={lst:frontend:tree:data}]
+            [
+                {
+                    id: 1,
+                    title: 'Title001',
+                    children: [
+                        {
+                            id: 11,
+                            title: 'Title001-001',
+                            children: []
+                        },
+                        {
+                            id: 12,
+                            title : 'Title001-002',
+                            children: []
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: 'Title002',
+                    children: []
+                }
+            ]
+		\end{lstlisting}
+	
+		\begin{figure}[p]
+			\centering
+			\includegraphics[width=0.8\textwidth,clip,trim=0 690 536 210]{figures/implementation/screenshots/example_tree.png}
+			\caption{The resulting tree, of the data specified on figure \ref{lst:frontend:tree:data} on page \pageref{lst:frontend:tree:data}.}
+			\label{lst:frontend:tree:result}
+		\end{figure}
