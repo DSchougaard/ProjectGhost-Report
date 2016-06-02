@@ -46,6 +46,7 @@
 		\subsection{Koa}
 
 	\section{Node.js Coding Style}
+		\label{sec:impl:node:style}
 		When developing using node.js there are two different schools of thought: Callbacks and promises. Since node.js asynchronous, traditional synchronous methods should not be used. For reference purposes, the \emph{wrong} way to do it, is shown on figure \ref{lst:node:wrong}. This causes major performance issues, as the execution of the program would halt, while the action taking a long time is performed.
 
 		On listing \ref{lst:node:callback} on page \pageref{lst:node:callback}, the same output is shown using callbacks. When the data that takes a long time to produce, or fetch, is ready, the callback is called, with the result. As such, while the I/O is happening the node thread can continue working.
@@ -170,7 +171,7 @@
 		\newcolumntype{R}[1]{>{\hsize=#1\hsize\raggedleft\arraybackslash}X}%
 		\newcolumntype{C}[2]{>{\hsize=#1\hsize\columncolor{#2}\centering\arraybackslash}X}%
 		
-		\begin{table}
+		\begin{table}[p]
 			\definecolor{tablerow1}{RGB}{230,230,230}
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
@@ -186,7 +187,7 @@
 		\end{table}
 
 
-		\begin{table}
+		\begin{table}[p]
 			\definecolor{tablerow1}{RGB}{230,230,230}
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
@@ -201,7 +202,7 @@
 			\label{tab:api:passwords}
 		\end{table}
 
-		\begin{table}
+		\begin{table}[p]
 			\definecolor{tablerow1}{RGB}{230,230,230}
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
@@ -216,7 +217,7 @@
 			\label{tab:api:sharedpasswords}
 		\end{table}		
 
-		\begin{table}
+		\begin{table}[p]
 			\definecolor{tablerow1}{RGB}{230,230,230}
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
@@ -231,7 +232,7 @@
 			\label{tab:api:categories}
 		\end{table}
 		
-		\begin{table}
+		\begin{table}[p]
 			\definecolor{tablerow1}{RGB}{230,230,230}
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
@@ -246,7 +247,7 @@
 			\label{tab:api:invites}
 		\end{table}
 
-		\begin{table}
+		\begin{table}[p]
 			\definecolor{tablerow1}{RGB}{230,230,230}
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
@@ -298,7 +299,56 @@
 		%RESTIFY workaround with serve static
 
 	\section{Validating Input}
-		\todo{Write about use of schemagic}
+		Whenever a system is developed, that requires the input of a user, it is generally a bad idea to blindly trust, that the input is \emph{correct}. As such, validating the input JSON is necessary. There exists a plethora of tools for this \emph{exact} purpose. 
+
+		Unfortunately, this is the place where the nature of humans comes into play. When development of the solution started, the tool schemagic was selected. At the time, it seemed the simplest of the available libraries. However, in the latter parts of the project, the library ajv began to seem more and more appropriate, albeit a bit more difficult to setup. Unfortunately, it was deemed necessary to \emph{not} migrate to the new tool, due to a lack of time. However, this is \emph{definitely} something that will need to be done in the future.
+
+		\subsection{Using ajv}
+			Using ajv is as simple as defining a scheme. This scheme defines the allowed variables that the input json can, may, or should contain. On listing \ref{lst:json:ajv:password} on page \pageref{lst:json:ajv:password} an example of this is found. It stated that a password entry \emph{must} contain a title \emph{(string)} and a password \emph{(base64 encoded string)}, and \emph{can} contain a username, url, note, and a parent \emph{(parent default to null)}. The \verb=user.schema= variable can then be used as a \emph{promise} to verify input. This is seen on listing \ref{lst:json:ajv:password:use} on page \pageref{lst:json:ajv:password}. The fact that ajv supports validation using promises, is a huge advantage, in regards to readability, cf. section \ref{sec:impl:node:style} on page \pageref{sec:impl:node:style}.
+
+			\begin{lstlisting}[gobble=16,language=JavaScript,caption={JSON schema for the password model, using ajv's notaiton.},label={lst:json:ajv:password},breakatwhitespace=false]
+                var schema = {
+                    "$async": true,
+                    "properties": {
+                        "title": {
+                            "type": "string"
+                        },
+                        "username": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string",
+                            "pattern": "^([A-Za-z0-9+\/]{4})*([A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}==)$"
+                        },
+                        "parent": {
+                            "type": "number"
+                        },
+                        "url": {
+                            "type": "string"
+                        },
+                        "note": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [ "title", "password" ],
+                    "additionalProperties": false
+                };
+                var user = {
+                    schema = ajv.compile(schema);
+                }
+				\end{lstlisting}
+
+			\begin{lstlisting}[gobble=16,language=JavaScript,caption={Using the user schema for validating input, using ajv.},label={lst:json:ajv:password:use}]
+                validate({title: 'I Love Programming', 'password': 'V2hhdC4uLiBBZ2Fpbj8h'))
+                .then(function (valid) {
+                    console.log('Data is valid');
+                })
+                .catch(function (err) {
+                    if (!(err instanceof Ajv.ValidationError)) throw err;
+                    // data is invalid
+                    console.log('Validation errors:', err.errors);
+                });
+		\end{lstlisting}
 
 	\section{Middlewares}
 		\label{sec:impl:middleware}
@@ -451,7 +501,9 @@
 		\end{lstlisting}
 
 	\section{Handling Errors}
-		Using the Bluebird.js promise library, error handling in the back-end is simplified a lot. Whereas native promises generally only support catching \emph{all} errors, Bluebird supports individual catching. Then, individual errors can be extended from the default error, creating very easy separation of error type. On listing \ref{lst:example:errorhandle:password:create} on page \pageref{lst:example:errorhandle:password:create} an example snippet is shown. It shows the error catching when creating a new password. This process can throw one of three errors: \verb=UserDoesNotExistError=, \verb=ValidationError=, and \verb=SqlError=. 
+		Using the Bluebird.js promise library, error handling in the back-end is simplified a lot. Whereas native promises generally only support catching \emph{all} errors, Bluebird supports individual catching. Then, individual errors can be extended from the default error, creating very easy separation of error type. 
+
+		On listing \ref{lst:example:errorhandle:password:create} on page \pageref{lst:example:errorhandle:password:create} an example snippet is shown. It shows the error catching when creating a new password. This process can throw one of three errors: \verb=UserDoesNotExistError=, \verb=ValidationError=, and \verb=SqlError=. While these are not the only errors that the back-end can throw, it is a selection. For a full list of available errors, please refer to appendix \ref{appendix:errors:backend}.
 
 		\begin{lstlisting}[language=Javascript,gobble=12,caption={Example of error handling, when creating new password},label={lst:example:errorhandle:password:create}]
             Password.create(password)
@@ -472,6 +524,7 @@
                 return next();
             });
 		\end{lstlisting}
+
 
 
 
