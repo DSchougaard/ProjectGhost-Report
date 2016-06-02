@@ -65,9 +65,14 @@
 		\label{sec:impl:ui-router}
 
 	\section{Encryption \& Hashing}
+		While in theory one could go about implementing the algorithms needed for the implementations oneself, the fact is that this would both be \emph{way} too resource demanding, and it would also introduce security risks, in forms of implementational errors. As such, it is chosen to go with an encryption library, which will handle the encryption.
 
-		\subsection{Deviating From the Requirements}
-			Argon2 not available.
+		For this purpose, the Forge library is chosen\cite{forge-encryption}. Forge is a collection of encryption algorithms, developed in pure JavaScript and is as such able to be executed in the browser directly. In its suite of encryption algorithm is not only AES, but also RSA key \emph{generation} and \emph{encryption}. As such, it alone houses all of the required cryptographic tools, to develop the front-end of the solution.
+
+		\subsection{Deviating From the Designs}
+			Unfortunately, the implementation must \emph{deviate} from the designs. Seeing as Argon2 only exists as a C++ implementation, it is simply not able to be executed in the browser. As such, it is \emph{unfortunately} necessary to choose another key derivation function, in accordance with section \ref{sec:kdf}, on page \pageref{sec:kdf}. Seeing as Forge actually contains an implementation of PBKDF2, this is chosen as the tool for deriving the encryption key. This choice is highly based upon interoperability, as the output from one algorithm will be guaranteed to work with the other.
+
+
 
 	\section{Generating Passwords}
 		One, until now, overlooked part, is password \emph{generation}. Since the solution aims at giving users the ability to use complex and ``strong'' passwords, it only makes sense that the solution can actually \emph{generate} these passwords.

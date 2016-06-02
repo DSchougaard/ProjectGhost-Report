@@ -117,7 +117,7 @@
 		\label{sec:impl:backend:codebase}
 		When it comes to a codebase's readability and maintainability, a good structure is almost the most important thing. As such, a proper categorisation is the first thing needed. Fundamentally, there will be four different types of code files, in the project: Models, routes, tests, and middleware.
 
-		Models represent on-disk data structures, as will be stored in the database. These were covered in section \ref{sec:moddeling} on page \pageref{sec:moddeling}. Since node.js natively supports ECMAScript 6 objects, these models will be represented as objects in memory. The models also contains the relevant methods for manipulating the entries. An example of this could be looking up a user, from an ID.
+		Models represent on-disk data structures, as will be stored in the database. These were covered in section \ref{sec:modelling} on page \pageref{sec:modelling}. Since node.js natively supports ECMAScript 6 objects, these models will be represented as objects in memory. The models also contains the relevant methods for manipulating the entries. An example of this could be looking up a user, from an ID.
 
 		Routes represent API endpoints. These are described in full detail, in section \ref{sec:impl:api} on page \pageref{sec:impl:api}. These routes will be separated into files representing their primary resource.
 
@@ -142,7 +142,7 @@
 		While working with ORMs generally takes database interactions to a higher abstraction level, it is thought that this also removes certain insight into how some queries work. Additionally, Knex's chainable methods, makes for query building in the style of Javascript promises. As such, it is concluded the Knex is the superior choice as a DAL for the implementation.
 
 	\section{API Endpoints}
-		\label{sec:api}
+		\label{sec:impl:api}
 		Before defining the endpoints, the resources \emph{(see section \ref{sec:design:rest} on page \pageref{sec:design:rest})} of the application need to be determined. Looking at the models defined in section \ref{sec:modelling} on page \pageref{sec:modelling}, these offer a great starting point for resources.
 
 		\subsection{The Users Resource}
@@ -419,7 +419,7 @@
 		For authorization purposes two strategies will be used: Simple and advanced. For all purposes where the simple is a possibility, it will be used. In section \ref{sec:design:authorization} on page \pageref{sec:design:authorization} it was described which users has access to which entities. The following two sections will adhere to this design.
 
 		\subsection{Basic Authorization}
-			Using the API described in section \ref{sec:api} on page \pageref{sec:api}, it is clearly seen that models' IDs are found in the URL. As such, using the owner field, of these models, it can easily be determined if the authenticated user has access to any given resource.
+			Using the API described in section \ref{sec:impl:api} on page \pageref{sec:impl:api}, it is clearly seen that models' IDs are found in the URL. As such, using the owner field, of these models, it can easily be determined if the authenticated user has access to any given resource.
 
 			As per the design, \emph{both} the user and admins will have full access to all user methods. This is simply handled with a comparison:
 			\begin{lstlisting}[gobble=16,language=JavaScript]
@@ -526,7 +526,8 @@
             });
 		\end{lstlisting}
 
-
+	\section{Testing the API}
+		\label{sec:impl:tests}
 
 
 
