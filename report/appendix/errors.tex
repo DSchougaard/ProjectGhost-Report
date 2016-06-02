@@ -1,0 +1,20 @@
+\chapter{Errors Thrown by the Back-End}
+\label{appendix:errors:backend}
+	\definecolor{tablerow1}{RGB}{230,230,230}
+	\definecolor{tablerow2}{RGB}{255,255,255}
+	\rowcolors{2}{tablerow1}{tablerow2}
+	
+	\begin{tabularx}{\textwidth}{ R{0.40} | L{0.60} }
+		\textbf{Error} 					& \textbf{Meaning} \\
+		\hline
+		UserDoesNotExistError 			& The requested user was not found.	\\
+		PasswordDoesNotExistError 		& The requested password was not found.	\\
+		CategoryDoesNotExistError 		& The category was not found.	\\
+		InviteDoesNotExistError 		& The invite was not found.	\\
+		InvalidInviteError 				& The invite was found to be invalid. Used when the invite is expired.	\\
+		AlreadyExistError 				& The entity already exists. Primarily used when trying to create a user with a non-unique username.	\\
+		AuditError 						& The audit entry failed in being created.	\\
+		SqlError 						& Generic SQL error. Most likely a foreign key constraint exception.	\\
+		UnauthorizedError 				& The user was found to have insufficient privileges.	\\
+		ValidationError 				& The input was malformed. Because of wrong type, or wrong regex pattern.	\\
+	\end{tabularx}
