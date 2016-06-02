@@ -30,6 +30,31 @@
 
 
 	\section{Being Responsive}
+		When it comes to developing websites and web applications, one of the most important aspect is responsiveness. In short, it is defined as a website that behaves accordingly to the available screen area. This is without a doubt one of Angular Material's strengths. The best example of this responsiveness, is the main interface's menu, on the right side. This is seen on figures \ref{fig:impl:responsive:locked} to \ref{fig:impl:responsive:expanded} on page \pageref{fig:impl:responsive:locked}. Figure \ref{fig:impl:responsive:locked} shows the side menu being locked open, since the screen is large enough to allow this. Figure \ref{fig:impl:responsive:collapsed} shows the side menu in its collapsed form. Clicking the standard Material Design expand icon, in the upper left corner will expand the menu, the result of which is seen on figure \ref{fig:impl:responsive:expanded}.
+
+		\begin{figure}
+			\centering
+			\begin{subfigure}[b]{0.75\textwidth}
+				\includegraphics[width=\linewidth,clip,trim=0 800 200 0]{figures/implementation/screenshots/ghost_main_locked_menu.png}
+				\caption{Main interface with the side menu locked in open position, due to plenty of screen space.}
+				\label{fig:impl:responsive:locked}
+			\end{subfigure}
+
+			\begin{subfigure}[b]{0.75\textwidth}
+				\includegraphics[width=\linewidth,clip,trim=0 800 200 0]{figures/implementation/screenshots/ghost_main_collapsed_menu.png}
+				\caption{Main interface with the side menu collapsed, due to lack of screen space.}
+				\label{fig:impl:responsive:collapsed}
+			\end{subfigure}
+
+			\begin{subfigure}[b]{0.75\textwidth}
+				\includegraphics[width=\linewidth,clip,trim=0 800 200 0]{figures/implementation/screenshots/ghost_main_expanded_menu.png}
+				\caption{Main interface with the side menu expanded, in order for the user to access it.}
+				\label{fig:impl:responsive:expanded}
+			\end{subfigure}
+
+		\end{figure}
+
+
 
 
 	\section{Structuring the Codebase}
@@ -58,7 +83,6 @@
 		.3 password.controller.js.
 		}
 
-		
 	\section{Making A Tree}
 
 	\section{UI-Router}
