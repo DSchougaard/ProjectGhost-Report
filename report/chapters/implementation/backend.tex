@@ -114,6 +114,7 @@
 		\end{lstlisting}
 
 	\section{Structuring the Codebase}
+		\label{sec:impl:backend:codebase}
 		When it comes to a codebase's readability and maintainability, a good structure is almost the most important thing. As such, a proper categorisation is the first thing needed. Fundamentally, there will be four different types of code files, in the project: Models, routes, tests, and middleware.
 
 		Models represent on-disk data structures, as will be stored in the database. These were covered in section \ref{sec:moddeling} on page \pageref{sec:moddeling}. Since node.js natively supports ECMAScript 6 objects, these models will be represented as objects in memory. The models also contains the relevant methods for manipulating the entries. An example of this could be looking up a user, from an ID.
