@@ -412,7 +412,7 @@
 
 	\section{Authorization}
 		\label{sec:impl:authorization}
-		For authorization purposes two strategies will be used: Simple and advanced. For all purposes where the simple is a possibility, it will be used. In section \ref{sec:design:authorization} on page \pageref{sec:design:authorization} it was described which users has access to which entities. The following two sections will adhere to this design.
+		For authorization purposes two strategies will be used: Simple and advanced authorization. For all purposes where simple authorization is a possibility, it will be used. In section \ref{sec:design:authorization} on page \pageref{sec:design:authorization} it was described which users has access to which entities. The following two sections will adhere to this design.
 
 		\subsection{Basic Authorization}
 			Using the API described in section \ref{sec:impl:api} on page \pageref{sec:impl:api}, it is clearly seen that models' IDs are found in the URL. As such, using the owner field, of these models, it can easily be determined if the authenticated user has access to any given resource.
