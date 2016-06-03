@@ -1074,10 +1074,31 @@
 			\end{enumerate}
 
 	\section{Authorization}
-		
-
 		\label{sec:design:authorization}
-		\todo{Describe authorization}
+		Having described these various models, it only makes sense to determine who can actually \emph{access} them. Various schemes for ensuring this exists, however before deciding that, it is important to understand which models should be limited, and to whom.
+
+		First and foremost, the users. Since the admin should be able to control the users signed up to the service, admins are granted full access to the users. This means reading, creating, updating, and deleting users. This is done to allow the admin to not only help regular users should an error occur, but also delete unused accounts. Keep in mind, that the admin will \emph{not} be able to neither read the authentication password nor the decryption password.
+
+		But that is also the extent of which, admins can interfere with other users' data. They should \emph{not} be allowed to access other user's passwords, shared passwords, categories or audit logs. Finally, there is the invites. As previously stated, it should only be admins that are able to create invites. These permissions are shown on table \ref{sec:design:authorization} on page \pageref{sec:design:authorization}.
+
+		\begin{table}
+			\centering
+			\begin{tabular}{ |r | l | l | }
+				\hline
+									&   \multicolumn{2}{r |}{\textbf{\textit{Role Can Access}}} \\
+				\textbf{Model}		& \textbf{User} 	& \textbf{Admin}  	\\
+				\hline
+				User 				& Own 				& All	 	\\
+				Password 			& Own 				& Own 		\\
+				Shared Password 	& Own 				& Own 		\\
+				Category 			& Own 				& Own 		\\
+				Audit 				& Own 				& Own 		\\
+				Invite 				& No 				& Create 	\\
+				\hline
+			\end{tabular}
+		\end{table}
+
+		Looking at table \ref{sec:design:authorization}, it is clearly seen that permissions are based on a users \emph{role}, i.e. whether or not he or she is an admin, or a regular user. As such, it is deemed only logical, that a role-based access control system will be used.
 
 	\section{Storing the Data}
 		\label{sec:database:type}
