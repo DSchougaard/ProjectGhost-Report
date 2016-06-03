@@ -1,5 +1,5 @@
 \chapter{Introduction}
-\label{chap:intro}
+	\label{chap:intro}
 	For many years, IT professionals have preached the importance of strong passwords. Many publications exist, describing exactly what defines a strong password. The general consensus is that it needs \emph{at least} both upper- and lower-case letters, digits and preferably also symbols \emph{(\#, \_, etc.)}. Additionally, it shouldn't be a word -- or a word where an L is replaced by a 1. And of course it has to be at least 8 characters long. And you're not supposed to use the same password more than once place. With all of these rules for strong passwords, it is hardly a surprise that a lot of the regular users of IT systems resort to simple and repetitive passwords.
 
 	To help alleviate this problem, a new class of software grew popular: Password managers. Simple tools, protected by a single master password, which generate and store passwords in a secure manner. A lot of the IT professionals took these tools to their heart, despite their inherent flaws. 
@@ -139,12 +139,21 @@
 				\item A user should never wait more than maximum $500ms$ after any action in the user interface, before the changes take effect \label{requirement:delay}
 			\end{enumerate}
 
-
-
-
 	\section{Contributions of the Project}
-		Analysis
-		Design
-		Prototype described in Implementation
+		The primary contribution of this thesis, is the Analysis and Design chapters. In the analysis, a thorough review of available tools -- both commercially available and academic papers -- are done, to see if any of them are usable. The Design chapter then takes over, and suggests a \emph{better} design.
+
+		Finally, a prototype is implemented following these design specifications. The details of the implementation process are found in the so aptly named Implementation chapter.
+
 
 	\section{Structure of the Thesis}
+		There exists a number of ways to read this thesis -- it all depends on where you wish to start. Reading the entire thesis, it is recommended to start with the Analysis before progressing to the Design, then Implementation and then finally the conclusion. This is the obvious and most complete way to read it. Secondly, it is possible to skip the Analysis completely, and simply read the Design and Implementation chapters. This approach is for the reader more interested in the \emph{resulting} system and \emph{why} it is designed as it is. Finally, it is possible to skip directly to the Implementation, albeit it is not recommended. All of these choices are visualized on figure \ref{fig:reading:the:thesis} on page \pageref{fig:reading:the:thesis}.
+
+		\begin{figure}[!htb]
+			\centering
+			\includegraphics[width=0.5\textwidth]{figures/intro/reading.eps}
+			\caption{Reading the thesis.}
+			\label{fig:reading:the:thesis}
+		\end{figure}
+
+
+
