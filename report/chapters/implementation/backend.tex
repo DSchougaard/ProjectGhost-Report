@@ -40,8 +40,6 @@
 
 		Since it has been determined in section \ref{sec:design:choosing-rest}, on page \pageref{sec:design:choosing-rest}, that the back-end essentially will be nothing more than a REST api, restify simply seems more fitting. The other frameworks contain a lot of features -- like server side rendered templates -- which simply won't be necessary when developing an API. 
 
-
-
 	\section{Node.js Coding Style}
 		\label{sec:impl:node:style}
 		When developing using node.js there are two different schools of thought: Callbacks and promises. Since node.js asynchronous, traditional synchronous methods should not be used. For reference purposes, the \emph{wrong} way to do it, is shown on figure \ref{lst:node:wrong}. This causes major performance issues, as the execution of the program would halt, while the action taking a long time is performed.
@@ -131,6 +129,7 @@
 		.2 routes.
 		.2 tests.
 		}
+
 	\section{Database Abstraction Layer}
 		As decided in section \ref{sec:restrict:database} on page \pageref{sec:restrict:database}, a database abstraction layer is necessary. While Object-Relational Mapping \emph{(ORM)} strictly speaking isn't the same as a DAL, for this section the two are considered equivalent.
 
@@ -525,8 +524,37 @@
 
 	\section{Testing the API}
 		\label{sec:impl:tests}
+		Last but not least, testing of the back-end is -- of course -- necessary. One could go about manually creating the HTTP requests and testing the output, but this is far from acceptable.
+
+		As such, unittesting is necessary. One of the most popular frameworks for unittesting in the JavaScript community is without a doubt mocha. However, since this is an API that will be tested, mocha isn't enough. When testing the HTTP calls there are two approaches: Either the actual server is run in a separate process, or the test framework runs the server itself. However, running the server separately will \emph{quickly} become very tedious, since it would have to be restarted for each set of tests. 
+
+		Fortunately, there exists a tool designed \emph{specifically} to aid in this type of unittesting: Supertest. It simply plugs into the main application code, and bootstraps a local version of the routes themselves. Then tests can be run on this, \emph{as if} it was running in a separate process. The application code simply has to export a link to the primary object \emph{(often the server or app variable)}, whenever the \verb=process.env.NODEENV= environment variable is set to \verb=test=. This export is shown on listing \ref{lst:impl:backend:testexport} on page \pageref{lst:impl:backend:testexport}. This is then used in Supertest, in order to test the result of certain requests. This is seen on listing \ref{lst:impl:backend:supertest} on page \pageref{lst:impl:backend:supertest}. 
+
+		As seen, when \verb=POST=ing to the endpoint \verb=/api/auth/login= \emph{(as described in section \ref{sec:impl:api} on page \pageref{sec:impl:api})}, with the username ``daniel'' and the password ``password'', it is \emph{expected} that it returns HTTP code \verb=200=, which indicates a successful authentication.
 
 
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={Application's export of primary variable, when in test environment},label={lst:impl:backend:testexport}]
+            if( process.env.NODE_ENV === 'test' ){
+                module.exports = server;
+            }else{
+                server.listen(opts.port);
+            }
+        \end{lstlisting}
+
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={Unittesting API endpoints, using Supertest},label={lst:impl:backend:supertest}]
+            var request = require('supertest');  
+            var server  = request(require(__base + 'app.js').server);
+            
+            server
+            .post('/api/auth/login')
+            .field('username', 'daniel')
+            .field('password', 'password')
+            .expect(200)
+		\end{lstlisting}
+
+		Finally, there is the question of \emph{code coverage}. Using the tool Istanbul, the coverage of the unittesting of the back-end is calculated. The result of this is found on figure \ref{lst:impl:coverage} on page \pageref{lst:impl:coverage}. While $100\%$ code coverage should be strived for, achieving $77.59\%$ is far from bad.
+
+		\lstinputlisting[language={},caption={Code coverage results, using Istanbul. Some equality signs removed to fit on a single page.},label={lst:impl:coverage}]{resources/coverage.txt}
 
 
 
