@@ -416,8 +416,8 @@
 			\label{fig:sequence:auth}
 		\end{figure}
 
-		\subsection{Differentiating from the Design}
-			Unfortunately, it is necessary to deviate from the design here. Where section \ref{} on page \pageref{} dictated that the Argon2 algorithm should be used for password hashing, it is simply not feasible. There currently only exist one binding for this, for node.js, and unfortunately using this binding, results in an inability to run it on ARM platforms.
+		\subsection{Deviating from the Design}
+			Unfortunately, it is necessary to deviate from the design here. Where section \ref{sec:password} on page \pageref{sec:password} dictated that the Argon2 algorithm should be used for password hashing, it is simply not feasible. There currently only exist one binding for this, for node.js, and unfortunately using this binding, results in an inability to run it on ARM platforms.
 
 			As such, it is necessary to simply use a tried and tested algorithm, namely PBKDF2. This is also mentioned in OWASP's recommendations\cite{owasp_kdf}.
 
