@@ -192,6 +192,7 @@
 			\end{enumerate}
 
 	\section{Securing the Communication}
+		\label{sec:design:secure-comms}
 		Having established the method of communication, it needs to be established that \emph{all} traffic between the client and the server \emph{shall} be encrypted using HTTPS. However, ``use SSL/TLS'' is not the magic solution that it was once thought it was. Over the past few years, more and more attacks have surfaced primarily exploiting attack vectors in what is generally thought to be ``legacy'' options.
 
 		As such, it is almost \emph{required} to heavily limit the available options for SSL/TLS on a service, for it to be considered ``safe''. Table \ref{table:ssl/tls} on page \pageref{table:ssl/tls} contains some of the more recent attacks and what their target is. Previously the recommendation have been to simply use TLS1.0 or higher\cite{ms_tls1.0+}, however this is just no longer viable. 

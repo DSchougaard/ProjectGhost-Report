@@ -40,6 +40,22 @@
 
 		Since it has been determined in section \ref{sec:design:choosing-rest}, on page \pageref{sec:design:choosing-rest}, that the back-end essentially will be nothing more than a REST api, restify simply seems more fitting. The other frameworks contain a lot of features -- like server side rendered templates -- which simply won't be necessary when developing an API. 
 
+		Additionally, it is noted that Restify supports limiting the SSL/TLS version, \emph{and} the available cipher-suites, as described in \ref{sec:design:secure-comms} on page \pageref{sec:design:secure-comms}. Restify supports this, using Node.js's internal HTTPS options. As such, restricting the protocol version to $TLS1.2$ is easily done using the option shown on listing \ref{lst:impl:restrict:tls1.2} on page \pageref{lst:impl:restrict:tls1.2}. Likewise, the ciphersuites being used, can be restricted using the configuration found on listing \ref{lst:impl:restrict:ciphers} on page \pageref{lst:impl:restrict:ciphers}.
+
+		\begin{lstlisting}[style=json2,gobble=12, caption={Restricting Restify to use TLS 1.2},label={lst:impl:restrict:tls1.2}]
+            secureProtocol: 'TLSv1_2_method'
+		\end{lstlisting}
+
+		\begin{lstlisting}[style=json2,gobble=12, caption={Restricting the TLS cipher suites that Restify uses. Ciphers here are \emph{examples}, as the actual list would take up too much place.},label={lst:impl:restrict:ciphers}]
+            ciphers: [
+                "Suite1",
+                "Suite2",
+                "NOT Suite3",
+            ].join(':'),
+            honorCipherOrder: true
+		\end{lstlisting}
+
+
 	\section{Node.js Coding Style}
 		\label{sec:impl:node:style}
 		When developing using node.js there are two different schools of thought: Callbacks and promises. Since node.js asynchronous, traditional synchronous methods should not be used. For reference purposes, the \emph{wrong} way to do it, is shown on figure \ref{lst:node:wrong}. This causes major performance issues, as the execution of the program would halt, while the action taking a long time is performed.
@@ -399,6 +415,11 @@
 			\caption{Sequence diagram showing the process of how the front-end authenticates to the back-end.}
 			\label{fig:sequence:auth}
 		\end{figure}
+
+		\subsection{Differentiating from the Design}
+			Unfortunately, it is necessary to deviate from the design here. Where section \ref{} on page \pageref{} dictated that the Argon2 algorithm should be used for password hashing, it is simply not feasible. There currently only exist one binding for this, for node.js, and unfortunately using this binding, results in an inability to run it on ARM platforms.
+
+			As such, it is necessary to simply use a tried and tested algorithm, namely PBKDF2. This is also mentioned in OWASP's recommendations\cite{owasp_kdf}.
 
 		\subsection{Powering the Two-Factor Authentication}
 			To aid in the development, a third party tool is chosen for aiding the two-factor authentication. The Speakeasy project\cite{speakeasy_lib} is not only well documented and extremely easy to use, it is also pretty much the only two-factor authentication tool for Node.js, that has any credibility at all. As such, the choice fell on this suite.
