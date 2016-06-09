@@ -1,0 +1,3 @@
+[submodule "report/resources/ProjectGhost-Benchmarks"]
+	path = report/resources/ProjectGhost-Benchmarks
+	url = git@github.com:Dasch42/ProjectGhost-Benchmarks.git
