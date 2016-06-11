@@ -1,1 +1,35 @@
 \chapter{What Could Go Wrong?}
+	Having described the implementation of the prototype, it is very important to acknowledge any short-comings or dangers in the use of the final solution. As such, in this chapter the greatest risks are discussed.
+
+	\section{Identical Encryption and Decryption Key}
+		In section \ref{sec:design:pseudo-zero-knowledge} on page \pageref{sec:design:pseudo-zero-knowledge} it was discussed why the design of the system requires two passwords. However, at \emph{no} point will the implementation ever actually compare these passwords. As such, it is \emph{completely} possible for the user to have identical authentication and decryption passwords.
+
+		The risk of this, is potentially giving the server owner the ability to decrypt the stored passwords, since the authentication password \emph{is} sent to the back-end, for authentication purposes. However, this all depends on the user's \emph{choice}, and as such is not regarded as a critical risk.
+
+	\section{Third Party Libraries}
+		As previously stated, the implementation relies on third party libraries, to perform certain functions. For instance, the Forge library is used for handling encryption in the front-end, and the Node-Argon2 library, is used for performing Argon2 password hashing in the back-end. 
+
+		Using these libraries -- or dependencies, as they're called in the Node.js community -- enabled prototypes to be rapidly developed. However, they also introduce a risk: The implementation relies on other peoples code. Recently the largest dependency manager for Node.js, npm, experienced a catastrophic event. A very basic package, \verb=left-pad= was removed from npm, due to a legal dispute between the author and a third party\cite{npm_leftpad}. This caused a chain reaction of chaos, as packages that depended on \verb=left-pad= no longer could install, and packages depending on those packages couldn't either -- and so forth. This is unfortunately the risk, when working with these kinds of dependencies, but it isn't even the worst.
+
+		When depending on libraries, the developer(s) trust that the author\emph{(s)} of the library is forthright about the content of the library. For instance, the Forge library could, for all intents and purposes, simply send every single encryption payload to a remote server. Luckily, since this \emph{is} the world of open source, major issues like this can be inspected and possibly found. However, there might still be both intentional and unintentional security risks involved with using these libraries. As such, it is needed determine the whether or not any given dependency can be trusted.
+
+	\section{Trusting the JavaScript}
+		In this implementation, one of the basic truths 
+
+
+	\section{Dumping the Memory}
+		Unfortunately, since the implementation is run in a browser, it is not possible to implement features depending on for instance Microsoft's Data Protection Application Programming Interface \emph{(DPAPI)}, like KeePass does. As such, storing the passwords unencrypted is \emph{unfortunately} a security risk.
+
+		There really isn't any way around this risk. For it to be shown to the user, in the browser, it needs to be decrypted. For it to be shown, it needs to be stored. Should an attacker make a dump of the process memory, he or she will \emph{unfortunately} gain access to any passwords decrypted. 
+
+		The same is said about swap partitions and pagefiles. Unfortunately, there is a risk of cleartext passwords ending up in these. It is a risk, that comes with the choice of implementation. Should it have been chosen to implement native clients instead, this could possibly be circumvented. So this risk, is the price that will have to be paid, for the convenience of a web application.
+
+		The only redeeming thing to be said about this risk, is the fact that the implementation attempts to remove decrypted passwords again, as soon as possible. When the user changes focus from the password, its variable is overwritten. This is, however, doesn't increase the security all that much. For user experience purposes, the decrypted private key is kept in memory. So even when removing the decrypted passwords, the encryption key for decrypting \emph{all} passwords, still resides \emph{in memory}. One could of course go about clearing this as well, but that would mean the user would have to enter the decryption password \emph{every} time he or she needed to access a password -- which would result in a horrible user experience.
+
+
+
+
+
+%- Owning the computer
+%	- Dumping memory
+	

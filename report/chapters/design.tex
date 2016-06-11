@@ -518,6 +518,7 @@
 				Since the SAML specification requires the use of SOAP, this is disregarded in this context. The difference between SWT and JWT is that SWT can only be signed symmetrically using the HMAC algorithm, where as JWT \emph{also} supports asymmetric signing using an private/public keypair\cite{auth0_jwt}.
 
 			\subsubsection{Making A Choice}
+				\label{sec:design:jwt}
 				While this aspect of the design might seem trivial to some, it is actually a very fundamental and important aspect: It defines how the front-end authenticates with the back-end. While any of the previous approaches are strictly speaking \emph{valid}, some are more obvious than others. The HTTP Digest, for instance, is almost unnecessary compared to the option of just running Basic over HTTPS, and \emph{of course} HTTPS is required.
 
 				That leaves us with Basic, cookies and tokens. Since it has previously been established that it is beneficial for the back-end to be designed in such a way, that third party clients can connect to it, cookies are not optimal. Cookies are primarily intended for the browser and as such, would most likely end up being a hindrance if one should choose to develop a native client.
@@ -607,6 +608,7 @@
 			\end{enumerate}
 
 	\section{Attaining Pseudo-Zero-Knowledge}
+		\label{sec:design:pseudo-zero-knowledge}
 		As per the requirements it is known that the passwords must never be stored or handled unencrypted on the server. Previously, as an extension of this, it has been argued that letting the back-end as much as having the \emph{ability} of decrypting the stored passwords is ill advised. Hence, there should be no way of inferring the user's password for storing their private-key \emph{(see \ref{sec:encryption_choice} on page \pageref{sec:encryption_choice})} from \emph{anything} stored in the back-end.
 
 		As the reader might have realized by now, \emph{two} passwords are -- unfortunately -- needed. One password for authentication purposes, and one for decrypting the private-key. From now on, these two passwords are known as the authentication password and the decryption password.

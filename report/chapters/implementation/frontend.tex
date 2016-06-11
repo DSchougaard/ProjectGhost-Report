@@ -86,6 +86,16 @@
 		\subsection{Deviating From the Designs}
 			Unfortunately, the implementation must \emph{deviate} from the designs. Seeing as Argon2 only exists as a C++ implementation, it is simply not able to be executed in the browser. As such, it is \emph{unfortunately} necessary to choose another key derivation function, in accordance with section \ref{sec:kdf}, on page \pageref{sec:kdf}. Seeing as Forge actually contains an implementation of PBKDF2, this is chosen as the tool for deriving the encryption key. This choice is highly based upon interoperability, as the output from one algorithm will be guaranteed to work with the other.
 
+	%\section{Storing the JWT Token}
+		%As has been described in \ref{sec:design:jwt} on page \pageref{sec:design:jwt}, the REST API is protected using JSON Web Tokens. Since these tokens will need to be sent along with every request, they would need to be stored somewhere. Of course the token could be stored in memory. However, this would effectively log a user out, every time he or she refreshes the website. This is not optimal. As such, it needs to be stored in a ``permanent'' location.
+
+		%To this end, there are two approaches: Using web storage and cookies. Web storage is simply a form of local storage. It is a portion of memory that the browsers allow the various websites to store data in. Unfortunately, web storage is inherently vulnerable to cross site scripting \emph{(XSS)}. The second option is using cookies to store the JWT. Unfortunately, cookies are susceptible to cross-site request forgery \emph{(CSRF)}. 
+
+		%It then comes down to what is easier to protect against: XSS or CSRF. This is where the Angular framework excels. Built-in is already the foundation of XSS protecting: One of the primary  
+
+
+		%prefix ")]}',\n"
+
 	\section{Generating Passwords}
 		One, until now, overlooked part, is password \emph{generation}. Since the solution aims at giving users the ability to use complex and ``strong'' passwords, it only makes sense that the solution can actually \emph{generate} these passwords.
 
