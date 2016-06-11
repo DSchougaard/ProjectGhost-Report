@@ -5,6 +5,16 @@
 		In section \ref{sec:design:pseudo-zero-knowledge} on page \pageref{sec:design:pseudo-zero-knowledge} it was discussed why the design of the system requires two passwords. However, at \emph{no} point will the implementation ever actually compare these passwords. As such, it is \emph{completely} possible for the user to have identical authentication and decryption passwords.
 
 		The risk of this, is potentially giving the server owner the ability to decrypt the stored passwords, since the authentication password \emph{is} sent to the back-end, for authentication purposes. However, this all depends on the user's \emph{choice}, and as such is not regarded as a critical risk.
+	
+	\section{Trusting the Server Owner}
+		While the pseudo-zero-knowledge concept introduced in section \ref{sec:design:pseudo-zero-knowledge} on page \pageref{sec:design:pseudo-zero-knowledge} is intended to keep admins from reading all of the users' passwords, there is more to the story.
+
+		The admin, whom is assumed to be the owner of the back-end, \emph{could} change the JavaScript files of the front-end, making them send all the unencrypted data back to him. 
+
+		In \emph{theory} this could be mitigated by publishing a checksum of the bundled JavaScript file, that the front-end executes. This could then be compared, using a separate browser plugin on load, determining whether or not the file had been tampered with.
+
+		However, there is a much more fundamental issue here: Trust. This implementation is meant to be \emph{self-hosted}. The multi-user support is intended to allow multiple users from the same small community or home, e.g. husband and wife, to share the same back-end for storing their private passwords. As such, a certain level of \emph{trust} is assumed. The pseudo-zero-knowledge ensures that the admin can not read the passwords, using information found in the implementation as originally developed. Beyond that, the users will simply have to trust the admin, that he or she will not deliberately alter the files, in order to access the passwords.
+
 
 	\section{Third Party Libraries}
 		As previously stated, the implementation relies on third party libraries, to perform certain functions. For instance, the Forge library is used for handling encryption in the front-end, and the Node-Argon2 library, is used for performing Argon2 password hashing in the back-end. 
@@ -13,8 +23,6 @@
 
 		When depending on libraries, the developer(s) trust that the author\emph{(s)} of the library is forthright about the content of the library. For instance, the Forge library could, for all intents and purposes, simply send every single encryption payload to a remote server. Luckily, since this \emph{is} the world of open source, major issues like this can be inspected and possibly found. However, there might still be both intentional and unintentional security risks involved with using these libraries. As such, it is needed determine the whether or not any given dependency can be trusted.
 
-	\section{Trusting the JavaScript}
-		In this implementation, one of the basic truths 
 
 
 	\section{Dumping the Memory}
@@ -25,6 +33,8 @@
 		The same is said about swap partitions and pagefiles. Unfortunately, there is a risk of cleartext passwords ending up in these. It is a risk, that comes with the choice of implementation. Should it have been chosen to implement native clients instead, this could possibly be circumvented. So this risk, is the price that will have to be paid, for the convenience of a web application.
 
 		The only redeeming thing to be said about this risk, is the fact that the implementation attempts to remove decrypted passwords again, as soon as possible. When the user changes focus from the password, its variable is overwritten. This is, however, doesn't increase the security all that much. For user experience purposes, the decrypted private key is kept in memory. So even when removing the decrypted passwords, the encryption key for decrypting \emph{all} passwords, still resides \emph{in memory}. One could of course go about clearing this as well, but that would mean the user would have to enter the decryption password \emph{every} time he or she needed to access a password -- which would result in a horrible user experience.
+
+		All in all, this risk is unfortunately unavoidable. It is simply the price paid for the convenience.
 
 
 
