@@ -55,6 +55,47 @@
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
+				<integer>35</integer>
+			</dict>
+			<key>ID</key>
+			<integer>84</integer>
+			<key>OrthogonalBarAutomatic</key>
+			<true/>
+			<key>OrthogonalBarPoint</key>
+			<string>{0, 0}</string>
+			<key>OrthogonalBarPosition</key>
+			<real>-1</real>
+			<key>Points</key>
+			<array>
+				<string>{422.66672, 166.50002}</string>
+				<string>{468.5, 379.99982}</string>
+			</array>
+			<key>Style</key>
+			<dict>
+				<key>stroke</key>
+				<dict>
+					<key>HeadArrow</key>
+					<string>FilledArrow</string>
+					<key>LineType</key>
+					<integer>2</integer>
+					<key>TailArrow</key>
+					<string>0</string>
+				</dict>
+			</dict>
+			<key>Tail</key>
+			<dict>
+				<key>ID</key>
+				<integer>19</integer>
+				<key>Info</key>
+				<integer>3</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>Class</key>
+			<string>LineGraphic</string>
+			<key>Head</key>
+			<dict>
+				<key>ID</key>
 				<integer>30</integer>
 			</dict>
 			<key>ID</key>
@@ -67,8 +108,8 @@
 			<real>-1</real>
 			<key>Points</key>
 			<array>
-				<string>{493.66669, 397.99982}</string>
-				<string>{526.5, 460}</string>
+				<string>{513.5, 397.99982}</string>
+				<string>{528.5, 464}</string>
 				<string>{168.83337, 464.5}</string>
 			</array>
 			<key>Style</key>
@@ -318,9 +359,9 @@
 			<real>-1</real>
 			<key>Points</key>
 			<array>
-				<string>{448.66669, 415.99982}</string>
+				<string>{468.5, 415.99982}</string>
 				<string>{382, 435.5}</string>
-				<string>{306, 415.99982}</string>
+				<string>{286.5, 415.99982}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -363,7 +404,7 @@
 			<key>Points</key>
 			<array>
 				<string>{377.66669, 317.00003}</string>
-				<string>{351, 397.99982}</string>
+				<string>{331.5, 397.99982}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -406,7 +447,7 @@
 			<key>Points</key>
 			<array>
 				<string>{377.66669, 317.00003}</string>
-				<string>{403.66669, 397.99982}</string>
+				<string>{423.5, 397.99982}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -426,49 +467,6 @@
 				<integer>21</integer>
 				<key>Info</key>
 				<integer>1</integer>
-			</dict>
-		</dict>
-		<dict>
-			<key>Class</key>
-			<string>LineGraphic</string>
-			<key>Head</key>
-			<dict>
-				<key>ID</key>
-				<integer>34</integer>
-				<key>Info</key>
-				<integer>2</integer>
-			</dict>
-			<key>ID</key>
-			<integer>70</integer>
-			<key>OrthogonalBarAutomatic</key>
-			<true/>
-			<key>OrthogonalBarPoint</key>
-			<string>{0, 0}</string>
-			<key>OrthogonalBarPosition</key>
-			<real>-1</real>
-			<key>Points</key>
-			<array>
-				<string>{486.5, 358.5}</string>
-				<string>{306, 379.99982}</string>
-			</array>
-			<key>Style</key>
-			<dict>
-				<key>stroke</key>
-				<dict>
-					<key>HeadArrow</key>
-					<string>FilledArrow</string>
-					<key>LineType</key>
-					<integer>2</integer>
-					<key>TailArrow</key>
-					<string>0</string>
-				</dict>
-			</dict>
-			<key>Tail</key>
-			<dict>
-				<key>ID</key>
-				<integer>56</integer>
-				<key>Info</key>
-				<integer>2</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -500,51 +498,6 @@
 \f0\fs20 \cf0 Implementation Approach}</string>
 				<key>VerticalPad</key>
 				<integer>0</integer>
-			</dict>
-		</dict>
-		<dict>
-			<key>Class</key>
-			<string>LineGraphic</string>
-			<key>Head</key>
-			<dict>
-				<key>ID</key>
-				<integer>35</integer>
-				<key>Info</key>
-				<integer>2</integer>
-			</dict>
-			<key>ID</key>
-			<integer>56</integer>
-			<key>OrthogonalBarAutomatic</key>
-			<true/>
-			<key>OrthogonalBarPoint</key>
-			<string>{0, 0}</string>
-			<key>OrthogonalBarPosition</key>
-			<real>45.466644287109375</real>
-			<key>Points</key>
-			<array>
-				<string>{422.66672, 166.50002}</string>
-				<string>{525.5, 175}</string>
-				<string>{486.5, 358.5}</string>
-				<string>{448.66669, 379.99982}</string>
-			</array>
-			<key>Style</key>
-			<dict>
-				<key>stroke</key>
-				<dict>
-					<key>HeadArrow</key>
-					<string>FilledArrow</string>
-					<key>LineType</key>
-					<integer>2</integer>
-					<key>TailArrow</key>
-					<string>0</string>
-				</dict>
-			</dict>
-			<key>Tail</key>
-			<dict>
-				<key>ID</key>
-				<integer>19</integer>
-				<key>Info</key>
-				<integer>3</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -678,10 +631,10 @@
 			<key>OrthogonalBarPoint</key>
 			<string>{0, 0}</string>
 			<key>OrthogonalBarPosition</key>
-			<real>34.183319091796875</real>
+			<real>24.433319091796875</real>
 			<key>Points</key>
 			<array>
-				<string>{261, 397.99982}</string>
+				<string>{241.5, 397.99982}</string>
 				<string>{168.83337, 464.5}</string>
 			</array>
 			<key>Style</key>
@@ -735,7 +688,7 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{403.66669, 379.99982}, {90, 36}}</string>
+			<string>{{423.5, 379.99982}, {90, 36}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>ID</key>
@@ -759,14 +712,14 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f0\fs20 \cf0 Benchmarking}</string>
+\f0\fs20 \cf0 Risks}</string>
 				<key>VerticalPad</key>
 				<integer>0</integer>
 			</dict>
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{261, 379.99982}, {90, 36}}</string>
+			<string>{{241.5, 379.99982}, {90, 36}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>ID</key>
@@ -790,7 +743,7 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f0\fs20 \cf0 Risks}</string>
+\f0\fs20 \cf0 Benchmarking}</string>
 				<key>VerticalPad</key>
 				<integer>0</integer>
 			</dict>
@@ -998,7 +951,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2016-06-12 13:41:55 +0000</string>
+	<string>2016-06-12 14:18:48 +0000</string>
 	<key>Modifier</key>
 	<string>Daniel Schougaard</string>
 	<key>NotesVisible</key>
@@ -1093,7 +1046,7 @@
 		<key>SidebarWidth</key>
 		<integer>120</integer>
 		<key>VisibleRegion</key>
-		<string>{{0, 156.5}, {558.5, 359.5}}</string>
+		<string>{{0, 204.5}, {558.5, 359.5}}</string>
 		<key>Zoom</key>
 		<real>2</real>
 		<key>ZoomValues</key>
