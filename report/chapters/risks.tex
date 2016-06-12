@@ -33,7 +33,7 @@
 
 		All in all, this risk is unfortunately unavoidable. It is simply the price paid for the convenience.
 
-	\section{Expiration of the Token}
+	\section{Leaking the Token}
 		In section \ref{sec:design:jwt} on page \pageref{sec:design:jwt} it was decided that the implementation will be using JWT's to handle API authentication. What was \emph{not} discussed, was the security impact this would have.
 
 		When JWT's are used, commonly there is an expiration time set. At the time of this writing, that timer is set to 24 hours, meaning that after 24 hours the user needs to re-authenticate. When those 24 hours have passed, the token is no longer valid and therefore can \emph{not} be used to gain access to the back-end.
@@ -54,5 +54,10 @@
 
 		Should this situation arise, it would be unfortunate. But there is nothing that can be done to remedy this risk, that would not lower the overall security of the system. As such, it is deemed a necessary risk.
 
+	\section{Summing Things Up}
+		In the previous sections various risks of running the system has been introduced. These range from trusting the owner of the setup, to depending on third party libraries.
+
+		
 
 
+		Taken all the risks into consideration, it is still deemed better to deploy the solution as is, rather than trusting remote services with ones password data.
