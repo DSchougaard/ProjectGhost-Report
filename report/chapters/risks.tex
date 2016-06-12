@@ -1,7 +1,15 @@
 \chapter{What Could Go Wrong?}
 	Having described the implementation of the prototype, it is very important to acknowledge any short-comings or dangers in the use of the final solution. As such, in this chapter the greatest risks are discussed.
+	
 
-	\section{Identical Encryption and Decryption Key}
+	\section{Weak Authentication and Decryption Passwords}
+		One of the most fundamental risks of using this implementation, is if the user chooses a weak password. Granted, this is a weakness that applies to \emph{everything} protected by a weak password.
+
+		If a can be guessed easily, by known publicly available information regarding the user, or can be bruteforced in a reasonable short about of time, they are thought to be weak. Such a password would in the event of an attacker attempting to gain access, result in greater risk of leaking the \emph{actual} passwords.
+
+		Unfortunately, preventive measures for this type of weakness, is fairly useless. Enforcing password policies is how it is often done in critical systems, but more often than not, the resulting password is chosen so it is easy to remember. As such, it is decided that this risk is \emph{completely} up to the user to avoid.
+
+	\section{Identical Encryption and Decryption Passwords}
 		In section \ref{sec:design:pseudo-zero-knowledge} on page \pageref{sec:design:pseudo-zero-knowledge} it was discussed why the design of the system requires two passwords. However, at \emph{no} point will the implementation ever actually compare these passwords. As such, it is \emph{completely} possible for the user to have identical authentication and decryption passwords.
 
 		The risk of this, is potentially giving the server owner the ability to decrypt the stored passwords, since the authentication password \emph{is} sent to the back-end, for authentication purposes. However, this all depends on the user's \emph{choice}, and as such is not regarded as a critical risk.
@@ -32,22 +40,25 @@
 		The only redeeming thing to be said about this risk, is the fact that the implementation attempts to remove decrypted passwords again, as soon as possible. When the user changes focus from the password, its variable is overwritten. This is, however, doesn't increase the security all that much. For user experience purposes, the decrypted private key is kept in memory. So even when removing the decrypted passwords, the encryption key for decrypting \emph{all} passwords, still resides \emph{in memory}. One could of course go about clearing this as well, but that would mean the user would have to enter the decryption password \emph{every} time he or she needed to access a password -- which would result in a horrible user experience.
 
 		All in all, this risk is unfortunately unavoidable. It is simply the price paid for the convenience.
+	
+	\section{Loss of Data in the Database}
+		As much as we wish they were, harddrives, flash cards, and USB sticks are fallible. Drive failures \emph{can} -- and eventually \emph{will} -- happen. Unfortunately, not all users will run with a setup supporting parity checks. As such, backing up the database every so often is very much \emph{encouraged}. While this will \emph{not} completely mitigate the threat of data loss, it minimizes the damage done in such an event.
+
+		Backing up the database can easily be done with a cronjob \emph{(or similar)}.
 
 	\section{Leaking the Token}
 		In section \ref{sec:design:jwt} on page \pageref{sec:design:jwt} it was decided that the implementation will be using JWT's to handle API authentication. What was \emph{not} discussed, was the security impact this would have.
 
 		When JWT's are used, commonly there is an expiration time set. At the time of this writing, that timer is set to 24 hours, meaning that after 24 hours the user needs to re-authenticate. When those 24 hours have passed, the token is no longer valid and therefore can \emph{not} be used to gain access to the back-end.
 
-		However, that also means that should this token fall into the hands of the attacker, he or she will have access to the user's data for 24 hours. Take note: Since password encryption and decryption happens in the browser, he or she will \emph{not} have direct access to the passwords.
+		However, that also means that should this token fall into the hands of the attacker, he or she will have access to the user's data for 24 hours. This would allow an attacker to change and delete passwords at will, but since password encryption and decryption happens in the browser, he or she will \emph{not} have direct access to the passwords. Avoiding the loss of passwords, can be somewhat mitigated, by backing up the database, as described in the previous section.
 
 		Obtaining these tokens commonly happen through either Cross-Site Request Forgery \emph{(CSRF)} or Cross-Site Scripting \emph{(XSS)}. While there definitely could be security vulnerabilities not found at this point, it is believed that no such exists. Additionally, it is not possible to intercept the token in transit, due to HTTPS being enforced at \emph{all} times.
 
 		As such, the risk of the token being compromised, is relatively low.
 
-
-
-
 		%Another option is to allow for token revocation. This would entail storing the token in the database, allowing the user to revoke tokens at any point in time.
+
 
 	\section{Forgetting the Password}
 		One of the more unfortunate ``issues'' with the implementation, is the lack of account recovery. The authentication password can, \emph{of course}, be reset. But the decryption password can \emph{not} be reset -- for good reasons. As such, if the user forgets his or her decryption password, \emph{nothing} can be done.
@@ -57,7 +68,7 @@
 	\section{Summing Things Up}
 		In the previous sections various risks of running the system has been introduced. These range from trusting the owner of the setup, to depending on third party libraries.
 
-		
+
 
 
 		Taken all the risks into consideration, it is still deemed better to deploy the solution as is, rather than trusting remote services with ones password data.
