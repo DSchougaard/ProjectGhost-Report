@@ -291,6 +291,7 @@
 		\end{table}
 
 	\section{Workaround To Be Self-Contained}
+		\label{sec:impl:backend:restify-fix}
 		Unfortunatly, Restify's documentation is sometimes lackluster. They have what they call the serveStatic method. From their decription, its intended use is to deliver a default file, if a match is not found. This is exactly what is needed for the front-end's router \emph{(more on this in section \ref{sec:impl:ui-router} on page \pageref{sec:impl:ui-router})}. However, after much fiddling, it was found simply not to work.
 
 		As such, a workaround is needed. After having stated the API routes, six new routes are defined as is seen on table \ref{tab:api:workaround} on page \pageref{tab:api:workaround}. This ensures that any API hits are given the proper error code, while ensuring that the application for the front-end is being delivered in all cases.
@@ -309,7 +310,6 @@
 			\caption{Workaround error routes, to make the API adhere to standards and the front-end's router to work \emph{(see section \ref{sec:impl:ui-router} on page \pageref{sec:impl:ui-router})}}
 			\label{tab:api:workaround}
 		\end{table}
-		%RESTIFY workaround with serve static
 
 	\section{Validating Input}
 		Whenever a system is developed, that requires the input of a user, it is generally a bad idea to blindly trust, that the input is \emph{correct}. As such, validating the input JSON is necessary. There exists a plethora of tools for this \emph{exact} purpose. 

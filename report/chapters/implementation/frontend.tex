@@ -144,9 +144,21 @@
             }	
 		\end{lstlisting}
 
-%	\section{Routing the UI}
-%		\label{sec:impl:ui-router}
-%		\todo{Write something about the way agnular handles UI routes...}
+	\section{Routing the UI}
+		\label{sec:impl:ui-router}
+		Using the UI-Router, Angular handles front-end routing very similarly to that of a REST API. The root path, \verb=/=, refers to the main page. From then on, routes like \verb=/users/add= can then be used, to create a logical seperation and distiction, of which page is to be loaded.
+
+		For this to function properly, a default file -- the \verb=index.html= -- needs to be delivered for every url, which does not match a certain file. This is best illustrated by an example. Imagine the folder structure depicted below:
+		\dirtree{%
+		.1 Project.
+		.2 index{.}html.
+		.2 img.
+		.3 image{.}png.
+		}
+
+		When a request is made for \verb=/img/image.png=, the image \emph{should} be delivered. But should a request happen for \verb=/users/add=, which clearly does not represent an \emph{actual} file, the \verb=index.html= file is to be delivered. This ensures that the UI-Router can do its work, and make sure the user ends up on the appropriate page -- or presented an error page.
+
+		This, however, somewhat conflicts with the built-in functionality of Restify, the back-end framework. The work-around and patching is described in section \ref{sec:impl:backend:restify-fix} on page \pageref{sec:impl:backend:restify-fix}.
 
 	\section{Making A Tree}
 		While Angular Material generally is a \emph{very} good graphical framework -- especially taking its relative young age into consideration -- it lacks some things, which is required for the implementation. Specifically, it lacks a tree-like menu, for showing the password categories \emph{(see \ref{sec:model:category} on page \pageref{sec:model:category})}. This is, to a great extent, because the Material Design specification never includes this as an actual component. 
