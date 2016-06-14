@@ -1,10 +1,10 @@
 \chapter{Designing the System}
 	\label{chap:design}
-	In the following chapter, the overall design of the system is discussed. First and foremost, the basic architecture is decided, based on the requirements described in section \ref{sec:requirements} on page \pageref{sec:requirements}. Then more detailed subjects are covered, such as how authentication will work, how the solution keeps the users' data safe, and generally how it will work under the hood - so to speak.
+	In the following chapter the overall design of the system is discussed. First and foremost, the basic architecture is decided based on the requirements described in section \ref{sec:requirements} on page \pageref{sec:requirements}. Then more detailed subjects are covered, such as how authentication will work, how the solution keeps the users' data safe, etc.
 
 	\section{Architecture}
 		\label{sec:arch}
-		As per the requirements specified in section \ref{sec:requirements} on page \pageref{sec:requirements} the solution will have to be distributed. As such, there are two primary basic paradigms which can be used: Peer-to-Peer and Client-Server. In the following sections the pros and cons of the two will be discussed, and a conclusion of which is more beneficial for the project will be made.
+		As per the requirements specified in section \ref{sec:requirements} on page \pageref{sec:requirements} the solution will have to be distributed. As such, there are two primary basic models which can be used: Peer-to-Peer and Client-Server. In the following sections the pros and cons of the two will be discussed, and a conclusion of which is more beneficial for the project will be made.
 
 		\begin{figure}[p]
 			\centering
@@ -22,34 +22,39 @@
 
 
 		\subsection{Peer-to-Peer}
-			Over the past few years, peer-to-peer technology has become ever so more appealing to the masses. Applications such as BittorrentSync applies peer-to-peer technology in an effort to synchronise data between devices. Such an approach could easily be adapted to the problem at hand. A number of a user's devices are online, and synchronises a local password database file between themselves, as visualised on figure \ref{fig:peertopeer} on page \pageref{fig:peertopeer}. This file is then accessed through a native application, on the target device. 
+			%Over the past few years, peer-to-peer technology has become ever so more appealing to the masses.
 
-			This approach \emph{definitely} has the lowest overhead of the two: After all it is only devices that needs to have access to the passwords, that need to be setup, maintained, and running for it to be used. However, it does have some drawbacks. Most noticeable, that a native application is required for it to work. This means that for \emph{all} platforms an application needs to be developed. This, in returns, results in a much larger codebase, higher risk of bugs, and a risk of lower consistency across devices. Furthermore, the requirements of logging, as per section \ref{sec:requirements} on page \pageref{sec:requirements}, becomes a lot more difficult, if not to say impossible.
+			%			A number of a user's devices are online, and synchronises a local password database file between themselves, as visualised on figure \ref{fig:peertopeer} on page \pageref{fig:peertopeer}. 
 
-			Additionally, there is a pitfall using this approach. The synchronization requires at least \emph{one} peer with the newest version, to be online for it to work. Let us imagine a user, Paul. Paul has three devices he wish to synchronize passwords to: A desktop, a laptop, and a smartphone -- a very common scenario! Before leaving for a holiday, Paul updates a password on his desktop, while his laptop is closed. Since the smartphone is online at the time, the password is stored there and Paul is perfectly able to access it on his way to the airport. Since it's a long trip, Paul's smartphone runs out of battery along the way. ``No problem!'', Paul thinks and pulls out his laptop -- but oh no! Since the laptop has been offline ever since he left home, it has not received the updated password. And since it is the only online peer -- the desktop at home is turned off and the smartphone has run out of battery -- he can't fetch the newest version. 
+
+			When creating distributed systems, using peer-to-peer technology has steadily become more and more appealing to use. Applications such as BittorrentSync applies peer-to-peer technology in an effort to synchronise data between devices. Such an approach could easily be adapted to the problem at hand. A user's devices are all online, and synchronises a password database between themselves, as visualized on figure  \ref{fig:peertopeer} on page \pageref{fig:peertopeer}. This database is then accessed through a native application, on each device. 
+
+			This approach \emph{definitely} has the lowest overhead of the two: After all it is only devices that needs to have access to the passwords, that need to be setup, maintained, and running for it to be used. However, it does have some drawbacks. Most noticeable, that a native application is required for it to work. This means that for \emph{all} platforms an application needs to be developed. This, in return, results in a much larger codebase, higher risk of bugs, and a risk of lower consistency across devices. Furthermore, the requirements of auditing, as per section \ref{sec:requirements} on page \pageref{sec:requirements}, becomes a lot more difficult, if not to say impossible.
+
+			Additionally, there is a pitfall using this approach. The synchronization requires at least \emph{one} peer with the newest version, to be online for it to work. Let us imagine a user, Paul. Paul has three devices he wishes to synchronize passwords between: A desktop, a laptop, and a smartphone -- a very common scenario. Before leaving for a holiday, Paul updates a password on his desktop, while his laptop is turned off. Since the smartphone is online at the time, the password is stored there and Paul is perfectly able to access it on his way to the airport. Since it's a long trip, Paul's smartphone runs out of battery along the way. ``No problem!'', Paul thinks and pulls out his laptop -- but oh no! Since the laptop has been offline ever since he left home, it has not received the updated password. And since it is the only online peer -- the desktop at home is turned off and the smartphone has run out of battery -- he can't fetch the newest version. 
 
 			The scenario presented before, can be somewhat mitigated by creating an ``always on peer''. It is a peer in the network, which is always connected and thus always has the newest version available for other peers. However, doing this very much negates one of the strongest arguments \emph{for} this approach: The lower overhead.
 
 		\subsection{Client-Server}
-			The client-server paradigm has been the basic model used, since the dawn of the modern internet. When browsing facebook, accessing gmail, or posting a tweet, this is the paradigm employed. It is also the most widespread model used, by the solutions examined in chapter \ref{chap:analysis}.
+			The client-server model has been the basic model used, since the dawn of the modern internet. When browsing facebook, accessing gmail, or posting a tweet, this is the model employed. It is also the most widespread model used by the solutions examined in chapter \ref{chap:analysis}.
 
 			Using this approach, there would have to be a dedicated server, acting as the ``master storage'' of passwords. Each client then connects to this server and fetches the passwords. This type of connection is visualised on figure \ref{fig:clientserver} on page \pageref{fig:clientserver}. This does, however, come with its own drawbacks. Since all passwords are stored on a single server, it introduces the risk of a single point of failure. Should the server be compromised or is otherwise unavailable, passwords can not be retrieved \emph{(unless a local cache is used, but this is delving into implementation details)}. It also comes with overhead in form of cost and maintenance. A server will have to be maintained and run 24/7. However, as mentioned in section \ref{sec:privatecloud_cost} on page \pageref{sec:privatecloud_cost}, this can be achieved using low-power devices such as a Raspberry Pi, reducing the financial cost significantly.
 
-			Finally, using the client-server paradigm counters the scenario presented in the previous section. When Paul updates the password from home, the updated password is stored on the server. When he uses his laptop, after his phone has died, it will fetch the updated password from the server.
+			Finally, using the client-server model counters the scenario presented in the previous section. When Paul updates the password from home, the updated password is stored on the server. When he uses his laptop, after his phone has died, it will fetch the updated password from the server.
 
 
 		\subsection{Conclusion}
 			After having weighed the pros and cons of the two approaches, it is decided that a classic client-server architecture will be used. It is deemed that it will create a more seamless experience for the user, and over all will be a more robust solution.
 
-			Another argument why the client-server paradigm is preferable is that if the peer-to-peer paradigm is used, a native application is \emph{required}. This is not the case for the client-server paradigm. A web UI could serve as a front-end, creating a completely identical user experience across devices. But a native application could also be the solution, for the client-server application. Hence, this paradigm allows more freedom of implementation, than peer-to-peer does.
+			Another argument why the client-server model is preferable is that if the peer-to-peer model is used, a native application is \emph{required}. This is not the case for the client-server model. A web UI could serve as a front-end, creating a completely identical user experience across devices, while \emph{also} allowing for the existence of a native client application. Hence, this model allows more freedom of implementation, than peer-to-peer does.
 
 			From here on out, the solution will be split into two parts: The front-end \emph{(client)} and back-end \emph{(server)} -- two very common denominators.
 
 	\section{Communication}
 		\label{sec:comms}
-		Having determined that the solution will be using the client-server paradigm, the next task is to determine how front-end and the back-end will communicate. There are a number of different available technologies and protocols readily available for use in such a scenario.
+		Having determined that the solution will be using the client-server model, the next task is to determine how front-end and the back-end will communicate. There are a number of different available technologies and protocols readily available for use in such a scenario.
 
-		One important fact, that needs to be stated that the back-end is practically equivalent to a web service. As such, 
+		One important fact, that needs to be stated that the back-end is practically equivalent to a web service. As such, a number of viable communication protocols and methods exists:
 
 		\begin{itemize}
 			\item Remote Procedure Calls
@@ -106,7 +111,7 @@
 
 			The core notion of REST is that resources are bundled in collections, on which the HTTP verbs are used. The API then exposes these collections as Uniform Resource Identifiers \emph{(URIs)} in what is commonly known as endpoints. Using the various HTTP verbs on these endpoints results in actions being invoked on said collections.
 
-			These verbs are for example -- but not limited to-- \verb=GET=, \verb=POST=, \verb=PUT=, \verb=PATCH=, and \verb=DELETE=. These five verbs roughly translates to the basic CRUD operations, as listed on table \ref{tbl:verbs} on page \pageref{tbl:verbs}. So, for instance if one where to \verb=GET= the endpoint of \verb=/api/users= one would get the list of all users on the system. However, most of the time the distinction between \verb=PUT= and \verb=PATCH= is ignored, and \verb=PUT= is allowed to perform partial updates. Table \ref{tbl:rest_example} on page \pageref{tbl:rest_example} shows an example of an API on the \verb=users= resource, showing the result of the respective verbs and their payload. In the example the host of the endpoints have been removed, the prefix could for example be \verb=https://someapi.com/api=, so that an endpoint would be \verb=https://someapi.com/api/users=.
+			These verbs are for example -- but not limited to-- \verb=GET=, \verb=POST=, \verb=PUT=, \verb=PATCH=, and \verb=DELETE=. These five verbs roughly translates to the basic CRUD operations, as listed on table \ref{tbl:verbs} on page \pageref{tbl:verbs}. So, for instance if one where to \verb=GET= the endpoint of \verb=/api/users= one would get the list of all users on the system. Table \ref{tbl:rest_example} on page \pageref{tbl:rest_example} shows an example of an API on the \verb=users= resource, showing the result of the respective verbs and their payload. In the example the host of the endpoints have been removed, the prefix could for example be \verb=https://someapi.com/api=, so that an endpoint would be \verb=https://someapi.com/api/users=.
 
 			\begin{table}
 				\begin{tabular}{r|l}
@@ -143,7 +148,7 @@
 			\end{table}
 
 		\subsection{Simple Object Access Protocol}
-			Simple Object Access Protocol \emph{(SOAP)} was developed by Goshein, Atkinson, Winer, and Box for Microsoft in 1997 \cite{soap_origin}. SOAP is considered an extension of XML-RPC and -- like its predecessor -- uses XML encoding. As implied by its successor SOAP is \emph{strictly speaking} considered an RPC, however due to its uniqueness from ``traditional'' RPCs it is considered separately.
+			Simple Object Access Protocol \emph{(SOAP)} was developed by Goshein, Atkinson, Winer, and Box for Microsoft in 1997 \cite{soap_origin}. SOAP is considered an extension of XML-RPC and -- like its predecessor -- uses XML encoding. As implied SOAP is \emph{strictly speaking} considered an RPC. However, due to its standing within the industry.
 
 			SOAP can be used with any number of protocols, due to its neutrality, however it is usually used with HTTP or SMPT. Web services relying on SOAP, usually publish a public definition of the available methods, using the Web Service Definition Language \emph{(WSDL)}. This can then be consumed by other clients, making integration with third parties much easier.
 
@@ -164,13 +169,18 @@
 
 		\subsection{Making A Choice}
 			\label{sec:design:choosing-rest}
-			Making the final choice of how the solution will communicate is important. It sets limitation on future work, and could possibly influence design choices not yet even thought of. 
+			%Making the final choice of how the solution will communicate is important. It sets limitation on future work, and could possibly influence design choices not yet even thought of. 
+			Making the final choice of how the solution will communicate is important. It puts limitations on future work, and could possibly influence design choices not yet even thought of. 
 
 			First and foremost let us examine RPC. While it \emph{was} the go-to method for achieving the sort of communication which is needed in this project, the issue of implementation remains. Each platform will need its own unique implementation of whichever RPC standard that is chosen. And there is no guarantee that all of these will adhere to the specifications. Additionally, since its usage has become less widespread, it will also hinder further development and integration from third parties, down the line. As such, RPC is dismissed as a possible solution.
 
 			Secondly, there is the RMI. While RMI generally makes remote invocation \emph{very} easy, there is the issue of language restrictions. Since a stub of code is sent from the server to the client, it more or less forces both ends to work using the same language. Additionally, the only proper implementation of RMI is Java's, which even further restricts implementation. As such, RMI is dismissed as a possible solution.
 
-			This leaves SOAP and REST. SOAP is a very ``heavy'' tool, often used in commercial applications, due to its stricter nature. Because of the XML syntax, their payload is \emph{significantly} larger than that of REST using JSON. This results in SOAP being magnitudes slower than REST, cf. \cite{soap_vs_rest}. Additionally there is the matter of support and general adaptation. In the open-source community REST seems to have won the hearts of the crowd. More libraries and tools exists, for aiding in quick development of a RESTful API. This will also make for the optimal base, should other users choose to integrate the solution with their own projects.
+			This leaves SOAP and REST. SOAP is a very ``heavy'' tool, often used in commercial applications, due to its stricter nature. Because of the XML syntax, their payload is \emph{significantly} larger than that of REST using JSON. This results in SOAP being magnitudes slower than REST, cf. \cite{soap_vs_rest}. Additionally there is the matter of support and general adaptation. In the open-source community REST seems to have won the hearts of the crowd. Consequently, more libraries and tools exists, for aiding in quick development of an RESTful API. This will also make for an optimal base, should other users choose to integrate the solution with their own projects.
+
+
+
+			%In the open-source community REST seems to have won the hearts of the crowd. More libraries and tools exists, for aiding in quick development of a RESTful API. This will also make for the optimal base, should other users choose to integrate the solution with their own projects.
 
 			Hence, it is decided that a RESTful approach will be used. 
 
@@ -208,7 +218,7 @@
 				Heartbleed 				& OpenSSL Implementation			& \cite{durumeric2014matter}			\\
 				Bar Mitzvah 			& RC4 ciphers and weak keys 		& \cite{mantin2015barmitzvah}			\\
 				FREAK 					& ``RSA\_EXPORT'' cipher suites 	& \cite[p.3]{novotnyimplementation}		\\
-				WinShock 				& Schell Implementation 			& \cite[p.2]{novotnyimplementation} 	\\
+				WinShock 				& Schannel Implementation 			& \cite[p.2]{novotnyimplementation} 	\\
 				BEAST 					& TLS 1.0 							& \cite{beast} 								\\
 			\end{tabular}
 			\caption{Some of the recent SSL/TLS attacks and exploits.}
@@ -237,7 +247,7 @@
 
 		The other type of client, and the one growing in popularity in the later years, is the web client. This client is accessed through a browser and is in form of a website. While this does put some restrictions in place, in regards to platform specific technologies, it also ensures that the experience is \emph{identical} across devices. It ensures, that if the user feels at home using the application from a browser on a desktop, he or she will feel at home on a smartphone as well. This also ensures that there is only \emph{one} code base for the client. Finally, this also reduces the chances for implementation errors.
 
-		Finally there is browser plug-ins. While this \emph{definitely} is the most popular type of client for password managers, it also goes in stark contrast with the requirements earlier specified. The issue with \emph{only} using a browser plug-in, is that it in most circumstances this confines the user to storing website passwords, which is \emph{not} desirable.
+		Finally there is browser plug-ins. While this \emph{definitely} is the most popular type of client for password managers, it also goes in stark contrast with the requirements earlier specified. The issue with \emph{only} using a browser-plugin, is that in most circumstances this would confine the user to storing only website passwords, which is \emph{not} desirable.
 
 		All of these three clients are by far mutually exclusive. However, due to constraints of this project it is beneficial to limit the scope to a single interface, with the possibility of further development down the road. For initial prototyping a web UI is the most obvious, since it is the quickest way to achieve cross-platform usage. 
 
@@ -248,10 +258,10 @@
 			\item Password sharing
 		\end{itemize}
 
-		The first requirement states that the passwords need to be encrypted when handled in the back-end. Multiple encryption and data schemes could be used for this.
+		The first requirement states that the passwords need to be encrypted when handled in the back-end. Multiple encryption and data schemes could be used for this. The second states, that it \emph{must} be possible for users to share passwords.
 
 		\subsection{A Single Encrypted Blob}
-			One solution, is to simply store \emph{one} large encrypted blob in the back-end. When the user then requests access to a password, this blob is transferred to the front-end, decrypted, and the password can be retrieved. 
+			One solution for protecting the passwords, is to simply store \emph{one} large encrypted blob in the back-end. When the user then requests access to a password, this blob is transferred to the front-end, decrypted, and the password can be retrieved. 
 
 			When a new password is generated -- or an old one updated -- the same happens. The front-end fetches the blob, decrypts it, updates or creates an entry, re-encrypts the blob, and then pushes the entire thing to the back-end. The back-end then overrides its own version with the newly received one. This sequence of events is depicted on figure \ref{fig:seq_blob} on page \pageref{fig:seq_blob}.
 
@@ -265,7 +275,7 @@
 			The advantage of this, is that the blob practically can be encrypted with whichever scheme the user chooses: The back-end merely sends and receives blobs. However, it also has a \emph{major} drawback. This approach, unfortunately, results in large amounts of overhead: Every time a single entry is accessed, the entire blob needs to be decrypted. Same goes for updating: The entire blob will need to be both decrypted and encrypted again. While this might not be a huge issue with small datasets, it scales horribly for larger sets.
 
 		\subsection{Per Entry Encryption}
-			An alternative approach is that encryption could be employed on a per-entry basis. Using this scheme, some of the attributes per entry could then be encrypted. An example of such an entry could be a set consisting of a username, password, and URL. In this specific \emph{example} the password could be the only thing encrypted. 
+			An alternative approach is that encryption could be employed on a per-entry basis. Using this scheme, one or more of the attributes per entry could then be encrypted. An example of such an entry could be a set consisting of a username, password, and URL. In this specific \emph{example} the password could be the only thing encrypted. 
 
 			Using the same example before, of a password being added or updated, it is clear that encryption-wise, this solution is a lot more lightweight. \emph{Only} the updated / new fields are changed, leaving the remainder of the data unchanged. This sequence of events, is depicted on the sequence diagram on figure \ref{fig:seq_perentry} on page \pageref{fig:seq_perentry}. The drawback to this, is that additional information has the potential of being exposed in the database \emph{(unless the entire entry is encrypted)}.
 
@@ -279,9 +289,9 @@
 
 		\subsection{Sharing Is Caring}
 			\label{sec:share}
-			However, deciding the encryption scheme based on the previous sections is not possible. There is one important aspect, not yet considered: As stated in section \ref{sec:requirements} on page \pageref{sec:requirements} being able to share a password is a requirement. As such, it is important that a user, Alice, is able to share a password with another user, Bob -- and \emph{only} Bob.
+			However, deciding the encryption scheme based solely on the previous sections is not possible. There is one important aspect, not yet considered: As stated in section \ref{sec:requirements} on page \pageref{sec:requirements} being able to share a password is a requirement. As such, it is important that a user, Alice, is able to share a password with another user, Bob -- and \emph{only} Bob.
 
-			For this feature, an encryption scheme is needed which satisfies the following: Alice can share a single password with Bob, without Bob being able to access the remaining passwords. It should happen purely from Alice's part: No interaction with Bob should be necessary before a password is shared.
+			For this feature, an encryption scheme is needed which satisfies the following: Alice can share a \emph{single} password with Bob, without Bob being able to access the remainder of her passwords. It should happen purely from Alice's part: No interaction with Bob should be necessary before a password is shared.
 
 
 			\subsubsection{Proxy Re-Encryption}
@@ -307,16 +317,16 @@
 				\end{figure}
 
 			\subsubsection{Pretty Good Privacy}
-				While the previous section described a start-of-the-art, this approach is more classic. Pretty Good Privacy, or more commonly known simply as PGP, is a scheme dating back to the beginning of the 1990s. 
+				While the previous section described a start-of-the-art crypto system, this section will concern itself with a more classical system. Pretty Good Privacy, or more commonly known simply as PGP, is a scheme dating back to the beginning of the 1990s.
 
 				PGP uses a combination of symmetric and asymmetric encryption. Whenever a chunk of data needs to be encrypted for sharing, a new symmetric key is generated. The symmetric key is used to encrypt the data. Afterwards, the symmetric key is encrypted using the recipients public-key. Then the encrypted data and the encrypted key is transmitted to the recipient, which can then decrypt the symmetric key, using his own private-key. 
 
 				The reasoning behind this, is that symmetric encryption is \emph{several} magnitudes faster than asymmetric encryption. As such, it is \emph{far} more efficient to encrypt larger documents, using the symmetric key and \emph{then} encrypting said key, than directly encryption the document with an asymmetric key.
 
 				%\textsc{..}
-				Using this approach for the problem at hand is quite similar to the previous one. Each password has a unique symmetric encryption key, $SK$, which is never stored directly on the back-end. All users having access to said password, then has a copy of $SK$ encrypted with their own public-key stored. Sharing a password is then as simple as getting the recipients public-key, encrypting the $SK$ with said key, and uploading it to the server. The previous approach is depicted on figure \ref{fig:sequence:pgp} on page \pageref{fig:sequence:pgp}.
+				Using this approach for the problem at hand is quite similar to the previous one. Each password has a unique symmetric encryption key, $SK$, which is never stored directly on the back-end. All users having access to said password, then has a copy of $SK$ encrypted with their own public-key stored. Sharing a password is then as simple as getting the recipients public-key, encrypting the $SK$ with said key, and uploading it to the server. This approach is depicted on figure \ref{fig:sequence:pgp} on page \pageref{fig:sequence:pgp}.
 
-				One of the main arguments for using PGP is the fact that symmetric encryption is by far faster than asymmetric. However, in this case the plaintext is relatively small: A password most likely no longer than 72 characters. As such, the performance gained using PGP is pretty much gone. It would hardly take longer to encrypt such a password with asymmetric encryption, than it would for PGP to encrypt a symmetric key.
+				One of the main arguments for using PGP is the fact that symmetric encryption is by far faster than asymmetric. However, in this case the plaintext is relatively small: A password will most likely not be longer than 72 characters. As such, the performance gained using PGP is pretty much gone. It would hardly take longer to encrypt such a password with asymmetric encryption, than it would for PGP to encrypt a symmetric key.
 
 				Additionally, this solution has the same draw-back as proxy re-encryption. It requires that \emph{all} passwords have an symmetric key stored beside them. The same argument as before can be used again: While it in \emph{no} way can be considered ``bad'' scaling, it could be better.
 
@@ -331,11 +341,13 @@
 				\label{sec:assymetric}
 				A third option is to directly use asymmetric encryption. Each user has -- like previously -- a private and a public-key pair. Each password is then encrypted using the public-key and stored on the server. To access the password it simply has to be decrypted using the private-key. Sharing the password is simple as well. Simply fetch the public-key of the recipient, encrypt the password using said key, and upload the newly encrypted password. This is shown on figure \ref{fig:sequence:asymmetric} on page \pageref{fig:sequence:asymmetric}.
 
-				One of strongest arguments for the PGP scheme, is that generally asymmetric encryption is significantly faster. However, since the plaintext would be rather small -- most likely below 100 bytes -- this problem is effectively null and void, leaving this scheme a \emph{viable} candidate.
+				One of strongest arguments for the PGP scheme, is that generally asymmetric encryption is significantly faster. However, since the plaintext would be rather small -- as previously mentioned -- this problem is effectively null and void, leaving this scheme a \emph{viable} candidate.
 
 				Using this approach is easily the most simple so far. Alice wishes to share a password with Bob. She fetches his public-key, encrypts the password with said key, and uploads the encrypted password to the back-end. Bob then merely needs to fetch the password and decrypt it, in a process virtually no different from when accessing his own passwords.
 
-				As the astute reader might have figured out, this \emph{strictly} speaking isn't ``sharing'' a password. It is more of a ``sharing by cloning'' procedure. When the original password needs to be updated, it needs to be encrypted once per user it is shared to. This is \emph{definitely} a draw-back, compared to the previous solutions. From a storage perspective, however, this trumps the previous solutions. Storage wise, this is far more efficient than the previous solutions. When a password is shared, it is cloned and stored encrypted with the recipient's public-key, causing only an increased storage \emph{if} a password is shared.
+				As the astute reader might have figured out, this \emph{strictly} speaking isn't ``sharing'' a password. It is more of a ``sharing by cloning'' procedure. When the original password needs to be updated, it needs to be encrypted once per user it is shared to. This is \emph{definitely} a draw-back, compared to the previous solutions. 
+
+				Storage wise, this is far more efficient than the previous solutions. When a password is shared, it is cloned and stored encrypted with the recipient's public-key, causing only an increased storage \emph{if} a password is shared.
 
 				\begin{figure}[h!]
 					\centering
@@ -371,28 +383,28 @@
 				\begin{table}
 					\center
 					\begin{tabular}{r|l|l}
-						Solution 		& Per Password Value  			& Per Share Value 	\\
+						\textbf{Solution} 		& \textbf{Per Password Value}  			& \textbf{Per Share Value} 	\\
 						\hline
 						CL-PRE 			& \red{Yes} 					& \red{Yes}			\\
 						PGP 			& \green{No} 					& \red{Yes} 		\\
 						Asymmetric 		& \green{No} 					& \green{No} 		\\
 					\end{tabular}
-					\caption{Comparison of data usage of the three encryption schemes.}
+					\caption{Comparison of stored values necessary for the three encryption schemes.}
 					\label{table:comp:data}
 				\end{table}
 
 				Finally, there is the matter of data processing, which is also an important aspect to take into account, cf. \ref{table:comp:data-process}. Creating a password with CL-PRE involves the following steps: First a symmetric DEK needs to be created, then the password is encrypted with said DEK, and finally the DEK is encrypted using the user's public-key. This totals to $3$ ``cryptographic steps''. PGP is essentially the same. First a new symmetric key is created, then the password is encrypted using that key, and finally the key is encrypted using the user's public-key. Hence, PGP also uses $3$ cryptographic steps. Using asymmetric encryption, however, only a single step is needed: Encrypt the password with the user's public-key.
 
-				For creating a password, the asymmetric approach is clearly the favourite. Not only in the steps involved, but also just from its simplicity. However, this is not \emph{quite} the same when sharing a password. CL-PRE actually only needs a single step for updating a shared a password: Creating the re-encryption key. PGP on the other hand needs two operations: Decrypting the symmetric key, and re-encrypting it with the recipients public-key. Finally, there is the asymmetric approach. This approach needs $n$ operations, per update, where $n$ is the number of people the password is shared to. This \emph{huge} performance loss is due to the fact that it uses sharing by cloning. This is best illustrated with an example: If a password is shared with three people, it means that it exists four times in the back-end: Once encrypted with the owners public-key, and once with each of the people it is shared to. When the password is updated, it needs to be re-encrypted using \emph{each} of these peoples public-keys as well.
+				For creating a password, the asymmetric approach is clearly the favourite. Not only in the steps involved, but also just from its simplicity. However, this is not \emph{quite} the same when updating a shared a password. CL-PRE actually only needs a single step for updating a shared a password: Creating the re-encryption key. PGP on the other hand needs two operations: Decrypting the symmetric key, and re-encrypting it with the recipients public-key. Finally, there is the asymmetric approach. This approach needs $n$ operations, per update, where $n$ is the number of people the password is shared to. This \emph{huge} performance loss is due to the fact that it uses sharing by cloning. This is best illustrated with an example: If a password is shared with three people, it means that it exists four times in the back-end: Once encrypted with the owners public-key, and once with each of the people it is shared to. When the password is updated, it needs to be re-encrypted using \emph{each} of these peoples public-keys as well.
 
-				In this case, it is \emph{quite} clear that the asymmetric approach is inferior, when $n$ is large. However, since this overall solution is based around individual password sharing, and not sharing between a group, it is fair to assume that $n$ will be low. As such, the performance loss significantly less than originally assumed.
+				In this case, it is \emph{quite} clear that the asymmetric approach is inferior, when $n$ is large. However, since this overall solution is based around individual password sharing, and not sharing passwords between members of a group, it is fair to assume that $n$ will be small. As such, the performance loss significantly less than originally assumed.
 
 				All of these three tables are combined into a single large table, on figure \ref{table:comp:complete_schemes} on page \pageref{table:comp:complete_schemes}. Looking at this table, it is quite clear that as long as the assumption of relative few shares per passwords hold, the asymmetric approach is the preferable one to use.
 
 				\begin{table}
 					\center
 					\begin{tabular}{r|l|l}
-						Solution 		& Creating A Password  	& Updating a Password 	\\
+						\textbf{Solution} 		& \textbf{Creating A Password}  	& \textbf{Updating a Password} 	\\
 						\hline
 						CL-PRE 			& \green{$3$} 					& \green{$1$}					\\
 						PGP 			& \green{$3$} 					& \green{$2$} 					\\
@@ -405,7 +417,7 @@
 				\begin{table}
 					\center
 					\begin{tabular}{r|l|l|l|l|l}
-						Solution 		& \rot{Available Implementations} & \rot{Storage Per Password Value}  	& \rot{Storage Per Share Value}	& \rot{Steps for Creating A Password} 	& \rot{Steps for Updating a Password} 	\\
+						\textbf{Solution} 		& \rot{Available Implementations} & \rot{Storage Per Password Value}  	& \rot{Storage Per Share Value}	& \rot{Steps for Creating A Password} 	& \rot{Steps for Updating a Password} 	\\
 						\hline
 						CL-PRE 			& \red{Very Rare} 	& \red{Yes}		& \red{Yes} 	& \green{$3$} & \green{$1$} \\
 						PGP 			& \green{Several} 	& \green{No}	& \red{Yes} 	& \green{$3$} & \green{$2$} \\
@@ -427,9 +439,9 @@
 			\label{sec:keys}
 			As the astute reader might have realized by now, there is a slight short-coming in what has previously been described. How the private and public-key is stored and transported is omitted \emph{(by choice)}. In an ideal world, all users would automatically have access to the rest of the users' public-keys, and their own private-key would be securely distributed to all devices. However, the world is far from ideal.
 
-			Since the public-key is \emph{not} sensitive information. As such the easiest way to distribute these keys, is simply to store them on the server. This also makes it very easy for the client application to access these keys.
+			Since the public-key is \emph{not} sensitive information, the easiest way to distribute these keys, is simply to store them on the server. This also makes it very easy for the client application to access these keys.
 
-			However, that leaves the private-key. The most secure approach would probably be to let the user manage distributing this key themselves. However, this would end up being a very troublesome process and will lower the over-all user experience. Hence, an encryption scheme for storing the private-key on the server needs to be devised.
+			However, that leaves the private-key. The most secure approach would probably to let the individual users manage the distribution of their private-key themselves. However, this would end up being a very troublesome process and will lower the over-all user experience. Hence, an encryption scheme for storing the private-key on the server needs to be devised. Since the private-keys are \emph{not} to be shared, symmetric encryption is deemed to be the preferable solution.
 
 			\subsubsection{Choosing an Encryption Algorithm}
 				While there exists a plethora of symmetric encryption algorithms, some are more used than others. These are the 3DES, Blowfish, and AES algorithms. As with any of these choices, there exists various pros and cons for each of the algorithms. 
@@ -437,28 +449,32 @@
 				Several independent papers describe blowfish as the faster algorithm, quoting that since no known vulnerabilities exists for it, it is the best option for symmetric encryption\cite{thakur2011aes,singh2011comparison,verma2011peformance,ramesh2013performance}. While this might very well be true, one can not only compare these algorithms on efficiency, as security is as equally important -- if not more. 
 
 				On the other hand the National Institute of Standards and Technology \emph{(NIST)} -- strictly speaking -- recommends the use of the 3DES and AES algorithms\cite{barker2012sp}, in their report for use of the 3DES algorithm they write:
-				\begin{quote}
-					\emph{Note: Through the year 2030, Triple DES (TDEA) and the FIPS 197 Advanced Encryption Standard (AES) will coexist as approved algorithms – thus, allowing for a gradual transition to AES. (The AES is another symmetric-based encryption standard approved by NIST.)}\\
-					\cite{barker2012sp}
-				\end{quote}
+				\begin{citequote}{barker2012sp}
+					``Note: Through the year 2030, Triple DES (TDEA) and the FIPS 197 Advanced Encryption Standard (AES) will coexist as approved algorithms – thus, allowing for a gradual transition to AES. (The AES is another symmetric-based encryption standard approved by NIST.)''
+				\end{citequote}
+
 				On top of this, ENISA classifies Blowfish as a legacy algorithm, whereas AES is considered future proof\cite[p.20]{enisa}.
 
-				As a consequence it is decided, that the AES algorithm will be used for protecting the private-key, stored on the server. While AES supports a number of different key sizes, AES-256 is chosen for the added security. Additionally, a random IV will need to be generated, due to how AES works.
+				As a consequence it is decided, that the AES algorithm will be used for protecting the private-key, stored on the server. While AES supports a number of different key sizes, AES-256 is chosen for the added security. Finally, for AES to function as securely as possible, a random Initialization Vector \emph{(IV)} will need to securely be generated.
 
 			\subsubsection{Creating an Encryption Key}
 				\label{sec:kdf}
 				As with any encryption, AES-256 requires an encryption key. If the key is chosen to be stored on the server, this merely shifts the security risk -- it wont eliminate it. As such, the encryption needs to be based on something which is never stored on the server. The easiest, and by far most logical, way to achieve this, is to use a password. 
 
-				But using a user's password as a asymmetric encryption key will \emph{not} result in enough entropy. Doing this will be \emph{very} insecure. alternatively an encryption key can be \emph{derived} from a password. This is a fairly common task, and is best performed using a so-called Key Derivation Function, or KDF for short. These KDF's are designed to be slow. Where regular hashing algorithms such as SHA-1 are designed to be fast and efficient, KDFs are designed to be exactly the opposite. This is done to slow down a possible brute-force attack against the hash. After all, the regular user will never be the wiser if hashing a single password takes $0.01$ seconds or $1$ seconds. But performing this calculating hundreds of thousands of times will add up, making the computational load for a bruteforce attack \emph{significantly} harder. 
+				But using a user's password as a asymmetric encryption key will \emph{not} result in enough entropy. Doing this will be \emph{very} insecure. Alternatively an encryption key can be \emph{derived} from a password. This is a fairly common task, and is best performed using a so-called Key Derivation Function, or KDF for short. These KDF's are designed to be slow. Where regular hashing algorithms such as SHA-1 are designed to be fast and efficient, KDFs are designed to be exactly the opposite. This is done to slow down a possible brute-force attack against the hash. After all, the regular user will never be the wiser if hashing a single password takes $0.01$ seconds or $0.5$ seconds. But performing this calculation hundreds of thousands of times will add up, making the computational load for a bruteforce attack \emph{significantly} harder. 
 
 				There exists a \emph{plethora} of various KDFs -- way too many to cover all of them in this section. However, the most widespread KDF is the PBKDF2 algorithm\cite{rfc2898}, which is developed by RSA Laboratories. However, in June 2015 the Password Hashing Competition was concluded\cite{phc}. The competition was held in an attempt to develop a new crypto standard for password hashing algorithms \emph{(practically the same as a KDF)}. Their recommendation is to use the Argon2 algorithm\cite{biryukov2015argon}. Based on this, The Open Web Application Security Project \emph{(OWASP)} made the following recommendation, in regards to password hashing:
-				\begin{quote}
-					\emph{Select:
-						Argon2[*7] when it becomes available. Argon2 is the winner of the password hashing competition and should be considered as your first choice when solid implementations are available.
-					}\\\cite{owasp_kdf}
-				\end{quote}
+				\begin{citequote}{owasp_kdf}
+					``Argon2[*7] when it becomes available. Argon2 is the winner of the password hashing competition and should be considered as your first choice when solid implementations are available.''
+				\end{citequote}
 
-				Since Argon2 is such a new algorithm, ``solid'' implementations might very well be difficult to find. But this project will adhere to OWASP's guidelines, as far as possible. As such, it is preferable if the project derives the symmetric encryption key using the Argon2 algorithm. As a final note, avoid multiple users having the same encryption key, a salt will need to be added as well. 
+%				\begin{quote}
+%					\emph{Select:
+%						Argon2[*7] when it becomes available. Argon2 is the winner of the password hashing competition and should \%						be considered as your first choice when solid implementations are available.%
+%					}\\\cite{owasp_kdf}
+%				\end{quote}
+
+				Since Argon2 is such a new algorithm, ``solid'' implementations might very well be difficult to find. But this project will adhere to OWASP's guidelines, as far as possible. As such, it is preferable if the project derives the symmetric encryption key using the Argon2 algorithm. As a final note, to avoid multiple users having the same encryption key, a salt will need to be added to the derivation process as well. 
 
 		\subsection{Comparison With Requirements}
 			\label{requirement:fulfilled:sharing}
@@ -488,10 +504,10 @@
 
 	\section{Authentication}
 		\label{sec:design:authentication}
-		As with any program handling users' data, there need to be some sort of authentication method in place. Describing the authentication used for this project, will be split up into two categories: First it will be determined exactly how the API will be secured. Once this has been determined, it will be decided how to actually \emph{perform} this authentication.
+		As with any program handling users' data, an authentication system needs to exist. Describing the authentication used for this project, will be split up into two categories: First it will be determined exactly how the API will be secured. Once this has been determined, it will be decided how to actually \emph{perform} this authentication.
 
 		\subsection{Securing the API}
-			There exists a number of different approaches for securing an API. These range from the built-in protocols in HTTP \emph{(HTTP Basic)} to more advanced enabling users to authenticate using their credentials from Google, for example \emph{(OAuth)}. One important aspect that needs to be stated first, is that this is a \emph{password manager}. Its sole purpose is to enable users to store \emph{strong} passwords to services such as Google. Hence, it would make little to no sense allowing a user to authenticating using their Google account. As such, a very fundamental decision is made here: The authentication scheme \emph{must} work with data stored on the back-end itself.
+			There exists a number of different approaches for securing an API. These range from the built-in protocols in HTTP \emph{(HTTP Basic)} to more advanced enabling users to authenticate using their credentials from Google \emph{(OAuth)}. One important aspect that needs to be stated first, is that this is a \emph{password manager}. Its sole purpose is to enable users to store \emph{strong} passwords to services such as Google. Hence, it would make little to no sense allowing a user to authenticating using their Google account. As such, a very fundamental decision is made here: The authentication scheme \emph{must} work with data stored on the back-end itself.
 
 			\subsubsection{HTTP Basic}
 				HTTP Basic is, as the name implies, the most basic form of authentication. It uses standard fields in the HTTP header, containing username and password for authentication purposes. Since it is intended to be a \emph{very} basic authentication method, the password is sent Base64 encoded. Since this is easily decoded, it is considered an extremely insecure protocol if used without HTTPS. Additionally, Basic is vulnerable to replay attacks, if used without HTTPS.
@@ -509,7 +525,7 @@
 			\subsubsection{Tokens}
 				Speaking in very general terms, tokens are somewhat similar to cookies: They're a little piece of code, stored in the browser. However, where as cookies are tied to a session on the server, tokens are not. Tokens merely represent a subject, or in this case a user. Upon receiving a request with a token attached, the server then checks the tokens validity and verifies that the subject has access to a given resource. These tokens are also often referred to as ``bearer tokens''.
 
-				Where the previous possibilities pretty much only has a single option for each, tokens are a more diverse option. Generally there exist three primary versions of these tokens:
+				While the previous options only has a single implementation type, tokens are a bit more diverse. Generally speaking, there exist three different types of these tokens:
 				\begin{itemize}
 					\item Security Assertion Markup Language \emph{(SAML)}
 					\item Simple Web Token \emph{(SWT)}
@@ -521,18 +537,19 @@
 				\label{sec:design:jwt}
 				While this aspect of the design might seem trivial to some, it is actually a very fundamental and important aspect: It defines how the front-end authenticates with the back-end. While any of the previous approaches are strictly speaking \emph{valid}, some are more obvious than others. The HTTP Digest, for instance, is almost unnecessary compared to the option of just running Basic over HTTPS, and \emph{of course} HTTPS is required.
 
-				That leaves us with Basic, cookies and tokens. Since it has previously been established that it is beneficial for the back-end to be designed in such a way, that third party clients can connect to it, cookies are not optimal. Cookies are primarily intended for the browser and as such, would most likely end up being a hindrance if one should choose to develop a native client.
+				That leaves us with Basic, cookies, and tokens. Since it has previously been established that it is beneficial for the back-end to be designed in such a way, that third party clients can connect to it, cookies are not optimal. Cookies are primarily intended for the browser and as such, would most likely end up being a hindrance if one should choose to develop a native client.
 
 				As such it is down to Basic or tokens. Basic only has the option of sending the username and password in Base64, as covered earlier. Tokens, on the other hand have the option of sending an entire JSON payload. This opens the possibility for fine tuning the payload down the road and customizing it better to suit the implementation requirements. 
 
-				Trusting the payload of the token requires a certain level of trust. Using symmetrical signing of the JWT for this purpose is \emph{not} suitable. However, using a keypair for signing the JWT \emph{ensures} that the token originated from the server, and not from the client. As such, a certain level of trust can be implied in the token.
+				Trusting the payload of the token requires a certain level of trust. Using symmetrical signing of the token for this purpose is \emph{not} suitable. However, using a asymmetrical keypair \emph{(JWT exclusive)} for signing the token \emph{ensures} that the token originated from the server, and not from the client. As such, a certain level of trust can be implied in the token.
 
-				As such, it is chosen that the API will be secured using JWT tokens which will be signed by a private/public keypair.
+				Consequently, it is chosen that the API will be secured using JWT tokens which will be signed by a private/public keypair.
 
 		\subsection{Obtaining the Token}
 			In the previous section it was decided that the API will be protected using JWTs. However, the process of obtaining said tokens were not discussed. There exists a number of different ways to obtain this.
+			\todo{make diagram}
 
-			Anyone working within the industry will without a doubt have at least heard of OAuth and OAuth2. These two authentication protocols are used for users to authenticate to a service, without actually revealing their credentials to said service. Instead they reveal them to Google, for instance, which in return issues a token that is used for authenticating to the service. Earlier arguments were made for why these protocols are \emph{not} suited for this problem, however, certain derived protocols of these exists. Commonly they're known as 2-legged-OAuth and 2-legged-OAuth2. The reason to this is that there is only two actors involved: The user and the service. The OAuth provider, as they're called, are taken out of the equation. While this is definitely a valid option, it is deemed that it is simply too much overhead, for which is essentially a \emph{very} authentication purpose.
+			Anyone regularly browsing the internet, will at some point have come in contact with the OAuth and OAuth2 protocols.These two authentication protocols are used for users to authenticate to a service, without actually revealing their credentials to said service. Instead they reveal them to an OAuth \emph{provider} -- Google, for instance -- which in return issues a token that is used for authenticating to the service. Earlier arguments were made for why these protocols are \emph{not} suited for this problem, however, certain derived protocols of these exists. Commonly they're known as 2-legged-OAuth and 2-legged-OAuth2. The reason to this is that there is only two actors involved: The user and the service. The OAuth provider is taken out of the equation. While this is definitely a valid option, it is deemed that it is simply too much overhead, for which is essentially a \emph{very} authentication purpose.
 
 			A general consensus amongst professionals using these technologies \emph{(RESTful APIs and JWT tokens)} seem to be, that a simple endpoint expecting a HTTP body with a username and password field, is the way to go, as long as HTTPS is used\cite{jwt.io,auth0_jwt,tkalec}. As such, the same approach will be used for this project.
 
@@ -542,19 +559,21 @@
 			\label{sec:password}
 			In the previous section, the process of the server verifying the user's input password was treated as a sort of black box. In this section this process will be examined.
 
-			Today, it is common knowledge that storing passwords in plain text is a \emph{huge} security risk. Salting and hashing passwords, is proper way to implement storage of passwords. However, when choosing a salting algorithm, it is important not to choose algorithms intended for checksums. Algorithms such as SHA-1 and SHA-256 are \emph{designed} to be fast. When trying to mitigate a bruteforce attack on a leaked database, this is \emph{not} desirable.
+			Today, it is common knowledge that storing passwords in plain text is a \emph{huge} security risk. Salting and hashing passwords, is the proper way to implement storage of passwords. However, when choosing a salting algorithm, it is important not to choose algorithms intended for checksums. Algorithms such as SHA-1 and SHA-256 are \emph{designed} to be fast. When trying to mitigate a bruteforce attack on a leaked database, this is \emph{not} desirable.
 
 			As such, it is by far better to use a key stretching algorithm \emph{(or key derivation function)} which is intended to be slow. Since this \emph{exact} topic has already been covered by section \ref{sec:kdf} on page \pageref{sec:kdf}, the same conclusion is made:
-
-			\begin{quote}
-				\emph{Select:
-					Argon2[*7] when it becomes available. Argon2 is the winner of the password hashing competition and should be considered as your first choice when solid implementations are available.
-				}\\\cite{owasp_kdf}
-			\end{quote}
+			\begin{citequote}{owasp_kdf}
+				``Argon2[*7] when it becomes available. Argon2 is the winner of the password hashing competition and should be considered as your first choice when solid implementations are available.''
+			\end{citequote}
+%			\begin{quote}
+%				\emph{Select:
+%					Argon2[*7] when it becomes available. Argon2 is the winner of the password hashing competition and should be %considered as your first choice when solid implementations are available.%
+%				}\\\cite{owasp_kdf}
+%			\end{quote}
 
 		\subsection{Multi-Factor Authentication}
 			\label{sec:mfa}
-			In the past years there has become more and more focus on security. As a result of this, more and more people are using multi-factor authentication to ensure that access to their personal data is as ``safe'' as possible. 
+			In the past years reports of account hacking have become more and more common. As a result, \emph{regular} users have begun to use and demand multi-factor authentication, to ensure that access to their personal data is as ``safe'' as possible. 
 
 			In the previous sections only single factor authentication was considered, however, as per the requirements, cf. section \ref{sec:requirements}, the solution will have to support two-factor authentication. All authentication forms fall under one of three categories:
 			\begin{enumerate}
@@ -569,19 +588,19 @@
 			However, there are also pitfalls to using possession as an authentication requirement. First and foremost, it is required that the user has the entity available at all times. Without it, he or she can simply not authenticate any more. So in a case of theft, or simple loss, the user is effectively locked out of his or her account. While this definitely is a weakness to the approach, it is deemed that the gain of security highly outweighs the pitfalls.
 
 			\subsubsection{Choosing the Second Factor}
-				Using ``something you have'' as a second factor is by far the easiest additional security factor to add to an online system. This involves sending the user a one-time-password \emph{(OTP)}. Some companies do this by providing physical tokens and some by developing their own internal system and accompanying app \emph{(Blizzard Entertainment, for instance)}. While this definitely is an option, it is also by far the most expensive. Dedicated hardware needs to be manufactured, or a separate application needs to be developed. Other companies choose to use text messages as a way of delivering one-time-passwords. The disadvantage to this approach is that a SMS gateway is required.
+				Using ``something you have'' as a second factor is by far the easiest additional security factor to add to an online system. This involves sending the user a one-time-password \emph{(OTP)}. Some companies do this by providing physical tokens and some by developing their own internal system and accompanying application. While this definitely is an option, it is also by far the most expensive. Dedicated hardware needs to be manufactured, or a separate application needs to be developed. Other companies choose to use text messages as a way of delivering one-time-passwords. The disadvantage to this approach is that a SMS gateway is required.
 
-				A far more universal -- and partially plug'n'play -- approach exists, in the two most common OTP algorithms: HMAC-Based One-Time Password Algorithm\cite{rfc4226}, commonly known as HOTP, and Time-Based One-Time Password Algorithm\cite{rfc6238}, commonly known as TOTP. 
+				A far more universal -- and partially plug'n'play -- approach exists, in the two most common OTP algorithms: HMAC-Based One-Time Password Algorithm \cite{rfc4226}, commonly known as HOTP, and Time-Based One-Time Password \cite{rfc6238}, commonly known as TOTP. 
 
 				\textbf{HOTP}\\
-				HOTP requires to values to work. First and foremost there is a secret, which is shared behind the HOTP client and the back-end. Secondly, both -- separately -- manages a counter of how many times a OTP has been used. Using these two variables and the HMAC hashing algorithm, the OTP is then calculated. 
+				HOTP requires two values to work. First and foremost there is a secret, which is shared between the HOTP client and the back-end. Secondly, both -- separately -- manages a counter of how many times a OTP has been used. Using these two variables and the HMAC hashing algorithm, the OTP is then calculated. 
 
 				\textbf{TOTP}\\
-				TOTP, by many thought to be the successor to HOTP, is roughly the same as HOTP, except it uses a value derived from a timestamp, instead of a counter. The value is derived based on two variables, $X$ and $T0$, where $T0$ is a Unix timestamp from when counting starts, and $X$ is the interval the key is valid for. Usually $T0$ is set to $0$, which is the Unix epoch and $X$ is set to $30$ seconds. The value is then calculated as $T = (now - T0)/X$, cf. \cite[Sec. 4.2]{rfc6238}.
+				TOTP is roughly the same as HOTP, except it uses a value derived from a timestamp, instead of a counter. The value is derived based on two variables, $X$ and $T0$, where $T0$ is a Unix timestamp from when counting starts, and $X$ is the interval the key is valid for. Usually $T0$ is set to $0$, which is the Unix epoch and $X$ is set to $30$ seconds. The value is then calculated as $T = (now - T0)/X$, cf. \cite[Sec. 4.2]{rfc6238}.
 
 				Both have their respective advantages and disadvantages. The advantage of HOTP is that it is independent from the system clock of the two devices, which is known to drift from time to time. The disadvantage, however, is that the counter needs to be synchronized between the client and the back-end. If the user generates OTPs without using them, they cease to be synchronized. To fix this, they back-end must initiate what the RFC defines as the ``resynch protocol'', which will result in the counter being updated in the back-end. Another drawback is that HOTP requires a counter to be stored in the back-end.
 
-				The advantage of TOTP is that OTPs are generated contentiously. Where the HOTP key lives for a lot longer \emph{(indefinitely)} the TOTP only has a certain window of validity. Common configurations of TOTP lets keys validate for plus/minus two minutes, to account for time drift between the client and the back-end. This, however, is also the weakness of TOTP: Time drift. If the client and the back-end does not operate with the same current time, the OTP will simply not validate.
+				The advantage of TOTP is that OTPs are generated continuously. Where the HOTP key lives for a lot longer \emph{(indefinitely)} the TOTP only has a certain window of validity. Common configurations of TOTP lets keys validate for plus/minus two minutes, to account for time drift between the client and the back-end. This, however, is also the weakness of TOTP: Time drift. If the client and the back-end does not operate with the same current time, the OTP will simply not validate.
 
 				Taking the pros and cons into consideration, it is chosen that the TOTP algorithm will be supported in this solution. It is believed that the only inherent draw-back in the algorithm, is mitigated for the most part, by modern systems being fairly good at making sure their internal time is correct.
 
@@ -611,7 +630,7 @@
 
 		As the reader might have realized by now, \emph{two} passwords are -- unfortunately -- needed. One password for authentication purposes, and one for decrypting the private-key. From now on, these two passwords are known as the authentication password and the decryption password.
  
-		The authentication password is the one which is stored on the server, in its salted and hashed form \emph{(see \ref{sec:password} on page \pageref{sec:password})}. This is sent -- in clear text -- to the server for verification purposes. The decryption password is used -- with a salt -- to derive the symmetric encryption key used for the client to decrypt the private-key \emph{(see \ref{sec:keys} on page \pageref{sec:keys})}. At no point in time will the front- or back-end attempt to compare these two passwords, however, it is \emph{strongly} recommended that they be different. As long as they are different it effectively ensures that the back-end can \emph{not} infer the correct decryption key, and as such can never actually inspect the passwords stored on it. This property is dubbed Pseudo-Zero-Knowledge.
+		The authentication password is the one which is stored on the server, in its salted and hashed form \emph{(see \ref{sec:password} on page \pageref{sec:password})}. This is sent to the server for verification purposes. The decryption password is used -- with a salt -- to derive the symmetric encryption key used for the client to decrypt the private-key \emph{(see \ref{sec:keys} on page \pageref{sec:keys})}. At no point in time will the front- or back-end attempt to compare these two passwords, however, it is \emph{strongly} recommended that they be different. As long as they are different it effectively ensures that the back-end can \emph{not} infer the correct decryption key, and as such can never actually inspect the passwords stored on it. This property is dubbed Pseudo-Zero-Knowledge.
 
 		\subsection{Comparison With the Requirements}
 			While this feature does not fulfil a requirement directly, it goes to strengthen the way that the requirement regarding un-encrypted data is handled.
@@ -620,9 +639,9 @@
 		\label{sec:user:diff}
 		As with any system, certain functionality should not be exposed to the regular users. As such, user differentiation is needed. There are two different schools of thought when it comes to this: The simple approach and the sophisticated approach.
 
-		The simple approach involved simply storing a boolean value, indicating whether or not the user is an admin or not. While this solution is \emph{very} simple and is most likely the easiest to implement, it has its drawback: There are only two user levels. If one, later down the road, then wanted to add a third user level, this would require large amounts of refactorisation in the code.
+		The simple approach involved simply storing a boolean value, indicating whether or not the user is an admin or not. While this solution is \emph{very} simple and is most likely the easiest to implement, it has its drawback: There are only two user levels. If at one point it is decided that more levels are required, this would require large amounts of refactorisation in the code.
 
-		The more sophisticated approach is creating a user hierarchy. This hierarchy would then only consist of two users in the beginning: User and Admin. Based on this hierarchy the solution could enable and disable various aspects based on a user's level. The benefit of this approach, is that later on, several new levels could be added in between the User and the Admin, with varying privileges. How this is stored in the database is up to the implementation, but something as simple as an integer could be sufficient for storing this.
+		The more sophisticated approach is creating a user hierarchy. This hierarchy would then only consist of two users in the beginning: User and Admin. Based on this hierarchy the solution could enable and disable various aspects based on a user's level. The benefit of this approach, is that later on, several new levels could be added in above, between, or below the User and the Admin, with varying privileges. How this is stored in the database is up to the implementation, but something as simple as an integer could be sufficient for storing this.
 
 		Since the functionality that needs to be kept away from the regular user, is nothing more than some administrative functionalities here and there, it can be argued that there never will be a need for more user levels. As such, it is chosen to go with the simple approach. 
 
@@ -647,7 +666,7 @@
 
 		\subsection{Breaking the REST Principles On Purpose}
 			\label{sec:design:breaking-rest}
-			While one of the pillars of REST APIs is that it should be stateless, sometimes this is just not feasible. One example of this, is when enabling two-factor-authentication for users. The back-end \emph{should} verify that the user has gotten the correct secret \emph{(see \ref{sec:mfa} on page \pageref{sec:mfa})}, before actually storing the secret in the database and enabling two-factor authentication. 
+			While one of the pillars of REST APIs is that they should be stateless, sometimes this is just not feasible. One example of this, is when enabling two-factor-authentication for users. The back-end \emph{should} verify that the user has gotten the correct secret \emph{(see \ref{sec:mfa} on page \pageref{sec:mfa})}, before actually storing it in the database and enabling two-factor authentication. 
 
 			If this verification is not done, the solution will be susceptible to the following scenario, resulting in a user being locked out:
 			\begin{enumerate}
@@ -658,7 +677,7 @@
 				\item User attempts to log in, using the wrong secret
 			\end{enumerate}
 
-			As such, a verification step \emph{(which is commonly seen)} is required. This can be easily achieved by having the solution store a cached map, between user ID and the 2FA secret. When a new secret is generated, it is deposited in this cache, instead of the database. A specific API endpoint then exists, for verifying this secret. The verification process is exactly the same process which would be used for logging in. Once the cached secret is verified against the received token, the secret is stored in the database and 2FA is enabled for the user.
+			As such, a verification step \emph{(which is commonly seen)} is required. This can be easily achieved by having the solution storing these secrets in a cache. When a new secret is generated, it is deposited into this cache, instead of the database. A specific API endpoint then exists, for verifying this secret. The verification process is exactly the same process which would be used for logging in. Once the cached secret is verified against the received token, the secret is stored in the database and 2FA is enabled for the user.
 
 			While it is recognized that this violates essential principles of REST, it is deemed \emph{necessary} to do so.
 
@@ -680,11 +699,11 @@
 
 	\section{Auditing of Access}
 		\label{sec:audit}
-		Since it is peoples passwords being handled, some sort of audit log is preferable. Simply put, an audit log contains entries of when certain actions took place. For instance, it could be whenever a user authenticates the service, an audit log entry -- or simply entry -- is generated. Later on, the user can review these entries. This way, the user can easily see if an authentication has taken place, somewhere that he or she was not.
+		Since it is peoples passwords being handled, some sort of audit log is preferable. Simply put, an audit log contains entries of when certain actions took place. For instance, whenever a user authenticates to the service, an audit log entry -- or simply entry -- is generated. Later on, the user can review these entries. This way, the user can easily see if an authentication has taken place, somewhere that he or she was not.
 
 		When creating an audit log, it is very tempting to simply create an entry for \emph{everything}. However, while this will contain the data the user would need, it will be \emph{too} much data. Not only for the user to review, but also for the back-end to store. As such, first and foremost, it is necessary to determine exactly which events are necessary to log.
 
-		Obviously, there is the matter of authentication. Both successful and failed authentication attempts will have to be logged. With this information, a user can quickly determine if access has been made from a device which he or she has not used. Furthermore, access to passwords should be logged. This access can call into any of four categories of actions: Create, read, update, and delete. These actions also apply to shared passwords. While the create actions could be used to denote a newly shared password, for the sake of usability a Share action is used instead. The remaining actions, read, update, and delete, also applies to shared passwords. As such, it is concluded that there will be \emph{seven} actions:
+		Obviously, there is the matter of authentication. Both successful and failed authentication attempts will have to be logged. With this information, a user can quickly determine if access has been made from a device which he or she has not used. Furthermore, access to passwords should be logged. This access can fall into any of four categories of actions: Create, read, update, and delete. These actions also apply to shared passwords. While the create actions could be used to denote a newly shared password, for the sake of usability a Share action is used instead. The remaining actions, read, update, and delete, also applies to shared passwords. As such, it is concluded that there will be \emph{seven} actions:
 		\begin{enumerate}
 			\item Success
 			\item Failure
@@ -726,14 +745,14 @@
 
 	\section{Modelling the System}
 		\label{sec:modelling}
-		In the previous sections, all of the various requirements have been thoroughly discussed. In this section, all of these requirements will be condensed into the actual models used, in the system. 
+		In the previous sections, all of the various requirements have been thoroughly discussed. In this section, all of these requirements will be condensed into the actual models used in the system. 
 
 		\subsection{The User Model}
-			The User model is the most basic structure in the project. It represents -- obviously -- each individual user. As such, three very basic attributes need to be present: Username, password, and salt. The username will appear in cleartext, and the password and salt are the results of the hashing algorithm and is most likely in hexadecimal format. While some hashing functions store the generated salt in the resulting password hash, some do not. As such it has been deemed beneficial to have an dedicated variable for this. Next, in section \ref{sec:user:diff} on page \pageref{sec:user:diff} it was determined that user and admin differentiation would be done using a simple boolean and for this purpose a field called isAdmin is added.
+			The User model is the most fundamental structure in the project. It represents -- obviously -- each individual user. As such, three very basic attributes need to be present: Username, password, and salt. The username will appear in cleartext, and the password and salt are the results of the hashing algorithm, and as such is stored in whatever the implementation outputs. While some hashing functions store the generated salt in the resulting password hash, some do not. As such it has been deemed beneficial to have an dedicated variable for this. Next, in section \ref{sec:user:diff} on page \pageref{sec:user:diff} it was determined that user and admin differentiation would be done using a simple boolean and for this purpose a field called isAdmin is added.
 
 			In sections \ref{sec:encryption_choice} and \ref{sec:kdf} on pages \pageref{sec:encryption_choice} and \pageref{sec:kdf}, respectively, it was determined that asymmetric encryption will be used. As such, a private-key and a public-key will need to be stored, additionally it was determined that a salt and IV needs to be stored. 
 
-			Finally, as per section \ref{sec:mfa} on page \pageref{sec:mfa}, there a 2FA secret will need to be stored. Furthermore, a boolean toggle value determining whether or not 2FA is enabled for said user, is stored as well.
+			Finally, as per section \ref{sec:mfa} on page \pageref{sec:mfa}, a two-factor-authentication \emph{(2FA)} secret will need to be stored. Furthermore, a boolean toggle value determining whether or not 2FA is enabled for said user, is stored as well.
 
 			As such, the final User model contains the fields listed on table \ref{fig:model:user} on page \pageref{fig:model:user}.
 
@@ -757,13 +776,13 @@
 
 		\subsection{The Category Model}
 			\label{sec:model:category}
-			Before delving into the core model, the Password model \emph{(see the following section)} it is required to cover an auxiliary model: The Category. Since it has already been determined that it is required for the solution to structure passwords in multiple levels, a data structure for this is required.
+			Before delving into the core model, the Password model it is required to cover an auxiliary model: The Category. This model exists, to facilitate the structuring of passwords in multiple levels, as per the requirements of section \ref{sec:requirements} on page \pageref{sec:requirements}.
 
-			First and foremost, it is important to realise that the classical ``folder'' structure, is nothing more than what is commonly known as a tree. Trees consists of internal nodes and leafs. Nodes have children. These children can be other nodes, or a leaf. A leaf is a final child -- it is last element in the branch. An example of such a tree is seen on figure \ref{fig:example:tree} on page \pageref{fig:example:tree}.
+			First and foremost, it is important to realise that the classical ``folder'' structure, is nothing more than what is commonly known as a tree. Trees consists of internal nodes and leaves. Each node can have children and these children can be other nodes, or a leaves. A leaf is a final child -- it is last element in the branch. An example of such a tree is seen on figure \ref{fig:example:tree} on page \pageref{fig:example:tree}.
 
-			This structure can be translated very easily to the structure needed for password organization. The root and the internal nodes represent the various categories, and the leafs represent the passwords. As such, it will look like figure \ref{fig:example:passwordtree} on page \pageref{fig:example:passwordtree}.
+			As should be obvious, this data structure can very easily be used for password organisation. The root and the internal nodes represent the various categories, and the leaves represent the passwords. As such, it will look like figure \ref{fig:example:passwordtree} on page \pageref{fig:example:passwordtree}.
 
-			Multiple data structures exist to solve this exact problem. The simplest of them all, is the adjacency list. In this approach, each element simply stores a reference to either its parent or its children \emph{(top-down or bottom-up)}, depending on the implementation. This allows for the structure to be stored ``flat'', i.e. in a table, or an array, and when required the actual tree can be built from the data. Examples of these notations are found on tables \ref{table:example:tree:buttomup} and \ref{table:example:tree:topdown} on pages \pageref{table:example:tree:buttomup} and \pageref{table:example:tree:topdown}, respectively. The examples are based on the tree structure from figure \ref{fig:example:passwordtree} on page \pageref{fig:example:passwordtree}.
+			Multiple data structures exist to solve this exact problem. The simplest of them all, is the adjacency list. In this approach, each element simply stores a reference to either its parent or its children \emph{(top-down or bottom-up)}, depending on the implementation. This allows for the structure to be stored ``flat'', i.e. in a table, or an array. When it is required the actual tree can be built from the data. Examples of these notations are found on tables \ref{table:example:tree:buttomup} and \ref{table:example:tree:topdown} on pages \pageref{table:example:tree:buttomup} and \pageref{table:example:tree:topdown}, respectively. The examples are based on the tree structure from figure \ref{fig:example:passwordtree} on page \pageref{fig:example:passwordtree}.
 
 			While this approach might inherently be slower than other algorithms, cf. \cite{heirarchial_database}, it is believed that due to the relatively small datasets -- which is \emph{assumed} to be used -- it will have little effect. As such, the simplicity of the storage scheme a makes it perfect for this use.
 
@@ -840,7 +859,7 @@
 
 		\subsection{The Password Model}
 			\label{sec:model:password}
-			Having described the Category model fully, the Password model can now correctly be explained. First and foremost it will consist of the fields that generally make up a password entry: A title, a username, a password, an URL, and a note. However, the passwords needs a way to connect with a user. For this purpose, a reference to the User models ID is needed. This reference is known as owner, i.e. the user who owns the password. Finally, to achieve the structure, as described in the previous section, a password is a child of a category. Hence, the Password model will need a reference to a parent Category's ID. These references are also depicted on figure \ref{fig:relationship:password} on page \pageref{fig:relationship:password}.
+			Having described the Category model fully, the Password model can now correctly be explained. First and foremost it will consist of the fields that generally make up a password entry: A title, a username, a password, an URL, and a note. However, the passwords needs a way denote which user they belong to. For this purpose, a reference to the User model's ID is needed. This reference is known as owner, i.e. the user who owns the password. Finally, to achieve the structure, as described in the previous section, a password is a child of a category. Hence, the Password model will need a reference to a parent Category's ID. These references are also depicted on figure \ref{fig:relationship:password} on page \pageref{fig:relationship:password}.
 
 			As such, the final Password model contains the fields listed on table \ref{fig:model:password} on page \pageref{fig:model:password}.
 
@@ -870,11 +889,11 @@
 
 			\subsubsection{One Hundred Thousand Entries}
 				\label{sec:model:password:size}
-				As the requirements state, the solution will have to store at least 100.000 entries. Based on the attributes defined on table \ref{fig:model:password}, the feasibility of this is investigated. 
+				As the requirements state, the solution will have to store at least 100.000 entries. Based on the attributes defined on table \ref{fig:model:password}, it can be determined how much disk space those 100.000 entries would actually require.
 
-				It is assumed that an ID is stored as an integer, and is four bytes in size. Additionally, the traditional length of text fields are used \emph{(255 characters)} which is stored as 256 bytes. Finally, there is the matter of the password. From sections \ref{sec:encryption_choice} and \ref{sec:encryption_choice:rsa_size} on pages \pageref{sec:encryption_choice} and \pageref{sec:encryption_choice:rsa_size}, respectively, it is known that this is encrypted using a 4096 bit RSA key. As it is known, the output of the RSA algorithm is always the same length as the key. Hence, the output is 4096 bits -- or 512 bytes -- long. Finally, since the output is binary, it needs to be base64 encoded, for proper transmission and storage. Due to the inner workings of the base64 encoding, the size of the encoded text is $4\lceil*{n/3}$ of the original text, where $n$ is the number of bytes of the input. As such, the base64 encoded version of the encrypted password, has a size of $684$ bytes. Using the values found on table \ref{tab:model:password:size}, it is concluded that the total size for each entry is $1465$ bytes.
+				It is assumed that an ID is stored as an integer, and is four bytes in size. Additionally, the traditional length of text fields are used \emph{(255 characters)} which is stored as 256 bytes. Finally, there is the matter of the password. From sections \ref{sec:encryption_choice} and \ref{sec:encryption_choice:rsa_size} on pages \pageref{sec:encryption_choice} and \pageref{sec:encryption_choice:rsa_size}, respectively, it is known that this is encrypted using a 4096 bit RSA key. As it is known, the output of the RSA algorithm is always the same length as the key. Hence, the output is 4096 bits -- or 512 bytes -- long. Finally, since the output is binary, it needs to be base64 encoded, for proper transmission and storage. Due to the inner workings of the base64 encoding, the size of the encoded text is $4\lceil{n/3}\rceil$ of the original text, where $n$ is the number of bytes of the input. As such, the base64 encoded version of the encrypted password, has a size of $684$ bytes. Using the values found on table \ref{tab:model:password:size} on page \pageref{tab:model:password:size}, it is concluded that the total size for each entry is $1465$ bytes.
 
-				Using the requirements minimum number of entries \emph{($100.000$)}, this results in a total size of $146.5$ megabytes, for the passwords alone. While this might sound as much, in today's world where flash storage reaches $64$ gigabyte at an affordable price, and mechanical storage is measured in terabytes, this is hardly causes an issue.
+				Using the requirements minimum number of entries \emph{(100.000)}, this results in a total size of $146.5$ megabytes, for the passwords alone. While this might sound as much, in today's world where flash storage reaches $64$ gigabyte at an affordable price, and mechanical storage is measured in terabytes, this is hardly causes an issue.
 
 				\begin{table}
 					\centering
@@ -898,9 +917,7 @@
 
 
 		\subsection{The Shared Password Model}
-			Having decided that the password sharing mechanism will be sharing by cloning, 
-
-			Sharing a password can be achieved easily, by simply storing a reference to a user's password, under the ownership of another user. As such, each shared password entry will contain a reference to the original password. Using this reference, fields such as the username etc., can easily be obtained. However, since the \emph{actual} password is encrypted using each users individual key, this needs to be stored as well. To let the user receiving the shared password organize it as he or she sees fit, a reference to a Category ID is needed. Finally, references to the original owner and password, will make certain operations a lot easier. These relations are all shown on figure \ref{fig:relationship:sharedpassword} on page \pageref{fig:relationship:sharedpassword}, albeit the internal relations between User, Password, and Category has been omitted for clarity.
+			Sharing a password can be achieved easily, by simply storing a reference to a user's password, under the ownership of another user. As such, each shared password entry will contain a reference to the original password. Using this reference, fields such as the username etc., can easily be obtained. However, since the \emph{actual} password is encrypted using each users individual key, this needs to be stored as well. To let the user receiving the shared password organize it as he or she sees fit, a reference to a Category ID is needed. Finally, a reference to the original owner, will make certain operations a lot easier. These relations are all shown on figure \ref{fig:relationship:sharedpassword} on page \pageref{fig:relationship:sharedpassword}, albeit the internal relations between User, Password, and Category has been omitted for clarity.
 
 			As such, it is determined that the Shared Password model will contain the fields listed on table \ref{fig:model:sharedpassword} on page \pageref{fig:model:sharedpassword}. 
 
@@ -919,7 +936,7 @@
 				\label{fig:model:sharedpassword}
 			\end{table}
 
-			An example such an entry could be the following. Two users exists, as seen on table \ref{fig:example:sharedpassword:users} on page \pageref{fig:example:sharedpassword:users}, Alice and Bob \emph{(irrelevant user data has on purpose been left out)}. Alice owns a password with the title ``SamplePassword'', the details of which are shown on table \ref{fig:example:sharedpassword:samplepassword} on page \pageref{fig:example:sharedpassword:samplepassword}. Alice now wishes to share this password with Bob. As such, an entry is created, containing the information found on figure \ref{fig:example:sharedpassword:sampleshare} on page \pageref{fig:example:sharedpassword:sampleshare}.
+			An example such an entry could be the following. Two users exists, as seen on table \ref{fig:example:sharedpassword:users} on page \pageref{fig:example:sharedpassword:users}, Alice and Bob \emph{(irrelevant user data has on purpose been omitted)}. Alice owns a password with the title ``SamplePassword'', the details of which are shown on table \ref{fig:example:sharedpassword:samplepassword} on page \pageref{fig:example:sharedpassword:samplepassword}. Alice now wishes to share this password with Bob. As such, an entry is created, containing the information found on figure \ref{fig:example:sharedpassword:sampleshare} on page \pageref{fig:example:sharedpassword:sampleshare}.
 			\begin{table}[p]
 				\centering
 				\begin{tabular}{r|l}
@@ -971,7 +988,7 @@
 			\end{figure}
 
 		\subsection{The Invite Model}
-			While the previous models have been very intertwined, the Invite model stands apart by quite a lot simpler. As has already been determined, the Invite model will need a UUID. Since this will, in the end, be part of an invite URL, this field is simply called the link. Furthermore, an expiration date will need to be stored, as it has been determined that the invite will only be valid, for 24 hours. As such, this \emph{very} simple model determined to contain the fields listed on table \ref{fig:model:invite} on page \pageref{fig:model:invite}. 
+			While the previous models have been very intertwined, the Invite model stands apart by quite a lot. As has already been determined, the Invite model will need a UUID. Since this will, in the end, be part of an invite URL, this field is simply called the link. Furthermore, an expiration date will need to be stored, as it has been determined that the invite will only be valid for 24 hours. As such, this \emph{very} simple model determined to contain the fields listed on table \ref{fig:model:invite} on page \pageref{fig:model:invite}. 
 			
 			\begin{table}[p]
 				\centering
@@ -987,9 +1004,9 @@
 
 		\subsection{The Audit Model}
 			\label{sec:moddeling:audit}
-			Finally, there is the audit model. As described in section \ref{sec:audit} on page \pageref{sec:audit}, each entry should contain one of six actions. While this could easily be achieved using an enum, not all database technologies support this data structure. As such, an integer mapping is used. In practice, this means that each action is translated to an integer, before being stored. When retrieved, the same integer is used to generate the actual name of the action. This mapping is shown on figure \ref{table:audit:actionmapping} on page \pageref{table:audit:actionmapping}.
+			Finally, there is the audit model. As described in section \ref{sec:audit} on page \pageref{sec:audit}, each entry should contain one of seven actions. While this could easily be achieved using an enum, not all database technologies support this data structure. As such, an integer mapping is used. In practice, this means that each action is translated to an integer, before being stored. When retrieved, the same integer is used to generate the actual name of the action. This mapping is shown on figure \ref{table:audit:actionmapping} on page \pageref{table:audit:actionmapping}.
 
-			What is a challenge when modelling these audit entries, is the reference to one of three things: Authentication attempts, passwords and shared passwords. Because it is a reference to multiple fields \emph{(the entry's target)}, a traditional database foreign key reference is simply not possible. As such, the reference will need to be stored in an integer \emph{(unfortunately loosing any restrictions from the relations, in the process)}. However, it is still needed to differentiate between an ID for a Password and for a Shared Password. As such, the targets type will need to be stored as well. Finally, as was decided previously, a hostname and a timestamp will need to be stored as well.
+			What is a challenge when modelling these audit entries, is the reference to one of three things: Authentication attempts, passwords and, shared passwords. Because it is a reference to multiple fields \emph{(the entry's target)}, a traditional database foreign key reference is simply not possible. As such, the reference will need to be stored in an integer \emph{(unfortunately loosing any restrictions from the relations, in the process)}. However, it is still needed to differentiate between an ID for a Password and for a Shared Password. Hence, the targets type will need to be stored as well. Finally, as was decided previously, a hostname and a timestamp will need to be stored as well.
 
 			\begin{table}[h!]
 				\centering
@@ -1020,7 +1037,7 @@
 					time  					& Datetime 	\\
 					host  					& String 	\\
 				\end{tabular}
-				\caption{Fields of the Audit model}
+				\caption{Fields of the Audit model.}
 				\label{fig:model:audit}
 			\end{table}
 
@@ -1067,7 +1084,7 @@
 				\item Support deleting stored passwords
 			\end{enumerate}
 
-			Finally, section \ref{sec:model:password:size} on page \pageref{sec:model:password:size} estimated the size of the database in regards to password entries, based on the approximated size of the password model. The conclusion was, that per $100.000$ entries in the database, it would take $145.6$ megabyte worth of storage, which in the modern world is no issue. As such, it is also concluded that the solution fulfil non-functional requirement \#\ref{requirement:entries}:
+			Finally, section \ref{sec:model:password:size} on page \pageref{sec:model:password:size} estimated the size of the database in regards to password entries, based on the approximated size of the password model. The conclusion was, that per $100.000$ entries in the database, it would take $145.6$ megabytes worth of storage, which in the modern world is no issue. As such, it is also concluded that the solution fulfil non-functional requirement \#\ref{requirement:entries}:
 			\vspace{-3ex}\begin{enumerate}
 				\setlength\itemsep{0.1em}
 				\setcounter{enumi}{3-1}
@@ -1080,7 +1097,7 @@
 
 		First and foremost, the users. Since the admin should be able to control the users signed up to the service, admins are granted full access to the users. This means reading, creating, updating, and deleting users. This is done to allow the admin to not only help regular users should an error occur, but also delete unused accounts. Keep in mind, that the admin will \emph{not} be able to neither read the authentication password nor the decryption password.
 
-		But that is also the extent of which, admins can interfere with other users' data. They should \emph{not} be allowed to access other user's passwords, shared passwords, categories or audit logs. Finally, there is the invites. As previously stated, it should only be admins that are able to create invites. These permissions are shown on table \ref{sec:design:authorization} on page \pageref{sec:design:authorization}.
+		But that is also the extent of which, admins can interfere with other users' data. They should \emph{not} be allowed to access other users' passwords, shared passwords, categories, or audit logs. Finally, there is the invites. As previously stated, it should only be admins that are able to create invites. These permissions are shown on table \ref{sec:design:authorization} on page \pageref{sec:design:authorization}.
 
 		\begin{table}
 			\centering
@@ -1105,7 +1122,9 @@
 		\label{sec:database:type}
 		Up until now the phrase ``database'' has been used as a generic description of persistent storage. In this section, this will be elaborated a bit. Generally speaking, there primarily exist two categories of databases: Relational Database Management Systems \emph{(RDBMSs)} and Non-SQL \emph{(NoSQL)}
 
-		RDBMS/SQL is the oldest of the bunch. This category covers the first database schemes ever used, dating back to the 70's. This type of database has a very strict structure, compared to the others, requiring a structure of tables, which in turn contains columns. RDBMS are by far, the most used type of database, if for no other reason, that they've simply existed for a lot longer. Typically RDBMSs uses the Structured Query Language \emph{(SQL)}. An example of a RDBMS table can be seen on table \ref{fig:example:rldb} on page \pageref{fig:example:rldb}, consisting of columns ID, Username, and E-Mail, each entry has one value for each column. RDBMS often adhere to the ACID qualities: Atomic, Consistent, Isolated, and Durable. These ensures that either a query succeeds or it fails. Additionally, most implementations support transactions. Transactions work by effectively grouping several queries. The smart thing about this, is that either the transaction fails, or it succeeds. I.e. either all of the sub-queries succeeds, or if \emph{one} of them fails, all of the changes are rolled back.
+		RDBMS is the oldest of the bunch. This category covers the first database schemes ever used, dating back to the 70's. This type of database has a very strict structure, compared to that of NoSQL databases, requiring a structure of tables, which in turn contains columns. RDBMS are by far, the most used type of database, if for no other reason, that they've simply existed for a lot longer. Typically RDBMSs uses the Structured Query Language \emph{(SQL)}. An example of a RDBMS table, can be found on figure \ref{fig:example:rldb} on page \pageref{fig:example:rldb}. This table consists of the following columns: ID, Username, and E-Mail, and each entry has one value for each column.
+
+		RDBMS often adhere to the ACID qualities: Atomic, Consistent, Isolated, and Durable. These ensures, amongst others, that a query either succeeds or it fails. This is done through the use of transactions. Transactions work by effectively grouping several queries. The smart thing about this, is that either the transaction fails, or it succeeds. I.e. either all of the sub-queries succeeds, or if \emph{one} of them fails, all of the changes are rolled back.
 
 		\begin{table}[h!]
 			\centering
@@ -1113,44 +1132,44 @@
 				\hline
 				\textbf{ID} 		& 	\textbf{Username} 		& \textbf{E-Mail} 		\\
 				\hline
-				1 					& Daniel 					& some@mail.com 		\\
+				1 					& Daniel 					& daniel@example-domain.com 		\\
 				\hline
-				2 					& John 						& someother@mail.com 	\\
+				2 					& John 						& john@example-domain.com 	\\
 				\hline
-				3 					& Kylo Ren 					& kren@firstorder.com 	\\
+				3 					& Bob 						& bob@example-domain.com 	\\
 				\hline
 			\end{tabular}
 			\caption{RDBMS table example}
 			\label{fig:example:rldb}
 		\end{table}
 
-		While generally NoSQL is being used to describe a set of implementations, much like RDBMS is. However, this is not exactly true. There exists no standard for NoSQL databases, and each implementation varies greatly, which unfortunately results in the various implementations API's being vastly different from each other.
+		Generally NoSQL is often used to describe a set of similar database implemetations, in the same manner that RDBMS is, however this is not exactly correct. There exists no standard for NoSQL databases, and each implementation varies greatly, which unfortunately results in the various implementations API's being vastly different from each other.
 
-		NoSQL databases uses JSON format to represent information in the database. Where as SQL entries are restricted to the columns in the table, NoSQL does not have this constraint. The example from before, is stored as follows, using the JSON syntax. An example of this is found on listing \ref{lst:example:nosql} on page \pageref{lst:example:nosql}. One of the advantages of NoSQL is that since it does not have a strict schema, additional values can easily be added, for instance, it would be perfectly fine if a fourth user was added to the example, containing a field called phone. Where RDBMS adhere to ACID, NoSQL adhere to BASE: Basic Availability, Soft-state, and Eventual consistency.
+		NoSQL databases uses JSON format to represent information in the database. Where as SQL entries are restricted to the columns in the table, NoSQL does not have this constraint. An example of how NoSQL stores the data, is found in listing \ref{lst:example:nosql} on page \pageref{lst:example:nosql}, which uses the same data as used on table \ref{fig:example:rldb}. One of the advantages of NoSQL is that since it does not have a strict schema, additional values can easily be added, for instance, it would be perfectly fine if a fourth user was added to the example, containing a field called phone. Where RDBMS adhere to ACID, NoSQL adhere to BASE: Basic Availability, Soft-state, and Eventual consistency.
 
 		\begin{lstlisting}[style=json2,gobble=8, caption={NoSQL table example},label={lst:example:nosql}]
         [
             {
-                "ID": 1,
-                Username: Daniel,
-                E-Mail: some@mail.com
+                ID: 1,
+                Username: "Daniel",
+                E-Mail: "daniel@example-domain.com"
             },
             {
                 ID: 2,
-                Username: John,
-                E-Mail: someother@mail.com
+                Username: "John",
+                E-Mail: "john@example-domain.com"
             },
             {
                 ID: 3,
-                Username: Kylo Ren,
-                E-Mail: kren@firstorder.com
+                Username: "Bob",
+                E-Mail: "bob@example-domain.com"
             }
         ]
 		\end{lstlisting}
 
 		First and foremost, it is important to realise that \emph{all} of the technologies are capable of storing what is required. Having said that, one of the most credited advantages of NoSQL is their ability to scale horizontally. It can be spread out over multiple hosts, if need be. However, this project \emph{should} never reach that size. It is not intended to reach that size. As such, that advantage can be disregarded.
 
-		At this point in time, tables such as \cite{db_rankings} could be used to argue that one type of database generally is faster. However, this really wouldn't matter much, in the context of this project. This is \emph{meant} to be self-hosted. It is \emph{meant} to be used by individuals. As such, it is \emph{highly} unlikely, that this project would ever find itself in a situation, where millions of records are being queried constantly. It would simply not make much sense, to use these arguments.
+		At this point in time, tables such as DB-Engine's\cite{db_rankings} could be used to argue that one type of database generally is faster. However, this really wouldn't matter much, in the context of this project. This is \emph{meant} to be self-hosted. It is \emph{meant} to be used by individuals. As such, it is \emph{highly} unlikely, that this project would ever find itself in a situation, where millions of records are being queried constantly. It would simply not make much sense, to use these arguments.
 
 		But what then. In section \ref{sec:modelling} on page \pageref{sec:modelling}, the contents of the various models were discussed. The way it was designed, hints heavily at a underlying relational scheme. The audit entries, for instance, is a \emph{perfect} example of where a relational database would excel. Furthermore, there is the issue of invites. The process of using an invite would most likely involve something like the following steps:
 		\begin{enumerate}
@@ -1159,19 +1178,7 @@
 			\item Use the invite to create new user
 			\item Delete invite
 		\end{enumerate}
-		However, as should be \emph{obvious} to everyone, this will be painfully vulnerable to race-conditions. This \emph{exact} scenario, is completely mitigated by the use of RDBMSs transactions: These would make the four steps atomic, in the eyes of the database. While some NoSQL databases adhering to the ACID principles, and supporting transactions, are starting to appear\cite{no_sql_transactions}, it is by far all of them that supports this.
-
-		As such, it is decided that a more ``traditional'' RDBMS will be used for this solution.
-
-		\subsection{Storage Schema}
-			Having decied to use an DAL ontop of a RDBMS, it is now suitable to actually model the way the data will be stored. Using section \ref{sec:modelling} on page \pageref{sec:modelling} as a reference, it is quite easy to generate an Enhanced Entity-Relationship diagram. This diagram is found on figure \ref{fig:eer} on page \pageref{fig:eer}. Unfortunately, the audit table is not as easy to model, as already described in section \ref{sec:moddeling:audit} on page \pageref{sec:moddeling:audit}. This is due to how it refereces multiple types of targets. As such, this is left as a plain integer.
-
-			\begin{figure}[p]
-				\centering
-				\includegraphics[width=0.8\textwidth]{figures/design/png/database2.png}
-				\caption{Enhanced Entity-Relationship diagram depicting database storage scheme.}
-				\label{fig:eer}
-			\end{figure}
+		However, as should be \emph{obvious} to everyone, this will be painfully vulnerable to race-conditions. This \emph{exact} scenario, is completely mitigated by the use of RDBMSs transactions: These would make the four steps atomic, in the eyes of the database. While some NoSQL databases are slowly starting to adhere to the ACID principles and to support transactions, it is by far all of them. As such, it is decided that a more ``traditional'' RDBMS will be used for this solution.
 
 	\section{Ensuring Agnosticism}
 		When creating a solution like this, it is important to make it as versatile as possible. As such, limiting it to run on a single platform only restricts deployment. As such, having an application that can run cross-platform is beneficial.
@@ -1195,10 +1202,19 @@
 
 			Using what is called a Database Abstraction Layer \emph{(DAL)} an application can work with the same type of databases, while not limiting itself to a \emph{single} solution. A DAL can ensure that the application can work with \emph{both} a separate MySQL database or a self-contained SQLite database, depending on configuration. This ensures that the user can customize the setup to work exactly how he or she wishes. 
 
-			For instance, for a user running the solution on a single Raspberry Pi \emph{(see section \ref{sec:privatecloud_cost} on page \pageref{sec:privatecloud_cost})} a SQLite database would be be beneficial, due to the lower resource requirement. On the other hand, the user having an entire dedicated server at home -- already running a MySQL instance -- would probably prefer to combine it with his or her existing system.
+			For instance, for a user running the solution on a single Raspberry Pi \emph{(see section \ref{sec:privatecloud_cost} on page \pageref{sec:privatecloud_cost})} a SQLite database \emph{could} be be beneficial, due to the lower resource requirement. On the other hand, the user having an entire dedicated server at home -- already running a MySQL instance -- would probably prefer to combine it with his or her existing system.
 
 			As such, using a DAL effectively ensures agnosticism when it comes to databases. Hence, another restriction on the implementation is imposed: The solution should use a DAL, ensuring compatibility with several database technologies.	
 
+			\subsubsection{Storage Schema}
+				Having decied to use an DAL ontop of a RDBMS, it is now suitable to actually model the way the data will be stored. Using section \ref{sec:modelling} on page \pageref{sec:modelling} as a reference, it is quite easy to generate an Enhanced Entity-Relationship diagram. This diagram is found on figure \ref{fig:eer} on page \pageref{fig:eer}. Unfortunately, the audit table is not as easy to model, as already described in section \ref{sec:moddeling:audit} on page \pageref{sec:moddeling:audit}. This is due to how it refereces multiple types of targets. As such, this is left as a plain integer.
+
+				\begin{figure}[p]
+					\centering
+					\includegraphics[width=0.8\textwidth]{figures/design/png/database2.png}
+					\caption{Enhanced Entity-Relationship diagram depicting database storage scheme.}
+					\label{fig:eer}
+				\end{figure}
 		\subsection{Comparison With the Requirements}
 			\label{requirement:fulfilled:database}
 			\label{requirement:fulfilled:platform}
@@ -1213,7 +1229,7 @@
 
 	\section{Licensing the Solution}
 		\label{requirement:fulfilled:open-source}
-		Finally, there is the issue of a software license. Since this project from day one, has been intended to be open-source, it only makes sense that the license reflects this. While many different licenses for this exact purpose exists, the most commonly used is the MIT license. This license essentially states that anyone can do whatever they want with the code, as long as they include the original copyright and license.
+		Finally, there is the issue of a software license. Since this project from day one has been intended to be open-source, it only makes sense that the license reflects this. While many different licenses for this exact purpose exists, the most commonly used is the MIT license. This license essentially states that anyone can do whatever they want with the code, as long as they include the original copyright and license.
 
 		The license used for this project, is found in appendix \ref{appendix:license}. As such, it is concluded that the solution fulfil the non-functional requirement \#\ref{requirement:open-source}:
 		\vspace{-3ex}\begin{enumerate}
@@ -1241,9 +1257,9 @@
 
 		First and foremost, non-functional requirement \#\ref{requirement:delay} is \emph{purely} a question of implementation. This is a requirement that is impossible to design ones way out of. As such, it merely transforms into a implementation \emph{restriction}, much in the likes of platform and database agnosticism \emph{(see sections \ref{sec:restrict:platform} and \ref{sec:restrict:database} on pages \pageref{sec:restrict:platform} and \pageref{sec:restrict:database}, respectively)}.
 
-		This leaves but one requirement lacking: Functional requirement \#\ref{requirement:restart}. This is painfully easily achieved. Each of the major operating systems have their own service, intended for this \emph{specific} purpose. Linux has Upstart \emph{(legacy systems)} and Systemd \emph{(newer systems)}\cite{autostart:linux}, OS X has launchd\cite{autostart:osx}, and Windows supports creating a service from an executable file using the SC command\cite{autostart:windows}. Creating a script for each of these services is again, just a matter of implementation. Deployment of these scripts can be easily done using a simple shell or bash script.
+		This leaves but one requirement lacking: Functional requirement \#\ref{requirement:restart}. This is painfully easily achieved. Each of the major operating systems have their own service, intended for this \emph{specific} purpose. Linux has Upstart \emph{(legacy systems)} and Systemd \emph{(newer systems)}\cite{autostart:linux}, OS X has launchd\cite{autostart:osx}, and Windows supports creating a service from an executable file using the SC command\cite{autostart:windows}. Creating a script for each of these services is -- again -- just a matter of implementation. Deployment of these scripts can be easily done using a simple shell or bash script.
 
-		As such, it is finally concluded that the design is complete. As such, the implementation of the prototype will follow the descriptions and restrictions, found in this chapter.
+		As such, it is finally concluded that the design is complete, and that the implementation of the prototype will follow the descriptions and restrictions, found in this chapter.
 
 
 		\begin{table}[h!]
