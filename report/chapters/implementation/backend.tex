@@ -286,16 +286,21 @@
 		\label{sec:impl:backend:restify-fix}
 		Unfortunatly, Restify's documentation is at some points less than ideal. They have what they call the serveStatic method. From their description, its intended use is to deliver a default file, if a match is not found. This is exactly what is needed for the front-end's router \emph{(more on this in section \ref{sec:impl:ui-router} on page \pageref{sec:impl:ui-router})}. However, after much fiddling, it was found simply not to work.
 
-		As such, a workaround is needed. After having stated the API routes, six new routes are defined as is seen on table \ref{tab:api:workaround} on page \pageref{tab:api:workaround}. This ensures that any API hits are given the proper error code, while ensuring that the application for the front-end is being delivered in all cases.
+		As such, a workaround is needed. After having defined \emph{all} of the API routes, six new routes are defined as is seen on table \ref{tab:api:workaround} on page \pageref{tab:api:workaround}. This ensures that any API hits are given the proper error code, while ensuring that the application for the front-end is being delivered in all cases.
+		
 		\begin{table}[p]
 			\definecolor{tablerow1}{RGB}{230,230,230}
 			\definecolor{tablerow2}{RGB}{255,255,255}
 			\rowcolors{2}{tablerow1}{tablerow2}
 			
 			\begin{tabularx}{\textwidth}{ R{0.15} | L{0.65} | L{0.2} }
-				\bfseries Method & \bfseries Endpoint & \bfseries Description% specify table head
-				\csvreader[head to column names]{resources/api/errors.csv}{}% use head of csv as column names
-				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
+				\bfseries Method & \bfseries Endpoint & \bfseries Description\\% specify table head
+				GET 	& 	/api/.* 	& Returns error 404 Not Found \\
+				HEAD 	& 	/api/.* 	& Returns error 404 Not Found \\
+				POST 	& 	/api/.* 	& Returns error 404 Not Found \\
+				PUT 	& 	/api/.* 	& Returns error 404 Not Found \\
+				DEL 	& 	/api/.* 	& Returns error 404 Not Found \\
+				PATCH 	& 	/api/.* 	& Returns error 404 Not Found \\
 			\end{tabularx}
 
 			\caption{Workaround error routes, to make the API adhere to standards and the front-end's router to work \emph{(see section \ref{sec:impl:ui-router} on page \pageref{sec:impl:ui-router})}.}
