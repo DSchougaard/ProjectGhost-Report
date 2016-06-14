@@ -7,6 +7,12 @@ GET,/api/users/\{id\}/categories,Get list of categories owned by user
 POST,/api/users/\{id\}/categories,Create category owned by user
 PUT,/api/users/\{id\}/categories/\{id\},Update category owned by user
 DELETE,/api/users/\{id\}/categories/\{id\},Delete category owned by user
+GET,/api/.*,Returns error 404, Not Found
+HEAD,/api/.*,Returns error 404, Not Found
+POST,/api/.*,Returns error 404, Not Found
+PUT,/api/.*,Returns error 404, Not Found
+DEL,/api/.*,Returns error 404, Not Found
+PATCH,/api/.*,Returns error 404, Not Found
 GET,/api/invites,Get status of an invite
 POST,/api/invites,Create new invite
 POST,/api/invites/\{id\}/accept,Accept invite and create user

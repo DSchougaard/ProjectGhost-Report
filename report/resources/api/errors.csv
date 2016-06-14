@@ -1,0 +1,7 @@
+method,endpoint,description
+GET,/api/.*,Returns error 404, Not Found
+HEAD,/api/.*,Returns error 404, Not Found
+POST,/api/.*,Returns error 404, Not Found
+PUT,/api/.*,Returns error 404, Not Found
+DEL,/api/.*,Returns error 404, Not Found
+PATCH,/api/.*,Returns error 404, Not Found
