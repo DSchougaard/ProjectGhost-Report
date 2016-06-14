@@ -26,7 +26,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2016-05-29 13:22:51 +0000</string>
+	<string>2016-06-14 12:40:29 +0000</string>
 	<key>Modifier</key>
 	<string>Daniel Schougaard</string>
 	<key>NotesVisible</key>
@@ -3463,11 +3463,11 @@ with Bob's public key}</string>
 					<integer>1757</integer>
 					<key>Points</key>
 					<array>
-						<string>{78.300903, 166.5}</string>
-						<string>{102.3009, 174.25}</string>
-						<string>{103.0509, 189.75}</string>
-						<string>{89.550903, 196.75}</string>
-						<string>{78.050903, 197.25}</string>
+						<string>{78.300903, 148.5}</string>
+						<string>{102.3009, 156.25}</string>
+						<string>{103.0509, 171.75}</string>
+						<string>{89.550903, 178.75}</string>
+						<string>{78.050903, 179.25}</string>
 					</array>
 					<key>Style</key>
 					<dict>
@@ -3484,7 +3484,7 @@ with Bob's public key}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{103.5, 166.5}, {122, 38}}</string>
+					<string>{{103.5, 148.5}, {122, 38}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>FitText</key>
@@ -3530,84 +3530,6 @@ with Bob's public key}</string>
 
 \f0\fs24 \cf0 Encrypt password \
 with Bob's public key}</string>
-					</dict>
-					<key>Wrap</key>
-					<string>NO</string>
-				</dict>
-				<dict>
-					<key>Class</key>
-					<string>LineGraphic</string>
-					<key>ID</key>
-					<integer>1723</integer>
-					<key>Points</key>
-					<array>
-						<string>{78.300903, 124.5}</string>
-						<string>{102.3009, 132.25}</string>
-						<string>{103.0509, 147.75}</string>
-						<string>{89.550903, 154.75}</string>
-						<string>{78.050903, 155.25}</string>
-					</array>
-					<key>Style</key>
-					<dict>
-						<key>stroke</key>
-						<dict>
-							<key>HeadArrow</key>
-							<string>FilledArrow</string>
-							<key>LineType</key>
-							<integer>1</integer>
-							<key>TailArrow</key>
-							<string>0</string>
-						</dict>
-					</dict>
-				</dict>
-				<dict>
-					<key>Bounds</key>
-					<string>{{99.5, 124.5}, {130, 38}}</string>
-					<key>Class</key>
-					<string>ShapedGraphic</string>
-					<key>FitText</key>
-					<string>YES</string>
-					<key>Flow</key>
-					<string>Resize</string>
-					<key>FontInfo</key>
-					<dict>
-						<key>Color</key>
-						<dict>
-							<key>w</key>
-							<string>0</string>
-						</dict>
-						<key>Font</key>
-						<string>Helvetica</string>
-						<key>Size</key>
-						<real>12</real>
-					</dict>
-					<key>ID</key>
-					<integer>1755</integer>
-					<key>Shape</key>
-					<string>Rectangle</string>
-					<key>Style</key>
-					<dict>
-						<key>shadow</key>
-						<dict>
-							<key>Draws</key>
-							<string>NO</string>
-						</dict>
-						<key>stroke</key>
-						<dict>
-							<key>Draws</key>
-							<string>NO</string>
-						</dict>
-					</dict>
-					<key>Text</key>
-					<dict>
-						<key>Text</key>
-						<string>{\rtf1\ansi\ansicpg1252\cocoartf1348\cocoasubrtf170
-\cocoascreenfonts1{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
-
-\f0\fs24 \cf0 Decrypt password \
-with Alice's private key}</string>
 					</dict>
 					<key>Wrap</key>
 					<string>NO</string>
@@ -5333,11 +5255,11 @@ key with Bob's public key}</string>
 	<key>WindowInfo</key>
 	<dict>
 		<key>CurrentSheet</key>
-		<integer>4</integer>
+		<integer>3</integer>
 		<key>ExpandedCanvases</key>
 		<array/>
 		<key>Frame</key>
-		<string>{{1680, 4}, {1440, 873}}</string>
+		<string>{{0, 4}, {1440, 873}}</string>
 		<key>ListView</key>
 		<true/>
 		<key>OutlineWidth</key>
@@ -5351,7 +5273,7 @@ key with Bob's public key}</string>
 		<key>SidebarWidth</key>
 		<integer>120</integer>
 		<key>VisibleRegion</key>
-		<string>{{-47, 246}, {652.5, 359.5}}</string>
+		<string>{{-47, 0}, {652.5, 359.5}}</string>
 		<key>Zoom</key>
 		<real>2</real>
 		<key>ZoomValues</key>
