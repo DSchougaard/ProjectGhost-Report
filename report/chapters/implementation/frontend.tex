@@ -126,10 +126,10 @@
 		There is one caveat with this approach, however. Since they're \emph{random} numbers, it is unfortunately not possible to 100\% guarantee termination of the algorithm. In the trials performed until now, this has shown to be an issue. However, should this become an issue a simple limit to the about of tries before failing can be introduced. When this limit is reached, the algorithm terminates itself, and re-tries. The code for this algorithm -- without the max tries limiter -- is shown on listing \ref{lst:impl:password:generate} on page \pageref{lst:impl:password:generate}
 
 
-		\begin{figure}[p]
+		\begin{figure}[!htb]
 			\centering
 			\includegraphics[width=0.5\textwidth,clip,trim=750 250 750 250]{figures/implementation/screenshots/add-password.png}
-			\caption{Generating new password.}
+			\caption{Interface when generating a new password.}
 			\label{fig:impl:password:generate}
 		\end{figure}
 
@@ -175,6 +175,7 @@
 
 		In the end, through this recursion, a tree consisting of \verb=tree-node=s will have been created. They will look as depicted on figure \ref{lst:frontend:tree:result}. Whenever one of the nodes are clicked, it is propagated up through the tree, using references to each node's parents. When this propagation reaches the parent \verb=tree-menu= object, the method specified using its \verb=on-select= directive, is invoked. That way, the controller can determine what happens, when the user clicks each category entry.
 
+		\pagebreak
 
 		\begin{lstlisting}[style=json2,gobble=12, caption={The front-end's category tree data structure},label={lst:frontend:tree:data}]
             [
@@ -202,9 +203,9 @@
             ]
 		\end{lstlisting}
 	
-		\begin{figure}[p]
+		\begin{figure}[!htb]
 			\centering
-			\includegraphics[width=0.8\textwidth,clip,trim=0 690 536 210]{figures/implementation/screenshots/example_tree.png}
+			\includegraphics[width=0.6\textwidth,clip,trim=0 690 536 210]{figures/implementation/screenshots/example_tree.png}
 			\caption{The resulting tree, of the data specified on figure \ref{lst:frontend:tree:data} on page \pageref{lst:frontend:tree:data}.}
 			\label{lst:frontend:tree:result}
 		\end{figure}
