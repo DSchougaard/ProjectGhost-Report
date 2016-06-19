@@ -4,7 +4,7 @@
 	\section{Developing for the Browser}
 		When developing for the browser, there are three possible tools available: JavaScript, Java applets, and Flash. However, from a technological point of view, Flash is horribly outdated. The usage of the Flash plugin has simply declined so much, that it is not logical to use this. Using Java applets are, similarly to Flash, simply outdated. Introducing too many security concerns, issues, and cross-platform issues, this is simply not a good choice.
 
-		This leaves us with JavaScript. This \emph{is} the language that pretty much all interactive web applications are developed in today. As such, it is what will be used for this project.
+		This leaves JavaScript. This \emph{is} the language that pretty much all interactive web applications are developed in today. As such, it is what will be used for this project.
 
 
 	\section{Using a Framework}
@@ -15,13 +15,13 @@
 			\item Ember
 			\item Backbone
 		\end{itemize}
-		Choosing the ``right'' framework, is a very subjective thing: There are pros and cons with each of the choices. However, Angular is without a doubt the \emph{largest} project. As such, there are more third party libraries available, which will speed up development. Consequently, there are also significantly more resources available in regards to achieving certain goals in regards to functionality. As such, it is chosen that Angular will be the framework for this project.
+		Choosing the ``right'' framework is a very subjective thing: There are pros and cons with each of the choices. However, Angular is without a doubt the \emph{largest} project. As such, there are more third party libraries available, which will speed up development. Consequently, there are also significantly more resources available in regards to achieving certain goals in regards to functionality. As such, it is chosen that Angular will be the framework for this project.
 
 
 		\subsection{A Framework for the Framework}
 			All is not said and done, however. Angular comes in two variants: Angular 1.5, which is tried and tested, and Angular 2.0 which is still in beta. Angular 2.0 focuses a lot more on web-components, than Angular 1.5, and as such will most likely generate more re-usable code. 
 
-			However, there are more to be considered. Most modern web applications uses a framework for the graphical interface as well. Projects such as Bootstrap has revolutionized the way these applications are developed. Recently, more contenders for the title of ``go-to graphical framework'' has popped up.
+			However, there are more to be considered. Most modern web applications uses a framework for the graphical interface as well. Projects such as Bootstrap has revolutionised the way these applications are developed. Recently, more contenders for the title of ``go-to graphical framework'' has popped up.
 
 			Most noticeably Angular Material, by Google. Angular Material supports Angular \emph{natively}. There are UI bindings available for \emph{all} components. Bootstrap, on the other hand, requires third party bindings, in order to function properly with Angular.
 
@@ -82,11 +82,11 @@
 
 	\section{Encryption \& Hashing}
 		%While in theory one could go about implementing the algorithms needed for the implementations oneself, 
-		While in theory one could go about implementing the encryption and hashing algorithms specifically for \emph{this} project, it would be ill advised. The fact is that this would both be \emph{way} too resource demanding, and it would also introduce security risks, in forms of implementational errors. As such, it is chosen to go with an encryption library, which will handle the encryption.
+		While in theory one could go about implementing the encryption and hashing algorithms specifically for \emph{this} project, it would be ill advised. Not only would it be \emph{far} too resource demanding, but it would also introduce security risks, in forms of implementational errors. As such, it is chosen to go with an encryption library, which will handle the encryption.
 
-		For this purpose, the Forge library is chosen\cite{forge-encryption}. Forge is a collection of encryption algorithms, developed in pure JavaScript and is as such able to be executed in the browser directly. In its suite of encryption algorithm is not only AES, but also RSA key \emph{generation} and \emph{encryption}. As such, it alone houses all of the required cryptographic tools, which is required for the front-end to use, as per the design specifications.
+		For this purpose, the Forge library is chosen\cite{forge-encryption}. Forge is a collection of encryption algorithms, developed in pure JavaScript and is as such able to be executed in the browser directly. In its suite of encryption algorithms is not only AES, but also RSA key \emph{generation} and \emph{encryption}. As such, it alone houses all of the required cryptographic tools, which is required for the front-end to use, as per the design specifications.
 
-		\subsection{Deviating From the Designs}
+		\subsection{Deviating From the Design}
 			Unfortunately, the implementation must \emph{deviate} from the designs. Seeing as Argon2 \emph{currently} only exists as a C++ implementation, it is simply not able to be executed in the browser. As such, it is \emph{unfortunately} necessary to choose another key derivation function, in accordance with section \ref{sec:kdf}, on page \pageref{sec:kdf}. Seeing as Forge actually contains an implementation of PBKDF2, this is chosen as the tool for deriving the encryption key. This choice is highly based upon interoperability, as the output from one method will be guaranteed to work with the other.
 
 	%\section{Storing the JWT Token}
@@ -100,11 +100,11 @@
 		%prefix ")]}',\n"
 
 	\section{Generating Passwords}
-		One, until now, overlooked part, is password \emph{generation}. Since the solution aims at giving users the ability to use complex and ``strong'' passwords, it only makes sense that the solution can actually \emph{generate} these passwords.
+		One, until now, overlooked part, is password \emph{generation}. Since the solution aims to give users the ability to use complex and ``strong'' passwords, it only makes sense that the solution can actually \emph{generate} these passwords.
 
-		First and foremost, it is important to give the user the ability to customize the length of the password. This is done since some systems only supports passwords of a certain length. Then there is the matter of which symbols that the password consists of. The UI for this is seen on figure \ref{fig:impl:password:generate}, on page \pageref{fig:impl:password:generate}. However, the interesting part is the code that powers it.
+		First and foremost, it is important to give the user the ability to customise the length of the password. This is done since some systems only support passwords of a certain length. Then there is the matter of which symbols that the password consists of. The UI for this is seen on figure \ref{fig:impl:password:generate}, on page \pageref{fig:impl:password:generate}. However, the interesting part is the code that powers it.
 
-		Following the Angular style, it is powered by an \verb=PasswordGeneratorService=. This has two functions -- no more. The first generate a so-called table. It is from this table, that the final password will be generated. The method really does nothing more then concatenate four arrays of characters, depending on the selections the user made from figure \ref{fig:impl:password:generate}.
+		Following the Angular style, it is powered by a \verb=PasswordGeneratorService=. This has two functions -- no more. The first generate a so-called table. It is from this table that the final password will be generated. The method really does nothing more than concatenate four arrays of characters, depending on the selections the user made from figure \ref{fig:impl:password:generate}.
 
 		Once the table has been created, it is time for the \emph{actual} password to be generated. This is the critical part of the code. Should the password generator end up being biased, it would make it easier for attackers to bruteforce passwords, they know to be generated by this solution. As such, a \emph{secure} random is used, from the Forge library. While this method most likely was not supposed to be used outside their own library, it serves this purpose quite well. \emph{However}, this generates a random \emph{byte} -- i.e. a number between $0$ and $255$.
 
@@ -147,11 +147,11 @@
             }	
 		\end{lstlisting}
 
-	\section{Routing the UI}
+	\section{Routing in the UI}
 		\label{sec:impl:ui-router}
 		Using the UI-Router, Angular handles front-end routing very similarly to that of a REST API. The root path, \verb=/=, refers to the main page. From then on, routes like \verb=/users/add= can then be used, to create a logical seperation and distiction, of which page is to be loaded.
 
-		For this to function properly, a default file -- the \verb=index.html= -- needs to be delivered for every url, which does not match a certain file. This is best illustrated by an example. Imagine the folder structure depicted below:
+		For this to function properly, a default file -- the \verb=index.html= -- need to be delivered for every url, which does not match a certain file. This is best illustrated by an example. Imagine the folder structure depicted below:
 		\dirtree{%
 		.1 Project.
 		.2 index{.}html.
@@ -173,7 +173,7 @@
 
 		Converting this data structure to the actual tree-like menu, starts with the aptly named \verb=tree-menu= component. When instantiating this component a method is passed to it, using the \verb=on-click= variable. This is the method the tree invokes, when something is pressed. Generating the tree is as a recursive definition: For each element at the current level, a new \verb=tree-node= is instantiated. Each of these nodes \emph{may} have children. For each of these children, a new \verb=tree-node= is instantiated, recursively traversing the JSON data structure.	Each of these \verb=tree-node=s are represented as a button, from a graphical point of view.
 
-		In the end, through this recursion, a tree consisting of \verb=tree-node=s will have been created. They will look as depicted on figure \ref{lst:frontend:tree:result}. Whenever one of the nodes are clicked, it is propagated up through the tree, using references to each node's parents. When this propagation reaches the parent \verb=tree-menu= object, the method specified using its \verb=on-select= directive, is invoked. That way, the controller can determine what happens, when the user clicks each category entry.
+		In the end, through this recursion, a tree consisting of \verb=tree-node=s will have been created. They will look as depicted on figure \ref{lst:frontend:tree:result}. Whenever one of the nodes is clicked, it is propagated up through the tree, using references to each node's parents. When this propagation reaches the parent \verb=tree-menu= object, the method specified using its \verb=on-select= function is invoked. That way, the controller can determine what happens, when the user clicks each category entry.
 
 		\pagebreak
 
@@ -205,7 +205,7 @@
 	
 		\begin{figure}[!htb]
 			\centering
-			\includegraphics[width=0.6\textwidth,clip,trim=0 690 536 210]{figures/implementation/screenshots/example_tree.png}
+			\includegraphics[width=0.5\textwidth,clip,trim=0 690 536 210]{figures/implementation/screenshots/example_tree.png}
 			\caption{The resulting tree, of the data specified on figure \ref{lst:frontend:tree:data} on page \pageref{lst:frontend:tree:data}.}
 			\label{lst:frontend:tree:result}
 		\end{figure}

@@ -26,11 +26,11 @@
 			Taking the various options into consideration, it is concluded that the back-end will be developed using Node.js. This choice is greatly influenced by the fact that it would share development language with the front-end, thus making venturing into new territory slightly less daunting.
 
 	\section{To Framework or Not To Framework}
-		Having decided to go with Node.js for the back-end, the next big question arises: To framework or not to framework? Node.js has its own built-in webserver, and it is perfectly viable to simply use this. However, using frameworks will inevitably make it \emph{easier} to code. As such, it is decided that a framework will be used, to aid the development of the back-end.
+		Having decided to go with Node.js for the back-end, the next big question arises: To framework or not to framework? Node.js has its own built-in webserver, and it is perfectly viable to simply use this. However, using frameworks will inevitably make it \emph{easier} to develop. As such, it is decided that a framework will be used, to aid the development of the back-end.
 
 		When it comes to these frameworks, there is no doubt that Express is the ``biggest'' one: It is simply the most widespread and popular of the frameworks available. However, alternatives such as Restify, Hapi, and Koa also exist. While these four by no means constitute the entire list of frameworks, they are the four most widely used.
 
-		Since it has been determined in section \ref{sec:design:choosing-rest}, on page \pageref{sec:design:choosing-rest}, that the back-end essentially will be nothing more than a REST api, restify simply seems more fitting. The other frameworks contain a lot of features -- like server side rendered templates -- which simply won't be necessary when developing an API. 
+		Since it has been determined in section \ref{sec:design:choosing-rest}, on page \pageref{sec:design:choosing-rest}, that the back-end essentially will be nothing more than a REST API, Restify simply seems more fitting. The other frameworks contain a lot of features -- like server side rendered templates -- which simply won't be necessary when developing an API. 
 
 		Additionally, it is noted that Restify supports limiting the SSL/TLS version, \emph{and} the available cipher-suites, as described in \ref{sec:design:secure-comms} on page \pageref{sec:design:secure-comms}. Restify supports this, using Node.js's internal HTTPS options. As such, restricting the protocol version to $TLS1.2$ is easily done using the option shown on listing \ref{lst:impl:restrict:tls1.2} on page \pageref{lst:impl:restrict:tls1.2}. Likewise, the ciphersuites being used, can be restricted using the configuration found on listing \ref{lst:impl:restrict:ciphers} on page \pageref{lst:impl:restrict:ciphers}.
 
@@ -42,7 +42,7 @@
             ciphers: [
                 "Suite1",
                 "Suite2",
-                "NOT Suite3",
+                "!Suite3",
             ].join(':'),
             honorCipherOrder: true
 		\end{lstlisting}
@@ -50,7 +50,7 @@
 
 	\section{Node.js Coding Style}
 		\label{sec:impl:node:style}
-		When developing using node.js there are two different schools of thought: Callbacks and promises. Since node.js asynchronous, traditional synchronous methods should not be used. For reference purposes, the \emph{wrong} way to do it, is shown on listing \ref{lst:node:wrong} on page \pageref{lst:node:wrong}. This causes major performance issues, as the execution of the program would block, while the action taking a long time is performed.
+		When developing using node.js there are two different schools of thought: Callbacks and promises. Since node.js is asynchronous, traditional synchronous methods should not be used. For reference purposes, the \emph{wrong} way to do it, is shown on listing \ref{lst:node:wrong} on page \pageref{lst:node:wrong}. This causes major performance issues, as the execution of the program would block, while the action taking a long time is performed.
 
 		On listing \ref{lst:node:callback} on page \pageref{lst:node:callback}, the same output is shown using callbacks. When the data that takes a long time to produce \emph{(or fetch)} is ready, the callback is invoked, with the result. As such, while the I/O is happening the main node.js thread can continue working.
 
@@ -145,28 +145,28 @@
 
 	\section{API Endpoints}
 		\label{sec:impl:api}
-		Before defining the endpoints, the resources \emph{(see section \ref{sec:design:rest} on page \pageref{sec:design:rest})} of the application need to be determined. Looking at the models defined in section \ref{sec:modelling} on page \pageref{sec:modelling}, these offer a great starting point for identifying resources.
+		Before defining the endpoints, the collections \emph{(see section \ref{sec:design:rest} on page \pageref{sec:design:rest})} of the application need to be determined. Looking at the models defined in section \ref{sec:modelling} on page \pageref{sec:modelling}, these offer a great starting point for identifying collections.
 
-		\subsection{The Users Resource}
-			First and foremost there is the collection of Users. This collections represents the user base as a whole. \verb=POST=ing to this collection would -- by extension -- mean the creation of a new user. \verb=GET=ing the user collection, mean retrieving all user entries, with their username and other attributes in the ``public domain''. \verb=PUT= and \verb=DELETE= is slightly different. They're used for updating and deleting a \emph{single} user, in the entire collection. As such, the endpoint needs to have a user ID postfixed. Adhering to the standard, \emph{all} API endpoints will have \verb=/api= prefixed. These API endpoints are listed on table \ref{tab:api:users} on page \pageref{tab:api:users}.
+		\subsection{The Users Collection}
+			First and foremost there is the collection of users. This collections represents the user base as a whole. \verb=POST=ing to this collection would -- by extension -- mean the creation of a new user. \verb=GET=ing the user collection, results in retrieving all user entries, with their username and other attributes in the ``public domain''. \verb=PUT= and \verb=DELETE= are slightly different. They are used for updating and deleting a \emph{single} user, in the entire collection. As such, the endpoint needs to have a user ID postfixed. Adhering to the standard, \emph{all} API endpoints will have \verb=/api= prefixed. These API endpoints are listed on table \ref{tab:api:users} on page \pageref{tab:api:users}.
 
-		\subsection{The Passwords Resource}
-			Then there is the collection of passwords. However, there is a slight caveat when it comes to this collection. Since each password is \emph{owned} by a user, it can thought be thought that there exists \emph{multiple} collections -- one for each user. As such, the password collection is stored behind the user resource and the ID specifying exactly which user owns said password. The same approach to designing these endpoints are used, as with the user resource and the result of this is found on table \ref{tab:api:passwords} on page \pageref{tab:api:passwords}.
+		\subsection{The Passwords Collection}
+			Then there is the collection of passwords. However, there is a slight caveat when it comes to this collection. Since each password is \emph{owned} by \emph{a} user, it can be thought that there exist \emph{multiple} collections -- one for each user. As such, the password collection is stored behind the users collection and the ID specifying exactly which user owns said password. The same approach for designing these endpoints is used, as with the users collection and the result of this is found on table \ref{tab:api:passwords} on page \pageref{tab:api:passwords}.
 
-			For simplicity's sake, access to shared passwords is stored behind the passwords resource. As such, a collection called shares -- which belongs to a specific password -- denotes the collection of users this specific password has been shared to. Additionally, two collections are added as well: \verb=shared= and \verb=shares=. These two are  \emph{very} similar in name, which unfortunately might result in some confusion. The \verb=shares= resource denotes passwords shared \emph{to} the user and the \verb=shared= resource denotes passwords that the user has shared to \emph{others}. These endpoints are found on table \ref{tab:api:sharedpasswords} on page \pageref{tab:api:sharedpasswords}.
+			For the sake of simplicity, access to shared passwords is stored behind the passwords collection. As such, a collection called shares -- which belongs to a specific password -- denotes the collection of users this specific password has been shared to. Additionally, two collections are added as well: \verb=shared= and \verb=shares=. These two are  \emph{very} similar in name, which unfortunately might result in some confusion. The \verb=shares= collection denotes passwords shared \emph{to} a user and the \verb=shared= collection denotes passwords that a user has shared to \emph{others}. These endpoints are found on table \ref{tab:api:sharedpasswords} on page \pageref{tab:api:sharedpasswords}.
 
-		\subsection{The Categories Resource}
+		\subsection{The Categories Collection}
 			The same argument made in regards to the passwords collection, can be said about categories. Each user has their own private password collection, which is -- similar to passwords -- stored behind the owning user's ID. This can be seen on table \ref{tab:api:categories} on page \pageref{tab:api:categories}.
 
-		\subsection{The Invites Resource}
-			When an admin creates a new invites, it can be said he \verb=POST=s it to the invites resource. \verb=GET=ing an ID, returns the status of an ID stored in the database. Then, there is finally the act of using an invite. Since a user is created, it only makes sense that the \verb=POST= method is needed. However, since the regular endpoint is already being posted to, an additional endpoint is needed. As such, appending the endpoint with \verb=/accept= will achieve this. This can be seen on table \ref{tab:api:invites} on page \pageref{tab:api:invites}.
+		\subsection{The Invites Collection}
+			When an admin creates a new invites, it can be said he \verb=POST=s it to the invites collection. \verb=GET=ing an ID, returns the status of an ID stored in the database. Then, there is finally the act of using an invite. Since a user is created, it only makes sense that the \verb=POST= method is needed. However, since the regular endpoint is already being posted to, an additional endpoint is needed. As such, appending the endpoint with \verb=/accept= will achieve this. This can be seen on table \ref{tab:api:invites} on page \pageref{tab:api:invites}.
 
-		\subsection{The Audit Resource}
-			The Audit resource is extremely simple. It only consists of a single endpoint: Reading the audit log. Since this resource is owned by individual users, this is -- much like passwords and categories -- stored behind the user collection and a specific ID. This can be seen on table \ref{tab:api:audit} on page \pageref{tab:api:audit}.
+		\subsection{The Audit Collection}
+			The Audit collection is extremely simple. It only consists of a single endpoint: Reading the audit log. Since this collection is owned by individual users, this is -- much like passwords and categories -- stored behind the users collection and a specific ID. This can be seen on table \ref{tab:api:audit} on page \pageref{tab:api:audit}.
 
-		\subsection{The Auth Resource}
+		\subsection{The Auth Collection}
 			\label{sec:api:auth}
-			The Auth resource is a little bit more interesting. Of course, there is the generic \verb=POST=, containing the user's username and password, for authentication purposes. The details of this is covered in section \ref{sec:design:authentication} on page \pageref{sec:design:authentication}. However, this is not all. Since the solution supports TOTP two-factor-authentication, as described in section \ref{sec:mfa} on page \pageref{sec:mfa}, endpoints for enabling this is needed as well. 
+			The Auth collection is a little bit more interesting. Of course, there is the generic \verb=POST=, containing the user's username and password, for authentication purposes. The details of this is covered in section \ref{sec:design:authentication} on page \pageref{sec:design:authentication}. However, this is not all. Since the solution supports TOTP two-factor-authentication, as described in section \ref{sec:mfa} on page \pageref{sec:mfa}, endpoints for enabling this is needed as well. 
 
 			In section \ref{sec:design:breaking-rest} on page \pageref{sec:design:breaking-rest} it was argued that at one point it would be \emph{necessary} to break the REST principles. This is when. As such, two endpoints are needed: One for generating a new secret and caching it, and one for actually verifying said secret.
 
@@ -187,7 +187,7 @@
 				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
 			\end{tabularx}
 
-			\caption{API endpoints for the Users resource.}
+			\caption{API endpoints for the Users collection.}
 			\label{tab:api:users}
 		\end{table}
 
@@ -203,7 +203,7 @@
 				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
 			\end{tabularx}
 
-			\caption{API endpoints for the Passwords resource.}
+			\caption{API endpoints for the Passwords collection.}
 			\label{tab:api:passwords}
 		\end{table}
 
@@ -233,7 +233,7 @@
 				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
 			\end{tabularx}
 
-			\caption{API endpoints for the Categories resource.}
+			\caption{API endpoints for the Categories collection.}
 			\label{tab:api:categories}
 		\end{table}
 		
@@ -248,7 +248,7 @@
 				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
 			\end{tabularx}
 
-			\caption{API endpoints for the Invites resource.}
+			\caption{API endpoints for the Invites collection.}
 			\label{tab:api:invites}
 		\end{table}
 
@@ -263,7 +263,7 @@
 				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
 			\end{tabularx}
 
-			\caption{API endpoint for the Audit resource.}
+			\caption{API endpoint for the Audit collection.}
 			\label{tab:api:audit}
 		\end{table}
 
@@ -278,7 +278,7 @@
 				{\\\hline\method & \texttt{\endpoint} & \description}% specify your coloumns here
 			\end{tabularx}
 
-			\caption{API endpoints for the Auth resource.}
+			\caption{API endpoints for the Auth collection.}
 			\label{tab:api:auth}
 		\end{table}
 
@@ -286,7 +286,7 @@
 		\label{sec:impl:backend:restify-fix}
 		Unfortunatly, Restify's documentation is at some points less than ideal. They have what they call the serveStatic method. From their description, its intended use is to deliver a default file, if a match is not found. This is exactly what is needed for the front-end's router \emph{(more on this in section \ref{sec:impl:ui-router} on page \pageref{sec:impl:ui-router})}. However, after much fiddling, it was found simply not to work.
 
-		As such, a workaround is needed. After having defined \emph{all} of the API routes, six new routes are defined as is seen on table \ref{tab:api:workaround} on page \pageref{tab:api:workaround}. This ensures that any API hits are given the proper error code, while ensuring that the application for the front-end is being delivered in all cases.
+		As such, a workaround is needed. After having defined \emph{all} of the API routes, six new routes are defined as is seen on table \ref{tab:api:workaround} on page \pageref{tab:api:workaround}. This ensures that any API hits that \emph{should} result in an error, are given the proper error code, while also ensuring that the application for the front-end is being delivered in all cases.
 		
 		\begin{table}[p]
 			\definecolor{tablerow1}{RGB}{230,230,230}
@@ -330,9 +330,9 @@
 		Unfortunately, this is the place where the nature of humans comes into play. When development of the solution started, the tool schemagic was selected. At the time, it seemed the simplest of the available libraries. However, last few weeks of the project, the library ajv began to seem more and more appropriate, albeit a bit more difficult to setup. Unfortunately, it was deemed necessary to \emph{not} migrate to the new tool, due to a lack of time. However, this is \emph{definitely} something that will need to be done in the future.
 
 		\subsection{Using ajv}
-			Using ajv is as simple as defining a scheme. This scheme defines the allowed variables that the input json can, may, or should contain. On listing \ref{lst:json:ajv:password} on page \pageref{lst:json:ajv:password} an example of this is found. It stated that a password entry \emph{must} contain a title \emph{(string)} and a password \emph{(base64 encoded string)}, and \emph{can} contain a username, url, note, and a parent \emph{(parent field defaults to null)}. The \verb=user.schema= variable can then be used as a \emph{promise} to verify input. This is seen on listing \ref{lst:json:ajv:password:use} on page \pageref{lst:json:ajv:password}. The fact that ajv supports validation using promises, is a huge advantage, in regards to readability, as per section \ref{sec:impl:node:style} on page \pageref{sec:impl:node:style}.
+			Using ajv is as simple as defining a scheme. This scheme defines the allowed variables that the input JSON can, may, or should contain. On listing \ref{lst:json:ajv:password} on page \pageref{lst:json:ajv:password} an example of this is found. It stated that a password entry \emph{must} contain a title \emph{(string)} and a password \emph{(base64 encoded string)}, and \emph{can} contain a username, url, note, and a parent \emph{(parent field defaults to null)}. The \verb=user.schema= variable can then be used as a \emph{promise} to verify input. This is seen on listing \ref{lst:json:ajv:password:use} on page \pageref{lst:json:ajv:password}. The fact that ajv supports validation using promises, is a huge advantage, in regards to readability, as per section \ref{sec:impl:node:style} on page \pageref{sec:impl:node:style}.
 
-			\begin{lstlisting}[gobble=16,language=JavaScript,caption={JSON schema for the password model, using ajv's notaiton.},label={lst:json:ajv:password},breakatwhitespace=false]
+			\begin{lstlisting}[gobble=16,language=JavaScript,caption={JSON schema for the password model, using ajv's notation.},label={lst:json:ajv:password},breakatwhitespace=false]
                 var schema = {
                     "$async": true,
                     "properties": {
@@ -365,7 +365,7 @@
 				\end{lstlisting}
 
 			\begin{lstlisting}[gobble=16,language=JavaScript,caption={Using the user schema for validating input, using ajv.},label={lst:json:ajv:password:use}]
-                validate({title: 'I Love Programming', 'password': 'V2hhdC4uLiBBZ2Fpbj8h'))
+                validate({title: 'I Love Programming', password: 'V2hhdC4uLiBBZ2Fpbj8h'))
                 .then(function (valid) {
                     console.log('Data is valid');
                 })
@@ -386,7 +386,7 @@
 		\end{citequote}
 		When the front-end receives the \verb=403= from the authentication endpoint, it \emph{knows} to promt to the user for a two-factor-token. Once this token is obtained, the request is sent again -- with the token. Once received, the back-end verifies the password, similar to before, and verifies that the token is correct. If all fields are verified the back-end responds with \verb=200= to signify successful authentication. Should either field fail to be verified, the response is \verb=401= to signify unsuccessful authentication. Figure \ref{fig:sequence:auth} on page \pageref{fig:sequence:auth} depicts this series of event, in a sequence diagram.
 
-		Upon successful authentication -- either with or without 2FA -- a JWT will be issued, in accordance with section \ref{sec:design:jwt} on page \pageref{sec:design:jwt}. This token is signed, using the back-ends private-key specifically intended for this use. For future reference, this key is known as the private-JWT-key.
+		Upon successful authentication -- either with or without 2FA -- a JWT will be issued, in accordance with section \ref{sec:design:jwt} on page \pageref{sec:design:jwt}. This token is signed using the back-ends private-key specifically intended for this use. For future reference, this key is known as the private-JWT-key.
 
 		\begin{figure}[p]
 			\centering
@@ -420,18 +420,18 @@
             });		
 		\end{lstlisting}
 
-		Whenever \emph{any} client performs a HTTP call to the endpoint \verb=/api/ping=, using the \verb=GET= method, the server simply returns http code \verb=200=, and continues its operation. However, a new middleware will now be created. This middleware will effectively \emph{log} whenever a ping request is made. The code for the logger is found on listing \ref{lst:example:pinglog} on page \pageref{lst:example:pinglog}. Listing \ref{lst:example:ping_wlog} on page \pageref{lst:example:ping_wlog} now contains the updated ping endpoint. As is seen on line 2, the variable \verb=pinglog= is injected into the route handler. As such, the code on listing \ref{lst:example:pinglog} is executed \emph{before} the code from listing \ref{lst:example:ping_wlog}, \emph{every} single time.
+		Whenever \emph{any} client performs a HTTP call to the endpoint \verb=/api/ping=, using the \verb=GET= method, the server simply returns http code \verb=200=, and continues its operation. However, a new middleware will now be created. This middleware will effectively \emph{log} whenever a ping request is made. The code for the logger is found on listing \ref{lst:example:pinglog} on page \pageref{lst:example:pinglog}. Listing \ref{lst:example:ping_wlog} on page \pageref{lst:example:ping_wlog} now contains the updated ping endpoint. As is seen on line 2, the variable \verb=log= is injected into the route handler. As such, the code on listing \ref{lst:example:pinglog} is executed \emph{before} the code from listing \ref{lst:example:ping_wlog}, \emph{every} single time.
 
-		\begin{lstlisting}[gobble=12,language=JavaScript,caption={PingLog Middleware},label={lst:example:pinglog}]
+		\begin{lstlisting}[gobble=12,language=JavaScript,caption={Log Middleware},label={lst:example:pinglog}]
             module.exposts = function(req, res, next){
-                console.log('Ping reqeuest received');
+                console.log('Request received');
                 return next();
             }
 		\end{lstlisting}
 
-		\begin{lstlisting}[gobble=12,language=JavaScript,caption={Ping endpoint with the pinglog middleware},numbers=left,label={lst:example:ping_wlog}]
-            var pinglog = require('pinglog.js');
-            server.get('/api/ping', pinglog, function(req, res, next){
+		\begin{lstlisting}[gobble=12,language=JavaScript,caption={Ping endpoint with the log middleware},label={lst:example:ping_wlog}]
+            var log = require('log.js');
+            server.get('/api/ping', log, function(req, res, next){
                 res.send(200, 'OK');
                 return next();
             });		
@@ -439,22 +439,22 @@
 
 		This design approach is used for several features in the codebase, most noticeable:
 		\begin{itemize}
-			\item Object Resolving \emph{(see section \ref{sec:impl:resolve} on page \pageref{sec:impl:resolve})}
 			\item Token Verification \emph{(see section \ref{sec:impl:token-verification} on page \pageref{sec:impl:token-verification})}
+			\item Object Resolving \emph{(see section \ref{sec:impl:resolve} on page \pageref{sec:impl:resolve})}
 			\item Authorization \emph{(see section \ref{sec:impl:authorization} on page \pageref{sec:impl:authorization})}
 		\end{itemize}
 
 	\section{Token Verification}
 		\label{sec:impl:token-verification}
-		In section \ref{sec:impl:authentication} on page \pageref{sec:impl:authentication} it was discussed how the JWTs are issued, \emph{(see section\ref{sec:design:jwt} on page \pageref{sec:design:jwt})}. Since most endpoints will require an authenticated user, this makes token verification a \emph{prime} candidate for implementation as a middleware.
+		In section \ref{sec:impl:authentication} on page \pageref{sec:impl:authentication} it was discussed how the JWTs are issued, \emph{(see section \ref{sec:design:jwt} on page \pageref{sec:design:jwt})}. Since most endpoints will require an authenticated user, this makes token verification a \emph{prime} candidate for implementation as a middleware.
 
-		Verifying these tokens are \emph{extremely} simple. When issued, they're signed with the server's private-JWT-key, \emph{(see section \ref{sec:impl:authentication} on page \pageref{sec:impl:authentication})}. Verification is simply making sure, that the received token \emph{was} signed with the back-ends own private-JWT-key.
+		Verifying these tokens are \emph{extremely} simple. When issued, they're signed with the server's private-JWT-key \emph{(see section \ref{sec:impl:authentication} on page \pageref{sec:impl:authentication})}. Verification is simply making sure, that the received token \emph{was} signed with the back-ends own private-JWT-key.
 
 		Upon successful token verification, the corresponding user object is fetched from the database, and attached to the request, as the \verb=req.resolved.user= variable, which subsequent middlewares and controllers can access. 
 
 	\section{Resolving Objects}
 		\label{sec:impl:resolve}
-		Since multiple routes exists for the same type of objects \emph{(get, post, put and delete)}, it would be beneficial to have a single place, where objects are read from the database. As such, a common object resolving middleware is made. It requires a number of standards, however. First and foremost, all object IDs found in the URL is to be postfixed with a constant, \verb=Id=. This is done to easily manipulate the variable name string, to identify the corresponding object. Secondly, \emph{all} resolvable objects \emph{must} use the same method definition to lookup an object from the database, using their ID: The \verb=find(..)= method.
+		Since multiple routes exists \emph{(get, post, put and delete)} for the same type of objects \emph{(passwords, for instance)}, it would be beneficial to have a single place, where objects are read from the database. As such, a common object resolving middleware is made. It requires a number of standards, however. First and foremost, all object IDs found in the URL is to be postfixed with a constant, \verb=Id=. This is done to easily manipulate the variable name string, to identify the corresponding object. Secondly, \emph{all} resolvable objects \emph{must} use the same method definition to lookup an object from the database, using their ID: The \verb=find(..)= method.
 
 		Using these two constraints, a resolver can fairly easily be built. It simply strips the tailing two characters from the variable name, and based on the rest it looks up a user, a password, a category, an invite, or a shared password. The core of the resolver is found on listing \ref{lst:example:resolver} on page \pageref{lst:example:resolver}. The \verb=objectTypes= array is used for creating the final variable names, which the controllers will then refer to these objects as.
 
@@ -476,15 +476,15 @@
             });
 		\end{lstlisting}
 
-		All of the resolved objects, are then attached to the request, before being passed on to the next handler. Resolved objects are found in the \verb=req.resolved.params= variable, which subsequent middlewares and controllers can access.
+		All of the resolved objects are then attached to the request, before being passed on to the next handler. Resolved objects are found in the \verb=req.resolved.params= variable, which subsequent middlewares and controllers can access.
 
-	\section{Authorization}
+	\section{Authorisation}
 		\label{sec:impl:authorization}
-		For authorization purposes two strategies will be used: Simple and advanced authorization. For all purposes where simple authorization is a possibility, it will be used. In section \ref{sec:design:authorization} on page \pageref{sec:design:authorization} it was described which users has access to which entities. The following two sections will adhere to this design.
+		For authorisation purposes two strategies will be used: Simple and advanced authorisation. For all purposes where simple authorisation is a possibility, it will be used. In section \ref{sec:design:authorization} on page \pageref{sec:design:authorization} it was described which users has access to which entities. The following two sections will adhere to this design.
 
 		\subsection{Basic Authorization}
 			%Using the API described in section \ref{sec:impl:api} on page \pageref{sec:impl:api}, it is clearly seen that models' IDs are found in the URL. As such, using the owner field, of these models, it can easily be determined if the authenticated user has access to any given resource.
-			In the previous too sections, the token verification \emph{(section \ref{sec:impl:token-verification})} and object resolving  \emph{(section \ref{sec:impl:resolve})} middleware were explained. Using these resolved objects' IDs, a very simple authorization scheme can be devised.
+			In the previous too sections, the token verification \emph{(section \ref{sec:impl:token-verification})} and object resolving  \emph{(section \ref{sec:impl:resolve})} middleware were explained. Using these resolved objects' IDs, a very simple authorisation scheme can be devised.
 
 			As per the design, \emph{both} the user and admins will have full access to all user methods. This is simply handled with a comparison:
 			\begin{lstlisting}[gobble=16,language=JavaScript]
@@ -505,19 +505,19 @@
                 if( (share.owner === user.id && user.id === req.resolved.user) || (share.origin_owner === user.id && user.id === req.resolved.user)){
 			\end{lstlisting}
 		
-			If the above snippets are evaluated to \verb=true=, the code keeps executing. If it is evaluated to false, the back-end returns http code \verb=403=, Forbidden denoting that the user does \emph{not} have sufficient privileges to access that specific data.
+			If the above snippets are evaluated to \verb=true=, the code keeps executing. If it is evaluated to false, the back-end returns HTTP code \verb=403=, denoting that the user does \emph{not} have sufficient privileges to access that specific data.
 
 		\subsection{Advanced Authorization}
-			However, this only works on select resources. As the user will easily see, the invite endpoints will not work using the simple method. As such, the groundwork for a more advanced and fine grained authorization framework is made.
+			However, this only works on select resources. As the user will easily see, the invite endpoints will not work using the simple method. As such, the groundwork for a more advanced and fine grained authorisation framework is made.
 
-			First and foremost, the basic target is defined. In this case, it will be \verb=invite=. Next, the actions on this target is defined. For invites, there really only is one: \verb=create=. For other objects, these actions might be \verb=update=, \verb=delete=, etc. Then, for each target, each method's permissions can be defined. For each endpoint, the middleware is given a variable, \verb=permObject= \emph{(permissions object)}, which denotes the resource and action in question. In the invites case, the following snippet shows the authorization process:
+			First and foremost, the basic target is defined. In this case, it will be \verb=invite=. Next, the actions on this target is defined. For invites, there really only is one: \verb=create=. For other objects, these actions might be \verb=update=, \verb=delete=, etc. Then, for each target, each method's permissions can be defined. For each endpoint, the middleware is given a variable, \verb=permObject= \emph{(permissions object)}, which denotes the resource and action in question. In the invites case, the following snippet shows the authorisation process:
 
 			\begin{lstlisting}[gobble=16,language=JavaScript]
                 function invite(permObject, req, res, next){
                     // Supported Methods
                     var methods = ['create'];
                     
-                    // Check to see if method is supported in authorization suite
+                    // Check to see if method is supported in authorisation suite
                     if( _.indexOf(methods, permObject.method) === -1 ){
                         return deny(next);
                     }
@@ -528,11 +528,11 @@
                             return next();
                         }
 
-                        return next(new restify.errors.ForbiddenError('Insufficient privileges'));
+                        return deny(next);
                     }
                 }			
 			\end{lstlisting}
-			The \verb=deny(..)= method is just a wrapper to elegantly throw the same error, across multiple authorization targets. The content of this method is as simple as:
+			The \verb=deny(..)= method is just a wrapper to elegantly throw the same error, across multiple authorisation targets. The content of this method is as simple as:
 			\begin{lstlisting}[gobble=16,language=JavaScript]
                 function deny(next){
                     return next(new restify.errors.ForbiddenError('Insufficient privileges'));
@@ -540,7 +540,7 @@
 			\end{lstlisting}
 
 		\subsection{Simple or Advanced}
-			There is not a seconds doubt that the advanced approach is more fine grained. Where the simple approach only supports differentiating between targets, the advanced approach also supports differentiating between actions. As such, while the simple method does its job perfectly as is, should the need for more detailed authorization options arise, they will need to be implemented the advanced approach.
+			There is not a seconds doubt that the advanced approach is more fine grained. Where the simple approach only supports differentiating between targets, the advanced approach also supports differentiating between actions. As such, while the simple method does its job perfectly as is, should the need for more detailed authorisation options arise, they will need to be implemented the advanced approach.
 
 
 	\section{Handling Errors}
@@ -568,7 +568,7 @@
 		\label{sec:impl:tests}
 		Last but not least, testing of the back-end is -- of course -- necessary. One could go about manually creating the HTTP requests and testing the output, but this is far from efficient.
 
-		As such, unittesting is necessary. One of the most popular frameworks for unittesting in the JavaScript community is without a doubt mocha. However, since this is an API that will be tested, mocha isn't \emph{enough}. When testing the HTTP calls there are two approaches: Either the actual server is run in a separate process, or the test framework runs the server itself. However, running the server separately will \emph{quickly} become very tedious, since it would have to be restarted for each set of tests. 
+		As such, unittesting is necessary. One of the most popular frameworks for unittesting in the JavaScript community is without a doubt Mocha. However, since this is an API that will be tested, Mocha isn't \emph{enough}. When testing the HTTP calls there are two approaches: Either the actual server is run in a separate process, or the test framework runs the server itself. However, running the server separately will \emph{quickly} become very tedious, since it would have to be restarted for each set of tests. 
 
 		Fortunately, there exists a tool designed \emph{specifically} to aid in this type of unittesting: Supertest. It simply plugs into the main application code, and bootstraps a local version of the routes themselves. Then tests can be run on this, \emph{as if} it was running in a separate process. The application code simply has to export a link to the primary object \emph{(often the server or app variable)}, whenever the \verb=process.env.NODEENV= environment variable is set to \verb=test=. This export is shown on listing \ref{lst:impl:backend:testexport} on page \pageref{lst:impl:backend:testexport}. This is then used in Supertest, in order to test the result of certain requests. This is seen on listing \ref{lst:impl:backend:supertest} on page \pageref{lst:impl:backend:supertest}. 
 

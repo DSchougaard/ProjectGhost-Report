@@ -18,9 +18,9 @@
 		\label{tab:bench:devices}
 	\end{table}
 
-	For these tests, it was chosen that the back-ends would be using the SQLite database. This choice was made, on the assumption that this would be the best option, for low-powered devices as argued in section \ref{sec:restrict:database} on page \pageref{sec:restrict:database}. The results of running these tests, are found on figure \ref{fig:bench:arch} on page \pageref{fig:bench:arch}. 
+	For these tests, it was chosen that the back-ends would be using the SQLite database. This choice was made, on the assumption that this would be the best option, for low-powered devices as argued in section \ref{sec:restrict:database} on page \pageref{sec:restrict:database}. The results of running these tests are found on figure \ref{fig:bench:arch} on page \pageref{fig:bench:arch}. 
 
-	As seen, the Raspberry Pi does not handle itself very well under pressure, compared to the Server. In fact, it is doing $~4.9$ times \emph{worse}. However, despite this \emph{horrible} benchmark, the implementation is \emph{usable} on the Raspberry Pi. However, the non-functional requirement \#\ref{requirement:delay} regarding maximum delay the user experiences, \emph{might} be violated, using this setup. Playing around with it, it \emph{does} feel sluggish, but this is easily mitigated by the use of a more powerful, newer, more power efficient, and -- most importantly -- equally cheap Raspberry Pi 3. But unfortunately it has not been possible to acquire a Raspberry Pi 3 for testing purposes, in time for this project.
+	As seen, the Raspberry Pi does not handle itself very well under pressure, compared to the Server. In fact, it is doing $~4.9$ times \emph{worse}. However, despite this \emph{horrible} benchmark, the implementation is \emph{usable} on the Raspberry Pi. However, the non-functional requirement \#\ref{requirement:delay} regarding maximum delay the user experiences, \emph{might} be violated using this setup. Playing around with it, it \emph{does} feel sluggish, but this is easily mitigated by the use of a more powerful, newer, more power efficient, and -- most importantly -- equally cheap Raspberry Pi 3. But unfortunately it has not been possible to acquire a Raspberry Pi 3 for testing purposes, in time for this project.
 
 	\begin{figure}[!h]
 		\centering
@@ -40,7 +40,7 @@
 	    \label{fig:bench:arch}
 	\end{figure}
 
-	However, even the performance of the reference server, seems extremely sub-par. As such, a benchmark is run, comparing the various database technologies: SQLite, MySQL, and Postgres. The results of these tests are found on figure \ref{fig:bench:db} on page \pageref{fig:bench:db}. As it is seen SQLite is \emph{several magnitudes} slower than both MySQL and Postgres -- around a factor of $12$.
+	However, even the performance of the reference server seems sub-par. As such, a benchmark is run, comparing the various database technologies: SQLite, MySQL, and Postgres. The results of these tests are found on figure \ref{fig:bench:db} on page \pageref{fig:bench:db}. As it is seen SQLite is \emph{several magnitudes} slower than both MySQL and Postgres -- around a factor of $12$.
 
 	This is, however, to be expected. Both MySQL and Postgres are designed to be performance databases, whereas SQLite is designed to have a minimal impact and run without a separate service. As such, even though the SQLite might result in a \emph{horrible} performance, compared to the other two, it could still potentially be beneficial to run on low-powered devices.
 
@@ -63,7 +63,7 @@
 	    \label{fig:bench:db}
 	\end{figure}
 
-	A final experiment is made to determine this assumption. This is done by installing and running the \verb=mysql-server= on the Raspberry Pi. The exact same test as before is performed and the results of this test is seen on figure \ref{fig:bench:rpi-bench} on page \pageref{fig:bench:rpi-bench}. As it appears, the fundamental assumption of SQLite being superior on such low-powered devices is actually \emph{wrong}. It would even seem that the MySQL database is \emph{slightly} faster. However, this could also just be due to variations. As such, performance-wise, SQLite really has no place being used as a database. However, there is more than just performance to the selection. Where initializing the system using a MySQL database is slightly cumbersome, a SQLite database takes virtually no work. As such, for setups favouring simplicity instead of performance, SQLite is still the go-to database, despite its horrible performance.
+	A final experiment is made to determine this assumption. This is done by installing and running the \verb=mysql-server= on the Raspberry Pi. The exact same test as before is performed and the results of this test is seen on figure \ref{fig:bench:rpi-bench} on page \pageref{fig:bench:rpi-bench}. As it appears, the fundamental assumption of SQLite being superior on such low-powered devices is actually \emph{wrong}. It would even seem that the MySQL database is \emph{slightly} faster. However, this could also just be due to variations. As such, performance-wise, SQLite really has no place being used as a database. \emph{But}, there is more than just performance to the selection. Where initializing the system using a MySQL database is slightly cumbersome, a SQLite database takes virtually no work. As such, for setups favouring simplicity instead of performance, SQLite is still the go-to database, despite its horrible performance.
 
 	\begin{figure}[!h]
 		\centering
@@ -81,10 +81,10 @@
 	            };
 	        \end{axis}
 	    \end{tikzpicture}
-	    \caption{Comparing performance of a SQLite ands a MySQL database on the Raspberry Pi. Lower is better.}
+	    \caption{Comparing performance of a SQLite and a MySQL database on the Raspberry Pi. Lower is better.}
 	    \label{fig:bench:rpi-bench}
 	\end{figure}
 
 
 	\section{Final Remarks}
-		Admittedly, the scientific-process of these benchmarks have been less than ideal. Many factors could effectively influence these tests greatly, such as the amount of \emph{other} traffic on the network at the time of the test, or the quality of the SD card that the Pi is equipped with. However, the intent of this chapter was not to adhere to the highest possible scientific standards, but more as a way of determining the viability of running the implementation on a Raspberry Pi. As such, it is finally concluded, that while running it on a Model 1 B+ is sluggish, it is still \emph{usable} for individuals.
+		Admittedly, the scientific-process of these benchmarks have been less than ideal. Many factors could effectively influence these tests greatly, such as the amount of \emph{other} traffic on the network at the time of the test, or the quality of the SD card that the Pi is equipped with. However, the intent of this chapter was never to adhere to the highest possible scientific standards, but more as a way of determining the viability of running the implementation on a Raspberry Pi. As such, it is finally concluded, that while running it on a Model 1 B+ is sluggish, it is still \emph{usable} for individuals.

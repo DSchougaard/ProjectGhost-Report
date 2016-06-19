@@ -933,7 +933,7 @@
 					password 				& String \emph{(Base64 Encoded)} \\
 					originPassword 			& Password ID 		\\
 				\end{tabular}
-				\caption{Fields of the Password model}
+				\caption{Fields of the Shared Password model}
 				\label{fig:model:sharedpassword}
 			\end{table}
 
@@ -999,15 +999,15 @@
 					link  					& UUID \\
 					expires 				& Unix timestamp \\
 				\end{tabular}
-				\caption{Fields of the Password model}
+				\caption{Fields of the Invite model}
 				\label{fig:model:invite}
 			\end{table}
 
 		\subsection{The Audit Model}
 			\label{sec:moddeling:audit}
-			Finally, there is the audit model. As described in section \ref{sec:audit} on page \pageref{sec:audit}, each entry should contain one of seven actions. While this could easily be achieved using an enum, not all database technologies support this data structure. As such, an integer mapping is used. In practice, this means that each action is translated to an integer, before being stored. When retrieved, the same integer is used to generate the actual name of the action. This mapping is shown on figure \ref{table:audit:actionmapping} on page \pageref{table:audit:actionmapping}.
+			Finally, there is the audit model. As described in section \ref{sec:audit} on page \pageref{sec:audit}, each entry should contain one of seven actions. While this could easily be achieved using an enum, not all database technologies support this data structure. As such, an integer mapping is used. In practice, this means that each action is translated to an integer before being stored. When retrieved, the same integer is used to generate the actual name of the action. This mapping is shown on figure \ref{table:audit:actionmapping} on page \pageref{table:audit:actionmapping}.
 
-			What is a challenge when modelling these audit entries, is the reference to one of three things: Authentication attempts, passwords and, shared passwords. Because it is a reference to multiple fields \emph{(the entry's target)}, a traditional database foreign key reference is simply not possible. As such, the reference will need to be stored in an integer \emph{(unfortunately loosing any restrictions from the relations, in the process)}. However, it is still needed to differentiate between an ID for a Password and for a Shared Password. Hence, the targets type will need to be stored as well. Finally, as was decided previously, a hostname and a timestamp will need to be stored as well.
+			What is a challenge when modelling these audit entries, is the reference to one of three things: Authentication attempts, passwords and, shared passwords. Because it is a reference to multiple fields \emph{(the entry's target)}, a traditional database foreign key reference is simply not possible. As such, the reference will need to be stored as an integer \emph{(unfortunately loosing any restrictions from the relations, in the process)}. However, it is still needed to differentiate between an ID for a Password and for a Shared Password. Hence, the targets type will need to be stored as well. Finally, as was decided previously, a hostname and a timestamp will need to be stored as well.
 
 			\begin{table}[h!]
 				\centering
@@ -1042,7 +1042,7 @@
 				\label{fig:model:audit}
 			\end{table}
 
-			As such, it is determined that the Audit model will contain the fields listed on table \ref{fig:model:audit} on page \pageref{fig:model:audit}. On figure \ref{fig:relationship:audit-user} on page \pageref{fig:relationship:audit-user}, the relationship between the Audit model and the Password and Shared Password models are depicted, with adjusted syntax to meet the slightly unique approach required for this model to work.
+			As such, it is determined that the Audit model will contain the fields listed on table \ref{fig:model:audit} on page \pageref{fig:model:audit}. On figure \ref{fig:relationship:audit-user} on page \pageref{fig:relationship:audit-user}, the relationship between the Audit, Password, and Shared Password models are depicted, with adjusted syntax to meet the slightly unique approach required for this model to work.
 			
 			\begin{figure}[p]
 				\centering
@@ -1061,7 +1061,7 @@
 				\label{fig:erd:full}
 			\end{figure}
 
-		\subsection{Comparison With Requirements}
+		\subsection{Comparison with the Requirements}
 			\label{requirement:fulfilled:organization}
 			\label{requirement:fulfilled:new}
 			\label{requirement:fulfilled:retrieve}
@@ -1092,7 +1092,7 @@
 				\item Support for \emph{at least} 100.000 password entries
 			\end{enumerate}
 
-	\section{Authorization}
+	\section{Authorisation}
 		\label{sec:design:authorization}
 		Having described these various models, it only makes sense to determine who can actually \emph{access} them. Various schemes for ensuring this exists, however before deciding that, it is important to understand which models should be limited, and to whom.
 
@@ -1125,7 +1125,7 @@
 
 		RDBMS is the oldest of the bunch. This category covers the first database schemes ever used, dating back to the 70's. This type of database has a very strict structure, compared to that of NoSQL databases, requiring a structure of tables, which in turn contains columns. RDBMS are by far, the most used type of database, if for no other reason, that they've simply existed for a lot longer. Typically RDBMSs uses the Structured Query Language \emph{(SQL)}. An example of a RDBMS table, can be found on figure \ref{fig:example:rldb} on page \pageref{fig:example:rldb}. This table consists of the following columns: ID, Username, and E-Mail, and each entry has one value for each column.
 
-		RDBMS often adhere to the ACID qualities: Atomic, Consistent, Isolated, and Durable. These ensures, amongst others, that a query either succeeds or it fails. This is done through the use of transactions. Transactions work by effectively grouping several queries. The smart thing about this, is that either the transaction fails, or it succeeds. I.e. either all of the sub-queries succeeds, or if \emph{one} of them fails, all of the changes are rolled back.
+		RDBMS often adhere to the ACID qualities: Atomic, Consistent, Isolated, and Durable. These properties ensures, amongst others, that a query either succeeds or it fails. This is commonly done through the use of transactions. Transactions work by effectively grouping several queries. The smart thing about this, is that either the transaction fails, or it succeeds. I.e. either all of the sub-queries succeeds, or if \emph{one} of them fails, all of the changes are rolled back.
 
 		\begin{table}[h!]
 			\centering
@@ -1146,7 +1146,7 @@
 
 		Generally NoSQL is often used to describe a set of similar database implemetations, in the same manner that RDBMS is, however this is not exactly correct. There exists no standard for NoSQL databases, and each implementation varies greatly, which unfortunately results in the various implementations API's being vastly different from each other.
 
-		NoSQL databases uses JSON format to represent information in the database. Where as SQL entries are restricted to the columns in the table, NoSQL does not have this constraint. An example of how NoSQL stores the data, is found in listing \ref{lst:example:nosql} on page \pageref{lst:example:nosql}, which uses the same data as used on table \ref{fig:example:rldb}. One of the advantages of NoSQL is that since it does not have a strict schema, additional values can easily be added, for instance, it would be perfectly fine if a fourth user was added to the example, containing a field called phone. Where RDBMS adhere to ACID, NoSQL adhere to BASE: Basic Availability, Soft-state, and Eventual consistency.
+		NoSQL databases uses JSON format to represent information in the database. Where as SQL entries are restricted to the columns in the table, NoSQL does not have this constraint. An example of how NoSQL stores the data, is found in listing \ref{lst:example:nosql} on page \pageref{lst:example:nosql}, which uses the same data as used on table \ref{fig:example:rldb}. One of the advantages of NoSQL is that since it does not have a strict schema, additional values can easily be added, for instance, it would be perfectly fine if a fourth user was added to the example, containing a field called phone. Where RDBMS adhere to the ACID properties, NoSQL adhere to BASE: Basic Availability, Soft-state, and Eventual consistency.
 
 		\begin{lstlisting}[style=json2,gobble=8, caption={NoSQL table example},label={lst:example:nosql}]
         [
@@ -1168,11 +1168,11 @@
         ]
 		\end{lstlisting}
 
-		First and foremost, it is important to realise that \emph{all} of the technologies are capable of storing what is required. Having said that, one of the most credited advantages of NoSQL is their ability to scale horizontally. It can be spread out over multiple hosts, if need be. However, this project \emph{should} never reach that size. It is not intended to reach that size. As such, that advantage can be disregarded.
+		First and foremost, it is important to realise that \emph{both} of the technologies are capable of storing what is required. Having said that, one of the most credited advantages of NoSQL is their ability to scale horizontally. It can be spread out over multiple hosts, if need be. However, this project \emph{should} never reach that size. It is not intended to reach that size. As such, that advantage can be disregarded.
 
 		At this point in time, tables such as DB-Engine's\cite{db_rankings} could be used to argue that one type of database generally is faster. However, this really wouldn't matter much, in the context of this project. This is \emph{meant} to be self-hosted. It is \emph{meant} to be used by individuals. As such, it is \emph{highly} unlikely, that this project would ever find itself in a situation, where millions of records are being queried constantly. It would simply not make much sense, to use these arguments.
 
-		But what then. In section \ref{sec:modelling} on page \pageref{sec:modelling}, the contents of the various models were discussed. The way it was designed, hints heavily at a underlying relational scheme. The audit entries, for instance, is a \emph{perfect} example of where a relational database would excel. Furthermore, there is the issue of invites. The process of using an invite would most likely involve something like the following steps:
+		In section \ref{sec:modelling} on page \pageref{sec:modelling}, the contents of the various models were discussed. The way it was designed, hints heavily at a underlying relational scheme. The audit entries, for instance, is a \emph{perfect} example of where a relational database would excel. Furthermore, there is the issue of invites. The process of using an invite would most likely involve something like the following steps:
 		\begin{enumerate}
 			\item Check that the invite exists
 			\item Check that the invite is not expired
@@ -1186,20 +1186,20 @@
 
 		\subsection{Platform Agnosticism}
 			\label{sec:restrict:platform}
-			As such, having a back-end being able to be run on the three major operating systems, would definitely be the best approach. These three operating systems are as follows:
+			Consequently, having a back-end being able to be run on the three major operating systems, would definitely be the best approach. These three operating systems are as follows:
 			\begin{itemize}
 				\item Windows
 				\item OS X
 				\item Linux
 			\end{itemize}
 
-			There exists numerous tools to develop such an API. Tools like Python and Ruby are just some some examples of languages, which makes cross-platform development a breeze.
+			There exists numerous tools to develop such an API. Tools like Python is just one example of a language, which makes cross-platform development a breeze.
 
 			As such, a \emph{restriction} on the implementation is imposed: A language intended to work across multiple platforms is needed and should be used.
 
 		\subsection{Database Agnosticism}
 			\label{sec:restrict:database}
-			While section \ref{sec:database:type} on page \pageref{sec:database:type} described why a RDBMS is better suited for this solution, it made no effort in selecting \emph{one} implementation \emph{(i.e. MySQL, MSSql etc.)}. This was very deliberately, partly because it is a question of implementation, and partly because restricting to \emph{one} implementation of database can be avoided.
+			While section \ref{sec:database:type} on page \pageref{sec:database:type} described why a RDBMS is better suited for this solution, it made no effort in selecting \emph{one} implementation \emph{(i.e. MySQL, MSSql etc.)}. This was very deliberately, partly because it is a question of implementation, and partly because restricting the design to \emph{one} implementation of database can be avoided.
 
 			Using what is called a Database Abstraction Layer \emph{(DAL)} an application can work with the same type of databases, while not limiting itself to a \emph{single} solution. A DAL can ensure that the application can work with \emph{both} a separate MySQL database or a self-contained SQLite database, depending on configuration. This ensures that the user can customize the setup to work exactly how he or she wishes. 
 
@@ -1220,7 +1220,7 @@
 			\label{requirement:fulfilled:database}
 			\label{requirement:fulfilled:platform}
 
-			Having decided to introduce the restrictions described in sections \ref{sec:restrict:platform} and \ref{sec:restrict:database}, it is concluded that the solution now fulfil the functional requirements \#\ref{requirement:platform} and \#\ref{requirement:database}:
+			Having decided to introduce the restrictions described in sections \ref{sec:restrict:platform} and \ref{sec:restrict:database}, it is concluded that the solution now fulfils the functional requirements \#\ref{requirement:platform} and \#\ref{requirement:database}:
 			\vspace{-3ex}\begin{enumerate}
 				\setlength\itemsep{0.1em}
 				\setcounter{enumi}{7-1}
@@ -1260,7 +1260,7 @@
 
 		This leaves but one requirement lacking: Functional requirement \#\ref{requirement:restart}. This is painfully easily achieved. Each of the major operating systems have their own service, intended for this \emph{specific} purpose. Linux has Upstart \emph{(legacy systems)} and Systemd \emph{(newer systems)}\cite{autostart:linux}, OS X has launchd\cite{autostart:osx}, and Windows supports creating a service from an executable file using the SC command\cite{autostart:windows}. Creating a script for each of these services is -- again -- just a matter of implementation. Deployment of these scripts can be easily done using a simple shell or bash script.
 
-		As such, it is finally concluded that the design is complete, and that the implementation of the prototype will follow the descriptions and restrictions, found in this chapter.
+		As such, it is finally concluded that the design is complete, and that the implementation of the prototype will follow the descriptions and restrictions found in this chapter.
 
 
 		\begin{table}[h!]
