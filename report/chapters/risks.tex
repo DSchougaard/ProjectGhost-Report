@@ -1,12 +1,12 @@
 %\chapter{What Could Go Wrong?}
 \chapter{Risks}
-	Having described the implementation of the prototype, it is very important to acknowledge any short-comings or dangers in the use of the final solution. As such, in this chapter the greatest risks are discussed.
+	Having described the implementation of the prototype, it is very important to acknowledge any shortcomings or dangers in the use of the final solution. As such, in this chapter the greatest risks are discussed.
 	
 
 	\section{Weak Authentication and Decryption Passwords}
 		One of the most fundamental risks of using this implementation, is if the user chooses a weak password. Granted, this is a weakness that applies to \emph{everything} protected by a weak password.
 
-		If the password can be guessed easily, by known publicly available information regarding the user, or can be bruteforced in a reasonable short about of time, they are thought to be weak. Such a password would in the event of an attacker attempting to gain access, result in greater risk of leaking the \emph{actual} passwords.
+		If the password can be guessed easily, by known publicly available information regarding the user, or can be brute-forced in a reasonable short amount of time, they are thought to be weak. Such a password would in the event of an attacker attempting to gain access, result in greater risk of leaking the \emph{actual} passwords.
 
 		Unfortunately, preventive measures for this type of weakness, is fairly useless. Enforcing password policies is how it is often done in critical systems, but more often than not, the resulting password is chosen so it is easy to remember. As such, it is decided that this risk is \emph{completely} up to the user to avoid.
 
@@ -25,20 +25,20 @@
 		However, there is a much more fundamental issue here: Trust. This implementation is meant to be \emph{self-hosted}. The multi-user support is intended to allow multiple users from the same small community or home, e.g. husband and wife, to share the same back-end for storing their private passwords. As such, a certain level of \emph{trust} is assumed. The pseudo-zero-knowledge ensures that the admin can not read the passwords, using information found in the implementation as originally developed. Beyond that, the users will simply have to trust the admin, that he or she will not deliberately alter the files, in order to access their passwords.
 
 	\section{Third Party Libraries}
-		As previously stated, the implementation relies on third party libraries, to perform certain functions. For instance, the Forge library is used for handling encryption in the front-end, and the Node-Argon2 library, is used for performing Argon2 password hashing in the back-end. 
+		As previously stated, the implementation relies on third party libraries to perform certain functions. For instance, the Forge library is used for handling encryption in the front-end, and the Node-Argon2 library is used for performing Argon2 password hashing in the back-end. 
 
-		Using these libraries -- or dependencies, as they're called in the Node.js community -- enables prototypes to be rapidly developed. However, they also introduce a risk: The implementation relies on other people's code. Recently the largest dependency manager for Node.js, npm, experienced a catastrophic event. A very basic package, \verb=left-pad= was removed from npm, due to a legal dispute between the author and a third party\cite{npm_leftpad}. This caused a chain reaction of chaos, as packages that depended on \verb=left-pad= no longer could be installed, and packages depending on those packages couldn't either -- and so forth. This is unfortunately the risk, when working with these kinds of dependencies, but it isn't even the worst.
+		Using these libraries -- or dependencies, as they are called in the Node.js community -- enables prototypes to be rapidly developed. However, they also introduce a risk: The implementation relies on other people's code. Recently the largest dependency manager for Node.js, npm, experienced a catastrophic event. A very basic package, \verb=left-pad= was removed from npm, due to a legal dispute between the author and a third party\cite{npm_leftpad}. This caused a chain reaction of chaos, as packages that depended on \verb=left-pad= no longer could be installed, and packages depending on those packages could not either -- and so forth. This is unfortunately the risk, when working with these kinds of dependencies, but this is not even the worst.
 
-		When depending on libraries, the developer\emph{(s)} trust that the author\emph{(s)} of the library is forthright about the content of the library. For instance, the Forge library could, for all intents and purposes, simply send every single encryption payload to a remote server. Luckily, since this \emph{is} the world of open source, the source code can be inspected, and security flaws and vulnerabilities possibly found. However, there \emph{might} still be both intentional and unintentional security risks involved with using these libraries. As such, it is the developers duty to assess the quality of \emph{any} dependency used.
+		When depending on libraries, the developer\emph{(s)} trusts that the author\emph{(s)} of the library is forthright about the content of the library. For instance, the Forge library could, for all intents and purposes, simply send every single encryption payload to a remote server. Luckily, since this \emph{is} the world of open source, the source code can be inspected, and security flaws and vulnerabilities possibly found. However, there \emph{might} still be both intentional and unintentional security risks involved with using these libraries. As such, it is the developers duty to assess the quality of \emph{any} dependency used.
 
 	\section{Dumping the Memory}
 		Unfortunately, since the implementation is run in a browser, it is not possible to implement features depending on for instance Microsoft's Data Protection Application Programming Interface \emph{(DPAPI)}, like KeePass does. As such, storing the passwords unencrypted is \emph{unfortunately} a security risk.
 
-		There really isn't any way around this risk. For it to be shown to the user, in the browser, it needs to be decrypted and stored. Should an attacker make a dump of the process memory, he or she will \emph{unfortunately} gain access to any passwords decrypted. 
+		There really is not any way around this risk. For it to be shown to the user, in the browser, it needs to be decrypted and stored. Should an attacker make a dump of the process memory, he or she will \emph{unfortunately} gain access to any passwords decrypted. 
 
 		The same is said about swap partitions and pagefiles. Unfortunately, there is a risk of clear text passwords ending up in these. It is a risk that comes with the choice of implementation. Should it have been chosen to implement native clients instead, this could possibly be circumvented. So this risk, is the price that will have to be paid, for the convenience of a web application.
 
-		Even the encrypted passwords are somewhat at risk. For user experience purposes, the decrypted private key is kept in memory. A mechanism clearing this variable could of course be devised, but that would result in the user having to enter their decryption password \emph{every} time he or she needed to access a password -- which would result in a horrible user experience.
+		Even the encrypted passwords are somewhat at risk. For user experience purposes, the decrypted private-key is kept in memory. A mechanism clearing this variable could of course be devised, but that would result in the user having to enter their decryption password \emph{every} time he or she needed to access a password -- which would result in a horrible user experience.
 
 
 		%So even when removing the decrypted passwords, the encryption key for decrypting \emph{all} passwords, still resides \emph{in memory}. One could of course go about clearing this as well, but that would mean the user would have to enter the decryption password \emph{every} time he or she needed to access a password -- which would result in a horrible user experience.
@@ -57,7 +57,7 @@
 
 		When JWTs are used, commonly there is an expiration time set. At the time of this writing, that timer is set to 24 hours, meaning that 24 hours after issuing, the token is no longer valid. As such, after the token is expired the user will need to re-authenticate to access the back-end again.
 
-		However, that also means that should this token fall into the hands of the attacker, he or she will have access to the user's data for 24 hours. This would allow an attacker to change and delete passwords at will, but since password encryption and decryption happens in the browser, he or she will \emph{not} have direct access to the passwords. Avoiding the loss of passwords, can be somewhat mitigated, by backing up the database, as described in the previous section.
+		However, that also means that should this token fall into the hands of the attacker, he or she will have access to the user's data for 24 hours. This would allow an attacker to change and delete passwords at will, but since password encryption and decryption happens in the browser, he or she will \emph{not} have direct access to the passwords. Avoiding the loss of passwords can be somewhat mitigated by backing up the database, as described in the previous section.
 
 		Obtaining these tokens commonly happen through either Cross-Site Request Forgery \emph{(CSRF)} or Cross-Site Scripting \emph{(XSS)}. 
 		While no such vulnerability is \emph{known} to exist in the current implementation, there are still the risk of undiscovered vulnerabilities. Furthermore it should be noted, that it is not possible to intercept the token in transit, due to HTTPS being enforced at \emph{all} times.
@@ -70,12 +70,9 @@
 	\section{Forgetting the Password}
 		One of the more unfortunate ``issues'' with the implementation, is the lack of account recovery. The authentication password can, \emph{of course}, be reset. But the decryption password can \emph{not} be reset -- for good reasons. As such, if the user forgets his or her decryption password, \emph{nothing} can be done.
 
-		Should this situation arise, it would be unfortunate. But there is nothing that can be done to remedy this risk, that would not lower the overall security of the system. As such, it is deemed a necessary risk.
+		Should this situation arise, it would be unfortunate. But there is nothing that can be done to remedy this risk that would not lower the overall security of the system. As such, it is deemed a necessary risk.
 
 	\section{Summing Things Up}
-		In the previous sections various risks of running the system has been introduced. These range from trusting the owner of the setup, to depending on third party libraries.
+		In the previous sections various risks of running the system have been introduced. These range from trusting the owner of the setup, to depending on third party libraries.
 
-
-
-
-		Taken all the risks into consideration, it is still deemed better to deploy the solution as is, rather than trusting remote services with ones password data.
+		Taking all the risks into consideration, it is still deemed better to deploy the solution as is, rather than trusting remote services with ones password data.
