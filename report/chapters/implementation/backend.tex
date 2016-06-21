@@ -2,37 +2,37 @@
 	\label{chap:impl:backend}
 	In chapter \ref{chap:design} the design of the solution was described. This description ranged from overall specifications, to more detailed model designs. In the following two chapters the implementation of a \emph{prototype}, following the design specifications from chapter \ref{chap:design}, is described.
 
-	To achieve the best possibly experience for the reader, the description is split into two parts: The back-end and the front-end. In \emph{this} chapter, the implemenation of the prototype back-end is described.
+	To achieve the best possible experience for the reader, the description is split into two parts: The back-end and the front-end. In \emph{this} chapter, the implemenation of the prototype back-end is described.
 
 
 	\section{The Language of the Back-End}
-		When developing a REST back-end, there exists numerous tools for the job. Amongst others are Python, Node.JS, and PHP. While this list is \emph{by far} complete, it more or less states the most popular options for REST APIs and web applications, these days.
+		When developing a REST back-end, there exist numerous tools aiding such development. Amongst others are Python, Node.js, and PHP. While this list is not, \emph{by far}, complete, it more or less states the most popular options for REST APIs and web applications, available today.
 
 		\subsection{Python}
-			One of the more popular languages for self-hosted software is Python. Python requires what is called Web Server Gateway Interface \emph{(WSGI)} server, to be able to run a webservice. Common implementations of such a server, is Django and Flask. Part of the popularity of Python is most likely the ease of which it is read. The Raspberry Pi foundation \emph{specifically} states, that:
+			One of the more popular languages for self-hosted software is Python. Python requires what is called a Web Server Gateway Interface \emph{(WSGI)} server to run a webservice. Common implementations of such a server are Django and Flask. Part of the popularity of Python is most likely the ease of which it is read. The Raspberry Pi foundation \emph{specifically} states, that:
 			\begin{citequote}{rpi_python}
 				``Python is a wonderful and powerful programming language that's easy to use (easy to read and write).''
 			\end{citequote}
 
 		\subsection{Node.js}
-			In the later years, node.js has become more and more widespread. This is partly due to how it \emph{very} effectively handles multiple requests. While ``traditional'' sequential languages -- like python -- would spawn a thread per request, node.js uses asynchronous code and is centered around non-blocking I/O. As such, while node.js strictly speaking only ever uses one thread, it can handle \emph{massive} amounts of traffic quite easily. However, this does change the programming style of node.js programs, as it uses callback methods and JavaScript promises to a large extent. Additionally, Node.js is built ontop of Google's V8 engine, and supports C++ plugins, should it be necessary.
+			In the later years, Node.js has become more and more widespread. This is partly due to how it \emph{very} effectively handles multiple requests. While ``traditional'' sequential languages -- like Python -- would spawn a thread per request, Node.js uses asynchronous code and is centered around non-blocking I/O. As such, while Node.js only ever uses one thread, it can handle \emph{massive} amounts of traffic quite easily. However, this does change the programming style of Node.js programs, as it uses callback methods and JavaScript promises to a large extent. Additionally, Node.js is built ontop of Google's V8 engine, and supports C++ plugins, should it be necessary.
 
-			One of the development advantages to node.js, is that it uses Javascript. Most web applications these days use JavaScript, and being able to code the front-end and back-end in the same language, might very well make it easier for a developer to quickly move between front-end and back-end.
+			One of the development advantages to Node.js, is that it uses Javascript. Most web applications these days use JavaScript, and being able to code the front-end and back-end in the same language, might very well make it easier for a developer to quickly move between front-end and back-end.
 
 		\subsection{PHP}
-			PHP is without a doubt the most widespread language used for server-side scripting, when it comes to websites. However, this language can also be used to actually develop a REST api. While previously PHP would have to be executed on top of an Apache or nginx server, in newer versions PHP support a native web-server. While this, strictly speaking, is only intended for development purposes, there is nothing stopping you from running a small-scale service using this server.
+			PHP is without a doubt the most widespread language used for server-side scripting, when it comes to websites. However, this language can also be used to actually develop a REST API. While previously PHP would have to be executed on top of an Apache or nginx server, in newer versions PHP support a native web-server. While this is only intended for development purposes, there is nothing stopping you from running a small-scale service using this server.
 
-		\subsection{Making A Choice}
+		\subsection{Making a Choice}
 			Taking the various options into consideration, it is concluded that the back-end will be developed using Node.js. This choice is greatly influenced by the fact that it would share development language with the front-end, thus making venturing into new territory slightly less daunting.
 
-	\section{To Framework or Not To Framework}
+	\section{To Framework or Not to Framework}
 		Having decided to go with Node.js for the back-end, the next big question arises: To framework or not to framework? Node.js has its own built-in webserver, and it is perfectly viable to simply use this. However, using frameworks will inevitably make it \emph{easier} to develop. As such, it is decided that a framework will be used, to aid the development of the back-end.
 
 		When it comes to these frameworks, there is no doubt that Express is the ``biggest'' one: It is simply the most widespread and popular of the frameworks available. However, alternatives such as Restify, Hapi, and Koa also exist. While these four by no means constitute the entire list of frameworks, they are the four most widely used.
 
-		Since it has been determined in section \ref{sec:design:choosing-rest}, on page \pageref{sec:design:choosing-rest}, that the back-end essentially will be nothing more than a REST API, Restify simply seems more fitting. The other frameworks contain a lot of features -- like server side rendered templates -- which simply won't be necessary when developing an API. 
+		Since it has been determined in section \ref{sec:design:choosing-rest}, on page \pageref{sec:design:choosing-rest}, that the back-end essentially will be nothing more than a REST API, Restify simply seems more fitting. The other frameworks contain a lot of features -- like server side rendered templates -- which simply will not be necessary when developing an API. 
 
-		Additionally, it is noted that Restify supports limiting the SSL/TLS version, \emph{and} the available cipher-suites, as described in \ref{sec:design:secure-comms} on page \pageref{sec:design:secure-comms}. Restify supports this, using Node.js's internal HTTPS options. As such, restricting the protocol version to $TLS1.2$ is easily done using the option shown on listing \ref{lst:impl:restrict:tls1.2} on page \pageref{lst:impl:restrict:tls1.2}. Likewise, the ciphersuites being used, can be restricted using the configuration found on listing \ref{lst:impl:restrict:ciphers} on page \pageref{lst:impl:restrict:ciphers}.
+		Additionally, it is noted that Restify supports limiting the SSL/TLS version, \emph{and} the available cipher-suites, as described in section \ref{sec:design:secure-comms} on page \pageref{sec:design:secure-comms}. Restify supports this, using Node.js's internal HTTPS options. As such, restricting the protocol version to $TLS1.2$ is easily done using the option shown on listing \ref{lst:impl:restrict:tls1.2} on page \pageref{lst:impl:restrict:tls1.2}. Likewise, the cipher suites being used, can be restricted using the configuration found on listing \ref{lst:impl:restrict:ciphers} on page \pageref{lst:impl:restrict:ciphers}.
 
 		\begin{lstlisting}[style=json2,gobble=12, caption={Restricting Restify to use TLS 1.2},label={lst:impl:restrict:tls1.2}]
             secureProtocol: 'TLSv1_2_method'
@@ -50,17 +50,17 @@
 
 	\section{Node.js Coding Style}
 		\label{sec:impl:node:style}
-		When developing using node.js there are two different schools of thought: Callbacks and promises. Since node.js is asynchronous, traditional synchronous methods should not be used. For reference purposes, the \emph{wrong} way to do it, is shown on listing \ref{lst:node:wrong} on page \pageref{lst:node:wrong}. This causes major performance issues, as the execution of the program would block, while the action taking a long time is performed.
+		When developing using Node.js there are two different schools of thought: Callbacks and promises. Since Node.js is asynchronous, traditional synchronous methods should not be used. For reference purposes, the \emph{wrong} way to do it, is shown on listing \ref{lst:node:wrong} on page \pageref{lst:node:wrong}. This causes major performance issues, as the execution of the program would block, while the action taking a long time is performed.
 
-		On listing \ref{lst:node:callback} on page \pageref{lst:node:callback}, the same output is shown using callbacks. When the data that takes a long time to produce \emph{(or fetch)} is ready, the callback is invoked, with the result. As such, while the I/O is happening the main node.js thread can continue working.
+		On listing \ref{lst:node:callback} on page \pageref{lst:node:callback}, the same output is shown using callbacks. When the data that takes a long time to produce \emph{(or fetch)} is ready, the callback is invoked, with the result. As such, while the I/O is happening the main Node.js thread can continue working.
 
-		Finally, there is listing \ref{lst:node:promise} on page \pageref{lst:node:callback}. This example uses promises, to achieve the same thing. By many, promises are thought to be the successor of callbacks. Some of the internals of the promise based method have been omitted, such as the proper use of deferreds, as this is beyond the point of this section.
+		Finally, there is listing \ref{lst:node:promise} on page \pageref{lst:node:callback}. This example uses promises to achieve the same thing. By many, promises are thought to be the successor of callbacks. Some of the internals of the promise based method have been omitted, such as the proper use of deferreds, as this is beyond the point of this section.
 
-		Conceptually promises are by \emph{far} the harder of the two to understand. Using them properly, without creating unnecessary overhead takes some getting used to. \emph{However} they do produce code which is \emph{much} easier to read. This is in partial due to what is commonly called ``promise chaining''. Essentially, this takes the output from one promise, and pipes it to the input for another function. 
+		Conceptually, promises are, by \emph{far}, the harder of the two to understand. Using them properly, without creating unnecessary overhead takes some getting used to. \emph{However}, they do produce code which is \emph{much} easier to read. This is in partial due to what is commonly called ``promise chaining''. Essentially, this takes the output from one promise, and pipes it to the input for another function. 
 
-		The above is best described using an example. In this scenario, there are three methods: \verb=fetch=, \verb=compute=, and \verb=send=, which are to be executed in that order. \verb=fetch= fetches the data from a remote source, \verb=compute= does some computations on said data, and finally \verb=send= sends the result of said computations somewhere else. On listing \ref{lst:node:callbackhell} on page \pageref{lst:node:callbackhell} this sequence of events are shown, using callbacks. As seen, the cascade of callbacks make this code \emph{horrible} to read. Professionals often use the derogatory term ``callback hell'', to describe this phenomenon. On listing \ref{lst:node:promisegoodness} on page \pageref{lst:node:promisegoodness} this \emph{exact} same sequence of events is shown, only using promises. As it is seen, this code is \emph{much} easier to read and understand. As such, using promises for this solution is by far preferable and is the style that will be used, whenever possible.
+		The above is best described using an example. In this scenario, there are three methods: \verb=fetch=, \verb=compute=, and \verb=send=, which are to be executed in that order. \verb=fetch= fetches the data from a remote source, \verb=compute= does some computations on said data, and finally \verb=send= sends the result of said computations somewhere else. On listing \ref{lst:node:callbackhell} on page \pageref{lst:node:callbackhell} this sequence of events are shown, using callbacks. As seen, the cascade of callbacks makes this code \emph{horrible} to read. Professionals often use the derogatory term ``callback hell'', to describe this phenomenon. On listing \ref{lst:node:promisegoodness} on page \pageref{lst:node:promisegoodness} this \emph{exact} same sequence of events is shown, only using promises. As it is seen, this code is \emph{much} easier to read and understand. As such, using promises for this solution is by far preferable and is the style that will be used, whenever possible.
 
-		\begin{lstlisting}[language=Javascript,gobble=12,caption={The wrong way to do it, in Node.js},label={lst:node:wrong}]
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={The wrong way to do it in Node.js},label={lst:node:wrong}]
             function longTime(){
                 // Something that takes a loooong time
                 var res = ...
@@ -69,7 +69,7 @@
             console.log(longTime());
 		\end{lstlisting}
 		
-		\begin{lstlisting}[language=Javascript,gobble=12,caption={Using callbacks, in Node.js},label={lst:node:callback}]
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={Using callbacks in Node.js},label={lst:node:callback}]
             function longTime(callback){
                 // Something that takes a loooong time
                 var res = ...
@@ -81,7 +81,7 @@
             });
 		\end{lstlisting}
 
-		\begin{lstlisting}[language=Javascript,gobble=12,caption={Using promises, in Node.js},label={lst:node:promise}]
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={Using promises in Node.js},label={lst:node:promise}]
             function longTime(){
                 var deferred = Promise.defer();
                 // Something that takes a loooong time
@@ -95,7 +95,7 @@
             })
 		\end{lstlisting}
 
-		\begin{lstlisting}[language=Javascript,gobble=12,caption={Chaining data between callbacks in node.js},label={lst:node:callbackhell}]
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={Chaining data between callbacks in Node.js},label={lst:node:callbackhell}]
             get(function(data){
                 compute(data, function(output){
                     send(output, function(){
@@ -105,7 +105,7 @@
             })
 		\end{lstlisting}
 		
-		\begin{lstlisting}[language=Javascript,gobble=12,caption={Chaining data between promises in node.js},label={lst:node:promisegoodness}]
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={Chaining data between promises in Node.js},label={lst:node:promisegoodness}]
             get()
             .then(compute)
             .then(send)
@@ -116,9 +116,9 @@
 
 	\section{Structuring the Codebase}
 		\label{sec:impl:backend:codebase}
-		When it comes to a codebase's readability and maintainability, a good structure is almost the most important thing. As such, a proper categorisation is the first thing needed. Fundamentally, there will be four different types of code files, in the project: Models, routes, tests, and middleware.
+		When it comes to a codebase's readability and maintainability, a good structure is almost the most important thing. As such, a proper categorisation is the first thing needed. Fundamentally, there will be four different types of code files in the project: Models, routes, tests, and middleware.
 
-		Models represent on-disk data structures, as will be stored in the database. These were covered in section \ref{sec:modelling} on page \pageref{sec:modelling}. Since node.js natively supports ECMAScript 6 objects, these models will be represented as objects in memory. The models also contains the relevant methods for manipulating the entries. An example of this could be looking up a user, from an ID.
+		Models represent on-disk data structures, as will be stored in the database. These were covered in section \ref{sec:modelling} on page \pageref{sec:modelling}. Since Node.js natively supports ECMAScript 6 objects, these models will be represented as objects in memory. The models also contain the relevant methods for manipulating the entries. An example of this could be looking up a user, from an ID.
 
 		Routes represent API endpoints. These are described in full detail, in section \ref{sec:impl:api} on page \pageref{sec:impl:api}. These routes will be separated into files representing their primary resource.
 
@@ -137,11 +137,11 @@
 		}
 
 	\section{Database Abstraction Layer}
-		As decided in section \ref{sec:restrict:database} on page \pageref{sec:restrict:database}, a database abstraction layer is necessary. While Object-Relational Mapping \emph{(ORM)} strictly speaking isn't the same as a DAL, for this section the two are considered equivalent.
+		As decided in section \ref{sec:restrict:database} on page \pageref{sec:restrict:database}, a database abstraction layer is necessary. While Object-Relational Mapping \emph{(ORM)} strictly speaking is not the same as a DAL, for this section the two are considered equivalent.
 
-		The three most widely used solutions for this, is Sequelize, Bookshelf, and Knex \emph{(Bookshelf is built ontop of Knex)}. Sequelize and Bookshelf are both ORMs, whereas Knex is a DAL. In regards to platform support, they are fairly similar. Sequelize supports PostgreSQL, MySQL, SQLite and MSSQL. Bookshelf/Knex supports MySQL, SQLite, Postgres, MariaDB, and Oracle.
+		The three most widely used solutions for this, are Sequelize, Bookshelf, and Knex \emph{(Bookshelf is built ontop of Knex)}. Sequelize and Bookshelf are both ORMs, whereas Knex is a DAL. In regards to platform support, they are fairly similar. Sequelize supports PostgreSQL, MySQL, SQLite, and MSSQL. Bookshelf/Knex supports MySQL, SQLite, Postgres, MariaDB, and Oracle.
 
-		While working with ORMs generally takes database interactions to a higher abstraction level, it is found that the ease of which Knex's query builder work, makes it a lot easier to just write these queries directly. Additionally, Knex allows for querying using Promises, which ensures that it will integrate nicely with the style argued for in section \ref{sec:impl:node:style} on page \pageref{sec:impl:node:style}. As such, it is concluded the Knex is the superior choice as a DAL for the implementation.
+		While working with ORMs generally takes database interactions to a higher abstraction level, it is found that the ease of which Knex's query builder works, makes it a lot easier to just write these queries directly. Additionally, Knex allows for querying using Promises, which ensures that it will integrate nicely with the style argued for in section \ref{sec:impl:node:style} on page \pageref{sec:impl:node:style}. As such, it is concluded that Knex is the superior choice as a DAL for the implementation.
 
 	\section{API Endpoints}
 		\label{sec:impl:api}
@@ -151,15 +151,15 @@
 			First and foremost there is the collection of users. This collections represents the user base as a whole. \verb=POST=ing to this collection would -- by extension -- mean the creation of a new user. \verb=GET=ing the user collection, results in retrieving all user entries, with their username and other attributes in the ``public domain''. \verb=PUT= and \verb=DELETE= are slightly different. They are used for updating and deleting a \emph{single} user, in the entire collection. As such, the endpoint needs to have a user ID postfixed. Adhering to the standard, \emph{all} API endpoints will have \verb=/api= prefixed. These API endpoints are listed on table \ref{tab:api:users} on page \pageref{tab:api:users}.
 
 		\subsection{The Passwords Collection}
-			Then there is the collection of passwords. However, there is a slight caveat when it comes to this collection. Since each password is \emph{owned} by \emph{a} user, it can be thought that there exist \emph{multiple} collections -- one for each user. As such, the password collection is stored behind the users collection and the ID specifying exactly which user owns said password. The same approach for designing these endpoints is used, as with the users collection and the result of this is found on table \ref{tab:api:passwords} on page \pageref{tab:api:passwords}.
+			Then there is the collection of passwords. There is a slight caveat when it comes to this collection. Since each password is \emph{owned} by \emph{a} user, it can be thought that there exist \emph{multiple} collections -- one for each user. As such, the password collection is stored behind the users collection and the ID specifying exactly which user owns said password. The same approach for designing these endpoints is used, as with the users collection, and the result of this is found on table \ref{tab:api:passwords} on page \pageref{tab:api:passwords}.
 
-			For the sake of simplicity, access to shared passwords is stored behind the passwords collection. As such, a collection called shares -- which belongs to a specific password -- denotes the collection of users this specific password has been shared to. Additionally, two collections are added as well: \verb=shared= and \verb=shares=. These two are  \emph{very} similar in name, which unfortunately might result in some confusion. The \verb=shares= collection denotes passwords shared \emph{to} a user and the \verb=shared= collection denotes passwords that a user has shared to \emph{others}. These endpoints are found on table \ref{tab:api:sharedpasswords} on page \pageref{tab:api:sharedpasswords}.
+			For the sake of simplicity, access to shared passwords is stored behind the passwords collection. As such, a collection called ``shares'' -- which belongs to a specific password -- denotes the collection of users, this specific password has been shared to. Additionally, two collections are added as well: \verb=shared= and \verb=shares=. These two are  \emph{very} similar in name, which unfortunately might result in some confusion. The \verb=shares= collection denotes passwords shared \emph{to} a user and the \verb=shared= collection denotes passwords that a user has shared to \emph{others}. These endpoints are found on table \ref{tab:api:sharedpasswords} on page \pageref{tab:api:sharedpasswords}.
 
 		\subsection{The Categories Collection}
 			The same argument made in regards to the passwords collection, can be said about categories. Each user has their own private password collection, which is -- similar to passwords -- stored behind the owning user's ID. This can be seen on table \ref{tab:api:categories} on page \pageref{tab:api:categories}.
 
 		\subsection{The Invites Collection}
-			When an admin creates a new invites, it can be said he \verb=POST=s it to the invites collection. \verb=GET=ing an ID, returns the status of an ID stored in the database. Then, there is finally the act of using an invite. Since a user is created, it only makes sense that the \verb=POST= method is needed. However, since the regular endpoint is already being posted to, an additional endpoint is needed. As such, appending the endpoint with \verb=/accept= will achieve this. This can be seen on table \ref{tab:api:invites} on page \pageref{tab:api:invites}.
+			When an admin creates a new invite, it can be said that he \verb=POST=s it to the invites collection. \verb=GET=ing an ID, returns the status of an ID stored in the database. Then, there is finally the act of using an invite. Since a user is created, it only makes sense that the \verb=POST= method is needed. However, since the regular endpoint is already being posted to, an additional endpoint is needed. As such, appending the endpoint with \verb=/accept= will achieve this. This can be seen on table \ref{tab:api:invites} on page \pageref{tab:api:invites}.
 
 		\subsection{The Audit Collection}
 			The Audit collection is extremely simple. It only consists of a single endpoint: Reading the audit log. Since this collection is owned by individual users, this is -- much like passwords and categories -- stored behind the users collection and a specific ID. This can be seen on table \ref{tab:api:audit} on page \pageref{tab:api:audit}.
@@ -168,7 +168,7 @@
 			\label{sec:api:auth}
 			The Auth collection is a little bit more interesting. Of course, there is the generic \verb=POST=, containing the user's username and password, for authentication purposes. The details of this is covered in section \ref{sec:design:authentication} on page \pageref{sec:design:authentication}. However, this is not all. Since the solution supports TOTP two-factor-authentication, as described in section \ref{sec:mfa} on page \pageref{sec:mfa}, endpoints for enabling this is needed as well. 
 
-			In section \ref{sec:design:breaking-rest} on page \pageref{sec:design:breaking-rest} it was argued that at one point it would be \emph{necessary} to break the REST principles. This is when. As such, two endpoints are needed: One for generating a new secret and caching it, and one for actually verifying said secret.
+			In section \ref{sec:design:breaking-rest} on page \pageref{sec:design:breaking-rest}, it was argued that it would be \emph{necessary} to break the REST principles. This is when. As such, two endpoints are needed: One for generating a new secret and caching it, and one for actually verifying said secret.
 
 
 		
@@ -284,7 +284,7 @@
 
 	\section{Workaround To Be Self-Contained}
 		\label{sec:impl:backend:restify-fix}
-		Unfortunatly, Restify's documentation is at some points less than ideal. They have what they call the serveStatic method. From their description, its intended use is to deliver a default file, if a match is not found. This is exactly what is needed for the front-end's router \emph{(more on this in section \ref{sec:impl:ui-router} on page \pageref{sec:impl:ui-router})}. However, after much fiddling, it was found simply not to work.
+		Unfortunatly, Restify's documentation is, at some points, less than ideal. They have what they call the serveStatic method. From their description, its intended use is to deliver a default file, if a match is not found. This is exactly what is needed for the front-end's router \emph{(more on this in section \ref{sec:impl:ui-router} on page \pageref{sec:impl:ui-router})}. However, after much fiddling, it was found simply not to work.
 
 		As such, a workaround is needed. After having defined \emph{all} of the API routes, six new routes are defined as is seen on table \ref{tab:api:workaround} on page \pageref{tab:api:workaround}. This ensures that any API hits that \emph{should} result in an error, are given the proper error code, while also ensuring that the application for the front-end is being delivered in all cases.
 		
@@ -327,12 +327,12 @@
 	\section{Validating Input}
 		Whenever a system is developed, that requires the input of a user, it is generally a bad idea to blindly trust that the input is \emph{correct}. As such, validating the input JSON is necessary. There exists a plethora of tools for this \emph{exact} purpose. 
 
-		Unfortunately, this is the place where the nature of humans comes into play. When development of the solution started, the tool schemagic was selected. At the time, it seemed the simplest of the available libraries. However, last few weeks of the project, the library ajv began to seem more and more appropriate, albeit a bit more difficult to setup. Unfortunately, it was deemed necessary to \emph{not} migrate to the new tool, due to a lack of time. However, this is \emph{definitely} something that will need to be done in the future.
+		Unfortunately, this is the place where the nature of humans comes into play. When development of the solution started, the tool schemagic was selected. At the time, it seemed the simplest of the available libraries. However, last few weeks of the project, the library Ajv began to seem more and more appropriate, albeit a bit more difficult to setup. Unfortunately, it was deemed necessary to \emph{not} migrate to the new tool, due to a lack of time. However, this is \emph{definitely} something that will need to be changed in the future.
 
-		\subsection{Using ajv}
-			Using ajv is as simple as defining a scheme. This scheme defines the allowed variables that the input JSON can, may, or should contain. On listing \ref{lst:json:ajv:password} on page \pageref{lst:json:ajv:password} an example of this is found. It stated that a password entry \emph{must} contain a title \emph{(string)} and a password \emph{(base64 encoded string)}, and \emph{can} contain a username, url, note, and a parent \emph{(parent field defaults to null)}. The \verb=user.schema= variable can then be used as a \emph{promise} to verify input. This is seen on listing \ref{lst:json:ajv:password:use} on page \pageref{lst:json:ajv:password}. The fact that ajv supports validation using promises, is a huge advantage, in regards to readability, as per section \ref{sec:impl:node:style} on page \pageref{sec:impl:node:style}.
+		\subsection{Using Ajv}
+			Using Ajv is as simple as defining a scheme. This scheme defines the allowed variables that the input JSON can, may, or should contain. On listing \ref{lst:json:ajv:password} on page \pageref{lst:json:ajv:password} an example of this is found. It states that a password entry \emph{must} contain a title \emph{(string)} and a password \emph{(base64 encoded string)}, and \emph{can} contain a username, url, note, and a parent \emph{(parent field defaults to null)}. The \verb=user.schema= variable can then be used as a \emph{promise} to verify input. This is seen on listing \ref{lst:json:ajv:password:use} on page \pageref{lst:json:ajv:password}. The fact that Ajv supports validation using promises, is a huge advantage, in regards to readability, as per section \ref{sec:impl:node:style} on page \pageref{sec:impl:node:style}.
 
-			\begin{lstlisting}[gobble=16,language=JavaScript,caption={JSON schema for the password model, using ajv's notation.},label={lst:json:ajv:password},breakatwhitespace=false]
+			\begin{lstlisting}[gobble=16,language=JavaScript,caption={JSON schema for the password model, using Ajv's notation.},label={lst:json:ajv:password},breakatwhitespace=false]
                 var schema = {
                     "$async": true,
                     "properties": {
@@ -364,7 +364,7 @@
                 }
 				\end{lstlisting}
 
-			\begin{lstlisting}[gobble=16,language=JavaScript,caption={Using the user schema for validating input, using ajv.},label={lst:json:ajv:password:use}]
+			\begin{lstlisting}[gobble=16,language=JavaScript,caption={Using the user schema for validating input, using Ajv.},label={lst:json:ajv:password:use}]
                 validate({title: 'I Love Programming', password: 'V2hhdC4uLiBBZ2Fpbj8h'))
                 .then(function (valid) {
                     console.log('Data is valid');
@@ -376,17 +376,17 @@
 
 	\section{Authentication}
 		\label{sec:impl:authentication}
-		In section \ref{sec:api:auth} on page \pageref{sec:api:auth} the endpoints involved in authentication was described. In this section, the process is described a little further. 
+		In section \ref{sec:api:auth} on page \pageref{sec:api:auth} the endpoints involved in authentication were described. In this section, the process is described a little further. 
 
 		As with any authentication, the user starts by sending his or her username and password \emph{(see section \ref{sec:design:authentication} on page \pageref{sec:design:authentication})}. If two factor authentication is not enabled, the standard verification approach is made. If the password matches, http code \verb=200= is returned, signifying successful authentication. Should it not match, http code \verb=401= is returned, signifying unsuccessful authentication.
 
-		Should two factor authentication be enabled, however, a more complex event happens. Since the front-end won't know if two factor authentication is enabled or not, this needs to be conveyed to it. As such, should the user have two-factor authentication enabled, but the token is missing from the body, http error code \verb=403= is returned. \verb=403= is defined as follows, by RFC2616\cite{httpcodes}:
+		Should two factor authentication be enabled, however, a more complex event happens. Since the front-end will not know if two factor authentication is enabled or not, this needs to be conveyed to it. As such, should the user have two-factor authentication enabled, but the token is missing from the body, http error code \verb=403= is returned. \verb=403= is defined as follows, by RFC2616\cite{httpcodes}:
 		\begin{citequote}[sec.10.4.4]{httpcodes}
 				``The server understood the request, but is refusing to fulfill it...''
 		\end{citequote}
-		When the front-end receives the \verb=403= from the authentication endpoint, it \emph{knows} to promt to the user for a two-factor-token. Once this token is obtained, the request is sent again -- with the token. Once received, the back-end verifies the password, similar to before, and verifies that the token is correct. If all fields are verified the back-end responds with \verb=200= to signify successful authentication. Should either field fail to be verified, the response is \verb=401= to signify unsuccessful authentication. Figure \ref{fig:sequence:auth} on page \pageref{fig:sequence:auth} depicts this series of event, in a sequence diagram.
+		When the front-end receives the \verb=403= from the authentication endpoint, it \emph{knows} to request the user for a two-factor-token. Once this token is obtained, the request is sent again -- with the token. Once received, the back-end verifies the password, similar to before, and verifies that the token is correct. If all fields are verified the back-end responds with \verb=200= to signify successful authentication. Should either field fail to be verified, the response is \verb=401= to signify unsuccessful authentication. Figure \ref{fig:sequence:auth} on page \pageref{fig:sequence:auth} depicts this series of event, in a sequence diagram.
 
-		Upon successful authentication -- either with or without 2FA -- a JWT will be issued, in accordance with section \ref{sec:design:jwt} on page \pageref{sec:design:jwt}. This token is signed using the back-ends private-key specifically intended for this use. For future reference, this key is known as the private-JWT-key.
+		Upon successful authentication -- either with or without 2FA -- a JWT will be issued, in accordance with section \ref{sec:design:jwt} on page \pageref{sec:design:jwt}. This token is signed using the back-end's private-key specifically intended for this use. For future reference, this key is known as the private-JWT-key.
 
 		\begin{figure}[p]
 			\centering
@@ -412,7 +412,7 @@
 	
 	\section{Middlewares}
 		\label{sec:impl:middleware}
-		To ease implementation and to reduce code duplication, certain features will be implemented using what is commonly known as middlewares. Middlewares are simply a term for methods, being executed \emph{before} the actual controller of an endpoint. An example of an endpoint is:
+		To ease implementation and to reduce code duplication, certain features will be implemented using what is commonly known as middlewares. Middlewares are simply a term for methods being executed \emph{before} the actual controller of an endpoint. An example of an endpoint is:
 		\begin{lstlisting}[gobble=12,language=JavaScript]
             server.get('/api/ping', function(req, res, next){
                 res.send(200, 'OK');
@@ -441,20 +441,20 @@
 		\begin{itemize}
 			\item Token Verification \emph{(see section \ref{sec:impl:token-verification} on page \pageref{sec:impl:token-verification})}
 			\item Object Resolving \emph{(see section \ref{sec:impl:resolve} on page \pageref{sec:impl:resolve})}
-			\item Authorization \emph{(see section \ref{sec:impl:authorization} on page \pageref{sec:impl:authorization})}
+			\item Authorisation \emph{(see section \ref{sec:impl:authorization} on page \pageref{sec:impl:authorization})}
 		\end{itemize}
 
 	\section{Token Verification}
 		\label{sec:impl:token-verification}
-		In section \ref{sec:impl:authentication} on page \pageref{sec:impl:authentication} it was discussed how the JWTs are issued, \emph{(see section \ref{sec:design:jwt} on page \pageref{sec:design:jwt})}. Since most endpoints will require an authenticated user, this makes token verification a \emph{prime} candidate for implementation as a middleware.
+		In section \ref{sec:impl:authentication} on page \pageref{sec:impl:authentication}, it was discussed how the JWTs are issued \emph{(see section \ref{sec:design:jwt} on page \pageref{sec:design:jwt})}. Since most endpoints will require an authenticated user, this makes token verification a \emph{prime} candidate for implementation as a middleware.
 
-		Verifying these tokens are \emph{extremely} simple. When issued, they're signed with the server's private-JWT-key \emph{(see section \ref{sec:impl:authentication} on page \pageref{sec:impl:authentication})}. Verification is simply making sure, that the received token \emph{was} signed with the back-ends own private-JWT-key.
+		Verifying these tokens are \emph{extremely} simple. When issued, they are signed with the server's private-JWT-key \emph{(see section \ref{sec:impl:authentication} on page \pageref{sec:impl:authentication})}. Verification is simply making sure that the received token \emph{was} signed with the back-ends own private-JWT-key.
 
 		Upon successful token verification, the corresponding user object is fetched from the database, and attached to the request, as the \verb=req.resolved.user= variable, which subsequent middlewares and controllers can access. 
 
 	\section{Resolving Objects}
 		\label{sec:impl:resolve}
-		Since multiple routes exists \emph{(get, post, put and delete)} for the same type of objects \emph{(passwords, for instance)}, it would be beneficial to have a single place, where objects are read from the database. As such, a common object resolving middleware is made. It requires a number of standards, however. First and foremost, all object IDs found in the URL is to be postfixed with a constant, \verb=Id=. This is done to easily manipulate the variable name string, to identify the corresponding object. Secondly, \emph{all} resolvable objects \emph{must} use the same method definition to lookup an object from the database, using their ID: The \verb=find(..)= method.
+		Since multiple routes exist \emph{(get, post, put and delete)} for the same type of objects \emph{(passwords, for instance)}, it would be beneficial to have a single place, where objects are read from the database. As such, a common object resolving middleware is made. However, it requires a number of standards. First and foremost, all object IDs found in the URL are to be postfixed with a constant, \verb=Id=. This is done to easily manipulate the variable name string, to identify the corresponding object. Secondly, \emph{all} resolvable objects \emph{must} use the same method definition to look up an object from the database, using their ID: The \verb=find(..)= method.
 
 		Using these two constraints, a resolver can fairly easily be built. It simply strips the tailing two characters from the variable name, and based on the rest it looks up a user, a password, a category, an invite, or a shared password. The core of the resolver is found on listing \ref{lst:example:resolver} on page \pageref{lst:example:resolver}. The \verb=objectTypes= array is used for creating the final variable names, which the controllers will then refer to these objects as.
 
@@ -480,18 +480,18 @@
 
 	\section{Authorisation}
 		\label{sec:impl:authorization}
-		For authorisation purposes two strategies will be used: Simple and advanced authorisation. For all purposes where simple authorisation is a possibility, it will be used. In section \ref{sec:design:authorization} on page \pageref{sec:design:authorization} it was described which users has access to which entities. The following two sections will adhere to this design.
+		For authorisation purposes two strategies will be used: Simple and advanced authorisation. For all purposes where simple authorisation is a possibility, it will be used. In section \ref{sec:design:authorization} on page \pageref{sec:design:authorization} it was described which users have access to which entities. The following two sections will adhere to this design.
 
 		\subsection{Basic Authorization}
 			%Using the API described in section \ref{sec:impl:api} on page \pageref{sec:impl:api}, it is clearly seen that models' IDs are found in the URL. As such, using the owner field, of these models, it can easily be determined if the authenticated user has access to any given resource.
-			In the previous too sections, the token verification \emph{(section \ref{sec:impl:token-verification})} and object resolving  \emph{(section \ref{sec:impl:resolve})} middleware were explained. Using these resolved objects' IDs, a very simple authorisation scheme can be devised.
+			In the previous two sections, the token verification \emph{(section \ref{sec:impl:token-verification})} and object resolving  \emph{(section \ref{sec:impl:resolve})} middleware were explained. Using these resolved objects' IDs, a very simple authorisation scheme can be devised.
 
 			As per the design, \emph{both} the user and admins will have full access to all user methods. This is simply handled with a comparison:
 			\begin{lstlisting}[gobble=16,language=JavaScript]
                 if( req.resolved.user.id === user.id || req.resolved.user.isAdmin ){
 			\end{lstlisting}
 
-			Since it is only the user self, that has access to his or her passwords, this is also handled extremely easy by doing:
+			Since it is only the user who has access to his or her passwords, this is also handled extremely easily by doing the following:
 			\begin{lstlisting}[gobble=16,language=JavaScript]
                 if( password.owner === user.id && user.id === req.resolved.user.id ){
 			\end{lstlisting}
@@ -500,17 +500,17 @@
                 if( category.owner === user.id && user.id === req.resolved.user.id ){
 			\end{lstlisting}
 
-			Shared passwords however, are a little bit more difficult. As has already been stated, both the user \emph{sharing} the password and the user receiving the shared password needs access to this resource. As such, the logic is a little different:
+			Shared passwords are, however, a little bit more difficult. As already stated, both the user \emph{sharing} the password and the user \emph{receiving} the shared password need access to this resource. As such, the logic is a little different:
 			\begin{lstlisting}[gobble=16,language=JavaScript]
                 if( (share.owner === user.id && user.id === req.resolved.user) || (share.origin_owner === user.id && user.id === req.resolved.user)){
 			\end{lstlisting}
 		
-			If the above snippets are evaluated to \verb=true=, the code keeps executing. If it is evaluated to false, the back-end returns HTTP code \verb=403=, denoting that the user does \emph{not} have sufficient privileges to access that specific data.
+			If the above snippets are evaluated to \verb=true=, the code keeps executing. If it is evaluated to \verb=false=, the back-end returns HTTP code \verb=403=, denoting that the user does \emph{not} have sufficient privileges to access that specific data.
 
-		\subsection{Advanced Authorization}
+		\subsection{Advanced Authorisation}
 			However, this only works on select resources. As the user will easily see, the invite endpoints will not work using the simple method. As such, the groundwork for a more advanced and fine grained authorisation framework is made.
 
-			First and foremost, the basic target is defined. In this case, it will be \verb=invite=. Next, the actions on this target is defined. For invites, there really only is one: \verb=create=. For other objects, these actions might be \verb=update=, \verb=delete=, etc. Then, for each target, each method's permissions can be defined. For each endpoint, the middleware is given a variable, \verb=permObject= \emph{(permissions object)}, which denotes the resource and action in question. In the invites case, the following snippet shows the authorisation process:
+			First and foremost, the basic target is defined. In this case, it will be \verb=invite=. Next, the actions on this target is defined. For invites, there only is one: \verb=create=. For other objects, these actions might be \verb=update=, \verb=delete=, etc. Then, for each target, each method's permissions can be defined. For each endpoint, the middleware is given a variable, \verb=permObject= \emph{(permissions object)}, which denotes the resource and action in question. In this case, the following snippet shows the authorisation process:
 
 			\begin{lstlisting}[gobble=16,language=JavaScript]
                 function invite(permObject, req, res, next){
@@ -540,11 +540,11 @@
 			\end{lstlisting}
 
 		\subsection{Simple or Advanced}
-			There is not a seconds doubt that the advanced approach is more fine grained. Where the simple approach only supports differentiating between targets, the advanced approach also supports differentiating between actions. As such, while the simple method does its job perfectly as is, should the need for more detailed authorisation options arise, they will need to be implemented the advanced approach.
+			It goes without saying that the advanced approach is more fine grained. Where the simple approach only supports differentiating between targets, the advanced approach also supports differentiating between actions. As such, while the simple method does its job perfectly, should the need for more detailed authorisation options arise, they will need to be implemented using the advanced approach.
 
 
 	\section{Handling Errors}
-		Using the Bluebird.js promise library, error handling in the back-end is simplified a lot. Whereas native promises generally only support catching \emph{all} errors, Bluebird supports filtered catching: Custom errors can be extended from the default error, creating very easy separation of error type. 
+		Using the Bluebird promise library, error handling in the back-end is simplified. Whereas native promises generally only support catching \emph{all} errors, Bluebird supports filtered catching: Custom errors can be extended from the default error, creating very easy separation of error type. 
 
 		On listing \ref{lst:example:errorhandle:password:create} on page \pageref{lst:example:errorhandle:password:create} an example snippet is shown. It shows the error catching when creating a new password. This process can throw one of three errors: \verb=UserDoesNotExistError=, \verb=ValidationError=, and \verb=SqlError=. While these are not the only errors that the back-end can throw, it is a selection. For a full list of available errors, please refer to appendix \ref{appendix:errors:backend}.
 
@@ -568,7 +568,7 @@
 		\label{sec:impl:tests}
 		Last but not least, testing of the back-end is -- of course -- necessary. One could go about manually creating the HTTP requests and testing the output, but this is far from efficient.
 
-		As such, unittesting is necessary. One of the most popular frameworks for unittesting in the JavaScript community is without a doubt Mocha. However, since this is an API that will be tested, Mocha isn't \emph{enough}. When testing the HTTP calls there are two approaches: Either the actual server is run in a separate process, or the test framework runs the server itself. However, running the server separately will \emph{quickly} become very tedious, since it would have to be restarted for each set of tests. 
+		As such, unittesting is necessary. One of the most popular frameworks for unittesting in the JavaScript community is Mocha. However, since this is an API that will be tested, Mocha isn't \emph{enough}. When testing the HTTP calls there are two approaches: Either the actual server is run in a separate process, or the test framework runs the server itself. However, running the server separately will \emph{quickly} become very tedious, since it would have to be restarted for each set of tests. 
 
 		Fortunately, there exists a tool designed \emph{specifically} to aid in this type of unittesting: Supertest. It simply plugs into the main application code, and bootstraps a local version of the routes themselves. Then tests can be run on this, \emph{as if} it was running in a separate process. The application code simply has to export a link to the primary object \emph{(often the server or app variable)}, whenever the \verb=process.env.NODEENV= environment variable is set to \verb=test=. This export is shown on listing \ref{lst:impl:backend:testexport} on page \pageref{lst:impl:backend:testexport}. This is then used in Supertest, in order to test the result of certain requests. This is seen on listing \ref{lst:impl:backend:supertest} on page \pageref{lst:impl:backend:supertest}. 
 
@@ -583,7 +583,7 @@
             }
         \end{lstlisting}
 
-		\begin{lstlisting}[language=Javascript,gobble=12,caption={Unittesting API endpoints, using Supertest},label={lst:impl:backend:supertest}]
+		\begin{lstlisting}[language=Javascript,gobble=12,caption={Unittesting API endpoints using Supertest},label={lst:impl:backend:supertest}]
             var request = require('supertest');  
             var server  = request(require(__base + 'app.js').server);
             
@@ -596,7 +596,7 @@
 
 		Finally, there is the question of \emph{code coverage}. Using the tool Istanbul, the coverage of the unittesting of the back-end is calculated. The result of this is found on figure \ref{lst:impl:coverage} on page \pageref{lst:impl:coverage}. While $100\%$ code coverage should be strived for, achieving $77.59\%$ is far from bad.
 
-		\lstinputlisting[language={},caption={Code coverage results, using Istanbul. Some equality signs removed to fit on a single page.},label={lst:impl:coverage}]{resources/coverage.txt}
+		\lstinputlisting[language={},caption={Code coverage results using Istanbul. Some equality signs removed to fit on a single page.},label={lst:impl:coverage}]{resources/coverage.txt}
 
 
 
